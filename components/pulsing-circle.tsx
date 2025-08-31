@@ -51,9 +51,9 @@ export default function PulsingCircle() {
           <defs>
             <path id="circle" d="M 50, 50 m -38, 0 a 38,38 0 1,1 76,0 a 38,38 0 1,1 -76,0" />
           </defs>
-          <text className="text-sl fill-white/80 instrument">
+          <text className="text-sm fill-white/80 instrument">
             <textPath href="#circle" startOffset="0%">
-              Development & webdesign by TripleZero iT •
+            • Design by TripleZero iT • Hosted by TripleZero iT  
             </textPath>
           </text>
         </motion.svg>
