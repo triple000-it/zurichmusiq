@@ -17,6 +17,24 @@ export default function HeroContent() {
         From recording and mixing to mastering and production, we exceed expectations.
         </p>
 
+        <br /><br />
+
+        {/* CTA Buttons */}
+        <div className="flex flex-col sm:flex-row gap-6 justify-center mb-4">
+          <Link href="/booking">
+            <button className="px-8 py-4 bg-[#4fdce5] hover:bg-[#3cc9d3] text-black font-semibold rounded-full text-lg transition-all duration-300 transform hover:scale-105 hover:shadow-lg">
+              Book Studio Time
+            </button>
+          </Link>
+          <Link href="/music">
+            <button className="px-8 py-4 bg-black text-white font-semibold rounded-full text-lg transition-all duration-300 transform hover:scale-105 hover:bg-white hover:text-black">
+              Listen to Our Work
+            </button>
+          </Link>
+        </div>
+
+<br /><br />
+
         {/* Studio Features */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-16">
           <div className="relative text-center p-6 rounded-xl border border-white/10 overflow-hidden">
@@ -87,24 +105,11 @@ export default function HeroContent() {
 
 
 
-        {/* CTA Buttons */}
-        <div className="flex flex-col sm:flex-row gap-6 justify-center mb-16">
-          <Link href="/booking">
-            <button className="px-8 py-4 bg-[#4fdce5] hover:bg-[#3cc9d3] text-black font-semibold rounded-full text-lg transition-all duration-300 transform hover:scale-105 hover:shadow-lg">
-              Book Studio Time
-            </button>
-          </Link>
-          <Link href="/music">
-            <button className="px-8 py-4 bg-black text-white font-semibold rounded-full text-lg transition-all duration-300 transform hover:scale-105 hover:bg-white hover:text-black">
-              Listen to Our Work
-            </button>
-          </Link>
-        </div>
+        
 
         {/* Trust Indicators */}
-        <div className="border-t border-white/20 pt-12">
-          <p className="text-gray-400 text-lg mb-6">Trusted by many artists, dj's, labels and music professionals.</p>
-          
+        <div className="border-t border-white/20 pt-6 mb-2">
+          <p className="text-gray-400 text-lg mb-2">Trusted by many artists, dj's, labels and music professionals.</p>
         </div>
       </div>
     </main>

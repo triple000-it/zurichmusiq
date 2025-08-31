@@ -13,7 +13,7 @@ export default function ShaderShowcase() {
       <HeroContent />
       
       {/* Statistics Section - Moved to bottom */}
-      <section className="relative z-20 w-full py-20 px-8 lg:px-16">
+      <section className="relative z-20 w-full px-8 lg:px-16">
         <div className="max-w-6xl mx-auto">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             <div className="text-center">
