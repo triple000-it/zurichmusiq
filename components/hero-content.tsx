@@ -4,7 +4,7 @@ import Link from "next/link"
 
 export default function HeroContent() {
   return (
-    <main className="relative z-20 w-full min-h-screen pt-40 pb-4 lg:pb-2 px-8 lg:px-16">
+    <main className="relative z-20 w-full min-h-screen lg:min-h-0 pt-40 pb-4 lg:pb-2 px-8 lg:px-16">
       {/* Hero Section */}
       <div className="max-w-6xl mx-auto text-center">
         <h1 className="text-6xl lg:text-8xl font-bold text-white mb-8">
