@@ -1,0 +1,8 @@
+User-agent: *
+Allow: /
+
+# Sitemaps
+Sitemap: https://zurichmusiq.com/sitemap.xml
+
+# Zurich Musiq - Professional Music Recording Studio
+# High-quality recording, mixing, mastering, and music production services

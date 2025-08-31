@@ -1,0 +1,63 @@
+{
+  "@context": "https://schema.org",
+  "@type": "MusicRecordingStudio",
+  "name": "Zurich Musiq",
+  "alternateName": "Zurich Musiq Recording Studio",
+  "description": "Professional music recording studio offering state-of-the-art recording, mixing, mastering, and music production services.",
+  "url": "https://zurichmusiq.com",
+  "logo": "https://zurichmusiq.com/LOGO-ZURICHMUSIQ-WIT.png",
+  "image": "https://zurichmusiq.com/LOGO-ZURICHMUSIQ-WIT.png",
+  "telephone": "+31 XX XXX XX XX",
+  "email": "info@zurichmusiq.com",
+  "address": {
+    "@type": "PostalAddress",
+    "addressLocality": "Rotterdam",
+    "addressCountry": "Netherlands"
+  },
+  "serviceArea": {
+    "@type": "GeoCircle",
+    "geoMidpoint": {
+      "@type": "GeoCoordinates",
+      "latitude": 51.9225,
+      "longitude": 4.47917
+    },
+    "geoRadius": "100000"
+  },
+  "services": [
+    {
+      "@type": "Service",
+      "name": "Professional Recording",
+      "description": "State-of-the-art equipment and acoustically treated rooms"
+    },
+    {
+      "@type": "Service", 
+      "name": "Mixing & Mastering",
+      "description": "Expert audio engineering for radio-ready sound"
+    },
+    {
+      "@type": "Service",
+      "name": "Music Production", 
+      "description": "Full production services from concept to completion"
+    },
+    {
+      "@type": "Service",
+      "name": "Artist Development",
+      "description": "Guidance and support for emerging artists"
+    }
+  ],
+  "openingHours": "Mo-Su 09:00-22:00",
+  "priceRange": "€€€",
+  "aggregateRating": {
+    "@type": "AggregateRating",
+    "ratingValue": "4.9",
+    "reviewCount": "98",
+    "bestRating": "5"
+  },
+  "foundingDate": "2010",
+  "numberOfEmployees": "5-10",
+  "sameAs": [
+    "https://www.instagram.com/zurichmusiq",
+    "https://www.facebook.com/zurichmusiq",
+    "https://www.youtube.com/zurichmusiq"
+  ]
+}

@@ -1,0 +1,37 @@
+<svg width="400" height="300" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="grad2" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#4fdce5;stop-opacity:0.3" />
+      <stop offset="100%" style="stop-color:#2dd4da;stop-opacity:0.1" />
+    </linearGradient>
+  </defs>
+  <rect width="100%" height="100%" fill="url(#grad2)"/>
+  <!-- Mixing console -->
+  <rect x="120" y="80" width="160" height="100" rx="8" fill="rgba(255,255,255,0.15)"/>
+  <!-- Faders -->
+  <rect x="140" y="90" width="6" height="60" rx="3" fill="rgba(255,255,255,0.2)"/>
+  <rect x="160" y="90" width="6" height="60" rx="3" fill="rgba(255,255,255,0.2)"/>
+  <rect x="180" y="90" width="6" height="60" rx="3" fill="rgba(255,255,255,0.2)"/>
+  <rect x="200" y="90" width="6" height="60" rx="3" fill="rgba(255,255,255,0.2)"/>
+  <rect x="220" y="90" width="6" height="60" rx="3" fill="rgba(255,255,255,0.2)"/>
+  <rect x="240" y="90" width="6" height="60" rx="3" fill="rgba(255,255,255,0.2)"/>
+  <rect x="260" y="90" width="6" height="60" rx="3" fill="rgba(255,255,255,0.2)"/>
+  <!-- Fader handles -->
+  <rect x="138" y="110" width="10" height="8" rx="2" fill="rgba(255,255,255,0.3)"/>
+  <rect x="158" y="120" width="10" height="8" rx="2" fill="rgba(255,255,255,0.3)"/>
+  <rect x="178" y="105" width="10" height="8" rx="2" fill="rgba(255,255,255,0.3)"/>
+  <rect x="198" y="115" width="10" height="8" rx="2" fill="rgba(255,255,255,0.3)"/>
+  <rect x="218" y="100" width="10" height="8" rx="2" fill="rgba(255,255,255,0.3)"/>
+  <rect x="238" y="125" width="10" height="8" rx="2" fill="rgba(255,255,255,0.3)"/>
+  <rect x="258" y="108" width="10" height="8" rx="2" fill="rgba(255,255,255,0.3)"/>
+  <!-- Knobs -->
+  <circle cx="143" cy="165" r="8" fill="rgba(255,255,255,0.2)"/>
+  <circle cx="163" cy="165" r="8" fill="rgba(255,255,255,0.2)"/>
+  <circle cx="183" cy="165" r="8" fill="rgba(255,255,255,0.2)"/>
+  <circle cx="203" cy="165" r="8" fill="rgba(255,255,255,0.2)"/>
+  <circle cx="223" cy="165" r="8" fill="rgba(255,255,255,0.2)"/>
+  <circle cx="243" cy="165" r="8" fill="rgba(255,255,255,0.2)"/>
+  <circle cx="263" cy="165" r="8" fill="rgba(255,255,255,0.2)"/>
+  <!-- EQ visualization -->
+  <path d="M60,200 L80,180 L100,190 L120,160 L140,170 L160,150 L180,140 L200,130 L220,135 L240,145 L260,140 L280,150 L300,160 L320,170 L340,180" stroke="rgba(255,255,255,0.15)" stroke-width="2" fill="none"/>
+</svg>

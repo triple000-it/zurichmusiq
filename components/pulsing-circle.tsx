@@ -6,17 +6,22 @@ import { motion } from "framer-motion"
 export default function PulsingCircle() {
   return (
     <div className="absolute bottom-8 right-8 z-30">
-      <div className="relative w-20 h-20 flex items-center justify-center">
+      <a 
+        href="https://000-it.com/" 
+        target="_blank" 
+        rel="noopener noreferrer"
+        className="block cursor-pointer hover:scale-105 transition-transform duration-300"
+      >
+        <div className="relative w-20 h-20 flex items-center justify-center">
         {/* Pulsing Border Circle */}
         <PulsingBorder
-          colors={["#BEECFF", "#E77EDC", "#FF4C3E", "#00FF88", "#FFD700", "#FF6B35", "#8A2BE2"]}
+          colors={["#4fdce5", "#B0E0E6", "#ADD8E6", "#E0F6FF", "#F0F8FF", "#B8E6B8", "#98D8C8"]}
           colorBack="#00000000"
           speed={1.5}
           roundness={1}
           thickness={0.1}
           softness={0.2}
           intensity={5}
-          spotsPerColor={5}
           spotSize={0.1}
           pulse={0.1}
           smoke={0.5}
@@ -46,13 +51,14 @@ export default function PulsingCircle() {
           <defs>
             <path id="circle" d="M 50, 50 m -38, 0 a 38,38 0 1,1 76,0 a 38,38 0 1,1 -76,0" />
           </defs>
-          <text className="text-sm fill-white/80 instrument">
+          <text className="text-sl fill-white/80 instrument">
             <textPath href="#circle" startOffset="0%">
-              v0 is amazing • v0 is amazing • v0 is amazing • v0 is amazing •
+              Development & webdesign by TripleZero iT •
             </textPath>
           </text>
         </motion.svg>
-      </div>
+        </div>
+      </a>
     </div>
   )
 }

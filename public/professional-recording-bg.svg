@@ -1,0 +1,54 @@
+<svg width="400" height="300" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="grad4" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#4fdce5;stop-opacity:0.3" />
+      <stop offset="100%" style="stop-color:#2dd4da;stop-opacity:0.1" />
+    </linearGradient>
+    <linearGradient id="micGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:rgba(255,255,255,0.25)" />
+      <stop offset="50%" style="stop-color:rgba(255,255,255,0.15)" />
+      <stop offset="100%" style="stop-color:rgba(255,255,255,0.05)" />
+    </linearGradient>
+  </defs>
+  <rect width="100%" height="100%" fill="url(#grad4)"/>
+  
+  <!-- Professional Studio Microphone (Neumann U87 style) -->
+  <!-- Microphone body -->
+  <rect x="185" y="80" width="30" height="80" rx="15" fill="url(#micGrad)"/>
+  <rect x="187" y="82" width="26" height="76" rx="13" fill="rgba(255,255,255,0.18)"/>
+  
+  <!-- Microphone grille (mesh pattern) -->
+  <rect x="189" y="85" width="22" height="35" rx="11" fill="rgba(255,255,255,0.12)"/>
+  <!-- Grille lines -->
+  <line x1="191" y1="87" x2="191" y2="118" stroke="rgba(255,255,255,0.08)" stroke-width="0.5"/>
+  <line x1="194" y1="87" x2="194" y2="118" stroke="rgba(255,255,255,0.08)" stroke-width="0.5"/>
+  <line x1="197" y1="87" x2="197" y2="118" stroke="rgba(255,255,255,0.08)" stroke-width="0.5"/>
+  <line x1="200" y1="87" x2="200" y2="118" stroke="rgba(255,255,255,0.08)" stroke-width="0.5"/>
+  <line x1="203" y1="87" x2="203" y2="118" stroke="rgba(255,255,255,0.08)" stroke-width="0.5"/>
+  <line x1="206" y1="87" x2="206" y2="118" stroke="rgba(255,255,255,0.08)" stroke-width="0.5"/>
+  <line x1="209" y1="87" x2="209" y2="118" stroke="rgba(255,255,255,0.08)" stroke-width="0.5"/>
+  
+  <!-- Microphone logo/brand area -->
+  <rect x="189" y="125" width="22" height="12" fill="rgba(255,255,255,0.1)"/>
+  
+  <!-- XLR connector -->
+  <rect x="192" y="160" width="16" height="8" rx="2" fill="rgba(255,255,255,0.15)"/>
+  <circle cx="196" cy="164" r="1" fill="rgba(255,255,255,0.3)"/>
+  <circle cx="200" cy="164" r="1" fill="rgba(255,255,255,0.3)"/>
+  <circle cx="204" cy="164" r="1" fill="rgba(255,255,255,0.3)"/>
+  
+  <!-- Microphone stand/boom arm -->
+  <rect x="198" y="168" width="4" height="40" fill="rgba(255,255,255,0.12)"/>
+  <rect x="190" y="205" width="20" height="8" rx="4" fill="rgba(255,255,255,0.1)"/>
+  
+
+  
+
+  
+
+  
+
+  
+  <!-- Frequency response visualization -->
+  <path d="M50,250 L70,245 L90,240 L110,235 L130,245 L150,230 L170,235 L190,225 L210,230 L230,220 L250,225 L270,215 L290,220 L310,225 L330,230 L350,235" stroke="rgba(255,255,255,0.12)" stroke-width="2" fill="none"/>
+</svg>
