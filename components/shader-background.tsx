@@ -118,8 +118,19 @@ export default function ShaderBackground({ children }: ShaderBackgroundProps) {
 
   return (
     <>
-      {/* Fixed Background Container */}
-      <div ref={containerRef} className="fixed inset-0 w-full h-full bg-black overflow-hidden pointer-events-none">
+      {/* Fixed Background Container with Fallback */}
+      <div 
+        ref={containerRef} 
+        className="fixed inset-0 w-full h-full overflow-hidden pointer-events-none"
+        style={{
+          background: `
+            radial-gradient(circle at 20% 80%, rgba(79, 220, 229, 0.15) 0%, transparent 50%),
+            radial-gradient(circle at 80% 20%, rgba(79, 220, 229, 0.1) 0%, transparent 50%),
+            radial-gradient(circle at 40% 40%, rgba(79, 220, 229, 0.08) 0%, transparent 50%),
+            linear-gradient(135deg, #000000 0%, #001a1a 25%, #000000 50%, #001a1a 75%, #000000 100%)
+          `
+        }}
+      >
       {/* SVG Filters */}
       <svg className="absolute inset-0 w-0 h-0">
         <defs>
