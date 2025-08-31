@@ -4,7 +4,7 @@ import Link from "next/link"
 
 export default function HeroContent() {
   return (
-    <main className="relative z-20 w-full min-h-screen pt-40 pb-20 px-8 lg:px-16">
+    <main className="relative z-20 w-full min-h-screen pt-40 pb-4 lg:pb-2 px-8 lg:px-16">
       {/* Hero Section */}
       <div className="max-w-6xl mx-auto text-center">
         <h1 className="text-6xl lg:text-8xl font-bold text-white mb-8">
@@ -108,7 +108,7 @@ export default function HeroContent() {
         
 
         {/* Trust Indicators */}
-        <div className="border-t border-white/20 pt-6 mb-2">
+        <div className="border-t border-white/20 pt-6 mb-2 lg:mb-0">
           <p className="text-gray-400 text-lg mb-2">Trusted by many artists, dj's, labels and music professionals.</p>
         </div>
       </div>
