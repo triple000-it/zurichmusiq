@@ -11,7 +11,7 @@ export default function ShaderShowcase() {
     <ShaderBackground>
       <Header />
       <HeroContent />
-      
+      <br /><br />
       {/* Statistics Section - Moved to bottom */}
       <section className="relative z-20 w-full px-8 lg:px-16">
         <div className="max-w-6xl mx-auto">
