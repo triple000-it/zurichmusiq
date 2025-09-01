@@ -5,6 +5,7 @@ import HeroContent from "@/components/hero-content"
 import PulsingCircle from "@/components/pulsing-circle"
 import ShaderBackground from "@/components/shader-background"
 import Footer from "@/components/footer"
+import PerformanceMonitor from "@/components/performance-monitor"
 
 export default function ShaderShowcase() {
   return (
@@ -34,6 +35,7 @@ export default function ShaderShowcase() {
       
       <Footer />
       <PulsingCircle />
+      <PerformanceMonitor />
     </ShaderBackground>
   )
 }

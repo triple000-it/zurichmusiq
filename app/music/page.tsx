@@ -3,7 +3,6 @@
 import Header from "@/components/header"
 import Footer from "@/components/footer"
 import ShaderBackground from "@/components/shader-background"
-import Image from "next/image"
 import Link from "next/link"
 
 interface Project {
@@ -94,7 +93,7 @@ export default function WorkPage() {
             </h1>
             <p className="text-xl md:text-2xl text-white/80 max-w-3xl mx-auto leading-relaxed">
               Discover our portfolio of successful projects across various genres. 
-              From intimate acoustic sessions to full orchestral recordings, we've helped artists bring their vision to life.
+              From intimate acoustic sessions to full orchestral recordings, we&apos;ve helped artists bring their vision to life.
             </p>
           </div>
 
@@ -165,7 +164,7 @@ export default function WorkPage() {
               Ready to Create Something Amazing?
             </h3>
             <p className="text-white/80 text-lg mb-8 max-w-2xl mx-auto">
-              Let's work together to bring your musical vision to life. 
+              Let&apos;s work together to bring your musical vision to life. 
               Contact us to discuss your project and get started.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
