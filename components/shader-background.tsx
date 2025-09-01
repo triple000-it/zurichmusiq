@@ -10,8 +10,22 @@ interface ShaderBackgroundProps {
 export default function ShaderBackground({ children }: ShaderBackgroundProps) {
   const containerRef = useRef<HTMLDivElement>(null)
   const [isActive, setIsActive] = useState(false)
+  const [isMobile, setIsMobile] = useState(false)
+  const [isTablet, setIsTablet] = useState(false)
 
   useEffect(() => {
+    // Device detection
+    const checkDevice = () => {
+      const width = window.innerWidth
+      const isMobileDevice = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)
+      
+      setIsMobile(isMobileDevice || width < 768)
+      setIsTablet(!isMobileDevice && width >= 768 && width < 1024)
+    }
+
+    checkDevice()
+    window.addEventListener('resize', checkDevice)
+
     const handleMouseEnter = () => setIsActive(true)
     const handleMouseLeave = () => setIsActive(false)
 
@@ -22,12 +36,48 @@ export default function ShaderBackground({ children }: ShaderBackgroundProps) {
     }
 
     return () => {
+      window.removeEventListener('resize', checkDevice)
       if (container) {
         container.removeEventListener("mouseenter", handleMouseEnter)
         container.removeEventListener("mouseleave", handleMouseLeave)
       }
     }
   }, [])
+
+  // Determine particle counts based on device type
+  const getParticleCounts = () => {
+    if (isMobile) {
+      return {
+        twinklingStars: 20,    // Reduced from 150
+        brightStars: 5,        // Reduced from 30
+        shootingStars: 2,      // Reduced from 8
+        showNebula: false,     // Disable heavy elements
+        showCosmicDust: false,
+        showAdditionalElements: false
+      }
+    } else if (isTablet) {
+      return {
+        twinklingStars: 60,    // Reduced from 150
+        brightStars: 12,       // Reduced from 30
+        shootingStars: 4,      // Reduced from 8
+        showNebula: true,      // Keep some heavy elements
+        showCosmicDust: true,
+        showAdditionalElements: false
+      }
+    } else {
+      // Desktop - full experience
+      return {
+        twinklingStars: 150,
+        brightStars: 30,
+        shootingStars: 8,
+        showNebula: true,
+        showCosmicDust: true,
+        showAdditionalElements: true
+      }
+    }
+  }
+
+  const particleCounts = getParticleCounts()
 
   // Generate truly random star positions across entire background
   const generateParticleStyles = (index: number, total: number) => {
@@ -174,8 +224,8 @@ export default function ShaderBackground({ children }: ShaderBackgroundProps) {
         {/* Enhanced Space Particles with Improved Distribution */}
         <div className="absolute inset-0 w-full h-full">
           {/* Twinkling Stars with Better Distribution */}
-          {[...Array(150)].map((_, i) => {
-            const styles = generateParticleStyles(i, 150)
+          {[...Array(particleCounts.twinklingStars)].map((_, i) => {
+            const styles = generateParticleStyles(i, particleCounts.twinklingStars)
             return (
               <div
                 key={i}
@@ -192,8 +242,8 @@ export default function ShaderBackground({ children }: ShaderBackgroundProps) {
           })}
 
           {/* Bright Stars (Bigger, More Prominent) */}
-          {[...Array(30)].map((_, i) => {
-            const styles = generateBrightStarStyles(i, 30)
+          {[...Array(particleCounts.brightStars)].map((_, i) => {
+            const styles = generateBrightStarStyles(i, particleCounts.brightStars)
             return (
               <div
                 key={`bright-${i}`}
@@ -210,31 +260,37 @@ export default function ShaderBackground({ children }: ShaderBackgroundProps) {
           })}
 
           {/* Floating Nebula Clouds (Reduced Blue) */}
-          <div
-            className="absolute top-1/4 left-1/4 w-96 h-96 rounded-full blur-3xl animate-pulse"
-            style={{
-              background: 'radial-gradient(circle, rgba(30, 58, 138, 0.1) 0%, transparent 70%)'
-            }}
-          />
-          <div
-            className="absolute bottom-1/4 right-1/4 w-80 h-80 rounded-full blur-3xl animate-pulse"
-            style={{
-              background: 'radial-gradient(circle, rgba(14, 165, 233, 0.08) 0%, transparent 70%)',
-              animationDelay: '2s'
-            }}
-          />
+          {particleCounts.showNebula && (
+            <>
+              <div
+                className="absolute top-1/4 left-1/4 w-96 h-96 rounded-full blur-3xl animate-pulse"
+                style={{
+                  background: 'radial-gradient(circle, rgba(30, 58, 138, 0.1) 0%, transparent 70%)'
+                }}
+              />
+              <div
+                className="absolute bottom-1/4 right-1/4 w-80 h-80 rounded-full blur-3xl animate-pulse"
+                style={{
+                  background: 'radial-gradient(circle, rgba(14, 165, 233, 0.08) 0%, transparent 70%)',
+                  animationDelay: '2s'
+                }}
+              />
+            </>
+          )}
 
           {/* Cosmic Dust (Reduced Blue) */}
-          <div
-            className="absolute inset-0 animate-pulse"
-            style={{
-              background: 'radial-gradient(circle at 50% 50%, rgba(79, 220, 229, 0.05) 0%, transparent 50%)'
-            }}
-          />
+          {particleCounts.showCosmicDust && (
+            <div
+              className="absolute inset-0 animate-pulse"
+              style={{
+                background: 'radial-gradient(circle at 50% 50%, rgba(79, 220, 229, 0.05) 0%, transparent 50%)'
+              }}
+            />
+          )}
 
           {/* Shooting Stars (Reduced Blue) */}
-          {[...Array(8)].map((_, i) => {
-            const styles = generateShootingStarStyles(i, 8)
+          {[...Array(particleCounts.shootingStars)].map((_, i) => {
+            const styles = generateShootingStarStyles(i, particleCounts.shootingStars)
             return (
               <div
                 key={`shooting-${i}`}
@@ -251,13 +307,15 @@ export default function ShaderBackground({ children }: ShaderBackgroundProps) {
           })}
 
           {/* Additional Space Elements (Reduced Blue) */}
-          <div
-            className="absolute top-1/2 left-1/2 w-64 h-64 rounded-full blur-2xl animate-pulse"
-            style={{
-              background: 'radial-gradient(circle, rgba(79, 220, 229, 0.04) 0%, transparent 60%)',
-              animationDelay: '4s'
-            }}
-          />
+          {particleCounts.showAdditionalElements && (
+            <div
+              className="absolute top-1/2 left-1/2 w-64 h-64 rounded-full blur-2xl animate-pulse"
+              style={{
+                background: 'radial-gradient(circle, rgba(79, 220, 229, 0.04) 0%, transparent 60%)',
+                animationDelay: '4s'
+              }}
+            />
+          )}
         </div>
 
         {/* Custom CSS for enhanced star animations with random movement and repositioning */}

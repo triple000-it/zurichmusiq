@@ -99,6 +99,40 @@ The app now has:
 - ✅ **Backup System**: Original images safely stored
 - ✅ **Performance Monitoring**: Development tools for tracking improvements
 
-**The main performance improvement comes from image optimization. The large 23MB images will now be automatically converted to modern formats and sized appropriately for each device, which should significantly improve loading times, especially on mobile devices.**
+## 📊 **Current Animated Particles by Device**
+
+### **🖥️ Desktop (1024px+)**
+- **Twinkling Stars**: 150 particles
+- **Bright Stars**: 30 particles  
+- **Shooting Stars**: 8 particles
+- **Nebula Clouds**: 2 large elements
+- **Cosmic Dust**: 1 large element
+- **Additional Elements**: 1 large element
+- **Total**: **192 animated elements** (full experience)
+
+### **📱 Tablet (768px - 1023px)**
+- **Twinkling Stars**: 60 particles (reduced from 150)
+- **Bright Stars**: 12 particles (reduced from 30)
+- **Shooting Stars**: 4 particles (reduced from 8)
+- **Nebula Clouds**: 2 large elements (kept)
+- **Cosmic Dust**: 1 large element (kept)
+- **Additional Elements**: 0 (disabled)
+- **Total**: **79 animated elements** (60% reduction)
+
+### **📱 Mobile (<768px)**
+- **Twinkling Stars**: 20 particles (reduced from 150)
+- **Bright Stars**: 5 particles (reduced from 30)
+- **Shooting Stars**: 2 particles (reduced from 8)
+- **Nebula Clouds**: 0 (disabled)
+- **Cosmic Dust**: 0 (disabled)
+- **Additional Elements**: 0 (disabled)
+- **Total**: **27 animated elements** (86% reduction)
+
+## ✅ **Performance Improvements**
+
+**The main performance improvements come from:**
+1. **Image Optimization**: Automatic WebP/AVIF conversion and responsive sizing
+2. **Adaptive Particles**: Device-specific particle counts to prevent mobile crashes
+3. **Clean Build**: No linting errors or warnings
 
 **Next step: Compress the original images in `public/backup/` using tools like TinyPNG or Squoosh to reduce them from 23MB to under 2MB total.**
