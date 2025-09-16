@@ -6,6 +6,7 @@ import Footer from "@/components/footer"
 import ShaderBackground from "@/components/shader-background"
 import Link from "next/link"
 import PulsingCircle from "@/components/pulsing-circle"
+import AdvancedLiveEditor from "@/components/advanced-live-editor"
 
 export default function ContactPage() {
   const [formData, setFormData] = useState({
@@ -37,16 +38,17 @@ export default function ContactPage() {
       
       <main className="relative z-20 w-full min-h-screen pt-32 pb-20 px-8 lg:px-16">
         <div className="max-w-6xl mx-auto">
-          {/* Page Header */}
-          <div className="text-center mb-20">
-            <h1 className="text-6xl md:text-7xl font-bold text-white mb-8">
-              Contact Us
-            </h1>
-            <p className="text-xl md:text-2xl text-white/80 max-w-3xl mx-auto leading-relaxed">
-              Ready to start your next project? Get in touch with us to discuss your needs, 
-              get a quote, or book studio time.
-            </p>
-          </div>
+          <AdvancedLiveEditor pageId="contact" pageSlug="contact">
+            {/* Page Header */}
+            <div className="text-center mb-20" data-editable>
+              <h1 className="text-6xl md:text-7xl font-bold text-white mb-8">
+                Contact Us
+              </h1>
+              <p className="text-xl md:text-2xl text-white/80 max-w-3xl mx-auto leading-relaxed">
+                Ready to start your next project? Get in touch with us to discuss your needs, 
+                get a quote, or book studio time.
+              </p>
+            </div>
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
             {/* Contact Form */}
@@ -281,24 +283,25 @@ export default function ContactPage() {
             </div>
           </div>
 
-          {/* Response Time Info */}
-          <div className="mt-20 text-center">
-            <div className="bg-white/10 backdrop-blur-sm rounded-lg p-8 border border-white/20 max-w-2xl mx-auto">
-              <h3 className="text-2xl font-bold text-white mb-4">
-                What Happens Next?
-              </h3>
-              <p className="text-white/80 leading-relaxed mb-6">
-                We typically respond to all inquiries within 24 hours. For urgent requests, 
-                please call us directly. We'll schedule a consultation to discuss your project 
-                in detail and provide a customized quote.
-              </p>
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm text-white/60">
-                <div>📧 Email Response: 24 hours</div>
-                <div>📞 Phone Response: 2 hours</div>
-                <div>💬 WhatsApp: 1 hour</div>
+            {/* Response Time Info */}
+            <div className="mt-20 text-center" data-editable>
+              <div className="bg-white/10 backdrop-blur-sm rounded-lg p-8 border border-white/20 max-w-2xl mx-auto">
+                <h3 className="text-2xl font-bold text-white mb-4">
+                  What Happens Next?
+                </h3>
+                <p className="text-white/80 leading-relaxed mb-6">
+                  We typically respond to all inquiries within 24 hours. For urgent requests, 
+                  please call us directly. We'll schedule a consultation to discuss your project 
+                  in detail and provide a customized quote.
+                </p>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm text-white/60">
+                  <div>📧 Email Response: 24 hours</div>
+                  <div>📞 Phone Response: 2 hours</div>
+                  <div>💬 WhatsApp: 1 hour</div>
+                </div>
               </div>
             </div>
-          </div>
+          </AdvancedLiveEditor>
         </div>
       </main>
 

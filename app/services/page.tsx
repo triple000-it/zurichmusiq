@@ -7,6 +7,7 @@ import Header from "@/components/header"
 import Footer from "@/components/footer"
 import ShaderBackground from "@/components/shader-background"
 import PulsingCircle from "@/components/pulsing-circle"
+import AdvancedLiveEditor from "@/components/advanced-live-editor"
 
 
 
@@ -121,33 +122,34 @@ export default function ServicesPage() {
       
       <main className="relative z-20 w-full min-h-screen pt-32 pb-20 px-8 lg:px-16">
         <div className="max-w-6xl mx-auto">
-          {/* Page Header */}
-          <div className="text-center mb-20">
-            <h1 className="text-6xl md:text-7xl font-bold text-white mb-8">
-              Our Services
-            </h1>
-            <p className="text-xl md:text-2xl text-white/80 max-w-3xl mx-auto leading-relaxed">
-              Professional music production, recording, and artist development services 
-              to help you create, record, and succeed in the music industry.
-            </p>
-          </div>
+          <AdvancedLiveEditor pageId="services" pageSlug="services">
+            {/* Page Header */}
+            <div className="text-center mb-20" data-editable>
+              <h1 className="text-6xl md:text-7xl font-bold text-white mb-8">
+                Our Services
+              </h1>
+              <p className="text-xl md:text-2xl text-white/80 max-w-3xl mx-auto leading-relaxed">
+                Professional music production, recording, and artist development services 
+                to help you create, record, and succeed in the music industry.
+              </p>
+            </div>
 
-          {/* Service Categories Menu */}
-          <div className="flex flex-wrap justify-center gap-4 mb-16">
-            {services.map((service) => (
-              <button
-                key={service.id}
-                onClick={() => setSelectedService(service)}
-                className={`px-6 py-3 rounded-lg transition-all duration-300 ${
-                  selectedService.id === service.id
-                    ? "bg-gray-200 text-[#3db5be] font-semibold border border-white"
-                    : "text-white hover:text-[#4fdce5] border border-white/20 hover:border-white/40"
-                }`}
-              >
-                {service.title}
-              </button>
-            ))}
-          </div>
+            {/* Service Categories Menu */}
+            <div className="flex flex-wrap justify-center gap-4 mb-16" data-editable>
+              {services.map((service) => (
+                <button
+                  key={service.id}
+                  onClick={() => setSelectedService(service)}
+                  className={`px-6 py-3 rounded-lg transition-all duration-300 ${
+                    selectedService.id === service.id
+                      ? "bg-gray-200 text-[#3db5be] font-semibold border border-white"
+                      : "text-white hover:text-[#4fdce5] border border-white/20 hover:border-white/40"
+                  }`}
+                >
+                  {service.title}
+                </button>
+              ))}
+            </div>
 
           {/* Selected Service Details */}
           <div className="bg-gray-200 rounded-lg p-8 border border-white">
@@ -196,28 +198,29 @@ export default function ServicesPage() {
             </div>
           </div>
 
-          {/* Additional Info Section */}
-          <div className="mt-20 text-center">
-            <h3 className="text-3xl font-bold text-white mb-8">
-              Ready to Start Your Project?
-            </h3>
-            <p className="text-white/80 text-lg mb-8 max-w-2xl mx-auto">
-              Contact us today to discuss your project requirements and get a personalized quote. 
-              Our team is ready to help you bring your musical vision to life.
-            </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Link href="/contact">
-                <button className="px-10 py-4 bg-[#4fdce5] text-black font-semibold text-lg rounded-lg hover:bg-[#3cc9d3] hover:scale-105 transition-all duration-300">
-                  Contact Us
-                </button>
-              </Link>
-              <Link href="/music">
-                <button className="px-10 py-4 bg-transparent border-2 border-white/30 text-white font-semibold text-lg rounded-lg hover:bg-white/10 hover:border-white/50 transition-all duration-300">
-                  View Our Work
-                </button>
-              </Link>
+            {/* Additional Info Section */}
+            <div className="mt-20 text-center" data-editable>
+              <h3 className="text-3xl font-bold text-white mb-8">
+                Ready to Start Your Project?
+              </h3>
+              <p className="text-white/80 text-lg mb-8 max-w-2xl mx-auto">
+                Contact us today to discuss your project requirements and get a personalized quote. 
+                Our team is ready to help you bring your musical vision to life.
+              </p>
+              <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                <Link href="/contact">
+                  <button className="px-10 py-4 bg-[#4fdce5] text-black font-semibold text-lg rounded-lg hover:bg-[#3cc9d3] hover:scale-105 transition-all duration-300">
+                    Contact Us
+                  </button>
+                </Link>
+                <Link href="/music">
+                  <button className="px-10 py-4 bg-transparent border-2 border-white/30 text-white font-semibold text-lg rounded-lg hover:bg-white/10 hover:border-white/50 transition-all duration-300">
+                    View Our Work
+                  </button>
+                </Link>
+              </div>
             </div>
-          </div>
+          </AdvancedLiveEditor>
         </div>
       </main>
 
