@@ -1,22 +1,12 @@
 import { NextAuthOptions } from "next-auth"
 import { PrismaAdapter } from "@auth/prisma-adapter"
 import CredentialsProvider from "next-auth/providers/credentials"
-import GitHubProvider from "next-auth/providers/github"
 import bcrypt from "bcryptjs"
 import { prisma } from "./prisma"
 
 export const authOptions: NextAuthOptions = {
   adapter: PrismaAdapter(prisma),
   providers: [
-    GitHubProvider({
-      clientId: process.env.GITHUB_CLIENT_ID!,
-      clientSecret: process.env.GITHUB_CLIENT_SECRET!,
-      authorization: {
-        params: {
-          scope: "read:user user:email",
-        },
-      },
-    }),
     CredentialsProvider({
       name: "credentials",
       credentials: {
@@ -70,48 +60,9 @@ export const authOptions: NextAuthOptions = {
     strategy: "jwt"
   },
   callbacks: {
-    async signIn({ user, account, profile }) {
-      if (account?.provider === "github") {
-        try {
-          // Check if user exists in database
-          const existingUser = await prisma.user.findUnique({
-            where: { email: user.email! }
-          })
-
-          if (!existingUser) {
-            // Create new user with USER role by default
-            await prisma.user.create({
-              data: {
-                email: user.email!,
-                name: user.name || user.email!,
-                role: "USER",
-                image: user.image,
-              }
-            })
-          } else {
-            // Update existing user's GitHub info
-            await prisma.user.update({
-              where: { email: user.email! },
-              data: {
-                name: user.name || existingUser.name,
-                image: user.image || existingUser.image,
-              }
-            })
-          }
-        } catch (error) {
-          console.error("Error handling GitHub sign in:", error)
-          return false
-        }
-      }
-      return true
-    },
-    async jwt({ token, user, account }) {
+    async jwt({ token, user }) {
       if (user) {
-        // Get user role from database
-        const dbUser = await prisma.user.findUnique({
-          where: { email: user.email! }
-        })
-        token.role = dbUser?.role || "USER"
+        token.role = user.role
       }
       return token
     },
