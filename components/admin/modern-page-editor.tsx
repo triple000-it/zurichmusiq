@@ -69,6 +69,14 @@ export default function ModernPageEditor({
   const [title, setTitle] = useState(page.title || "")
   const [metaTitle, setMetaTitle] = useState(page.metaTitle || "")
   const [metaDescription, setMetaDescription] = useState(page.metaDescription || "")
+
+  // Initialize content when page changes
+  useEffect(() => {
+    setContent(page.content || "")
+    setTitle(page.title || "")
+    setMetaTitle(page.metaTitle || "")
+    setMetaDescription(page.metaDescription || "")
+  }, [page])
   const [isPreview, setIsPreview] = useState(false)
   const [isSaving, setIsSaving] = useState(false)
   const [hasChanges, setHasChanges] = useState(false)
@@ -311,6 +319,45 @@ export default function ModernPageEditor({
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+      <style jsx global>{`
+        .editor-content * {
+          color: #333 !important;
+        }
+        .editor-content h1,
+        .editor-content h2,
+        .editor-content h3,
+        .editor-content h4,
+        .editor-content h5,
+        .editor-content h6 {
+          color: #2c3e50 !important;
+        }
+        .editor-content p {
+          color: #333 !important;
+        }
+        .editor-content a {
+          color: #4fdce5 !important;
+        }
+        .editor-content .hero-section {
+          background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+          color: white !important;
+        }
+        .editor-content .hero-section h1,
+        .editor-content .hero-section h2,
+        .editor-content .hero-section h3,
+        .editor-content .hero-section p {
+          color: white !important;
+        }
+        .editor-content .testimonials-section {
+          background: #2c3e50 !important;
+          color: white !important;
+        }
+        .editor-content .testimonials-section h1,
+        .editor-content .testimonials-section h2,
+        .editor-content .testimonials-section h3,
+        .editor-content .testimonials-section p {
+          color: white !important;
+        }
+      `}</style>
       <div className="bg-white rounded-lg w-full max-w-7xl h-[90vh] flex flex-col">
         {/* Header */}
         <div className="flex items-center justify-between p-4 border-b border-gray-200">
@@ -553,7 +600,7 @@ export default function ModernPageEditor({
             {isPreview ? (
               <div className="flex-1 p-6 overflow-auto bg-white">
                 <div 
-                  className="prose max-w-none"
+                  className="editor-content prose max-w-none"
                   style={{
                     fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
                     fontSize: '14px',
@@ -571,6 +618,26 @@ export default function ModernPageEditor({
                   data-color-mode="light"
                   height="100%"
                 />
+              </div>
+            ) : editorMode === 'wysiwyg' ? (
+              <div className="flex-1 flex flex-col">
+                <div className="flex-1 p-4">
+                  <div 
+                    className="editor-content w-full h-full p-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#4fdce5] overflow-auto"
+                    contentEditable
+                    suppressContentEditableWarning
+                    onInput={(e) => setContent(e.currentTarget.innerHTML)}
+                    dangerouslySetInnerHTML={{ __html: content }}
+                    style={{
+                      fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
+                      fontSize: '14px',
+                      lineHeight: '1.6',
+                      color: '#333',
+                      minHeight: '400px',
+                      backgroundColor: '#f8f9fa'
+                    }}
+                  />
+                </div>
               </div>
             ) : (
               <div className="flex-1 p-4">
