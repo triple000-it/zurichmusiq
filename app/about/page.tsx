@@ -6,7 +6,6 @@ import PulsingCircle from "@/components/pulsing-circle"
 import ShaderBackground from "@/components/shader-background"
 import Image from "next/image"
 import Link from "next/link"
-import AdvancedLiveEditor from "@/components/advanced-live-editor"
 
 interface TeamMember {
   name: string
@@ -48,10 +47,9 @@ export default function AboutPage() {
       <Header />
       
       <main className="relative z-20 w-full min-h-screen pt-32 pb-20 px-8 lg:px-16">
-        <div className="max-w-6xl mx-auto">
-          <AdvancedLiveEditor pageId="about" pageSlug="about">
+            <div className="max-w-6xl mx-auto">
             {/* Page Header */}
-            <div className="text-center mb-20" data-editable>
+            <div className="text-center mb-20">
               <h1 className="text-6xl md:text-7xl font-bold text-white mb-8">
                 About Us
               </h1>
@@ -62,7 +60,7 @@ export default function AboutPage() {
             </div>
 
             {/* Company Story */}
-            <div className="bg-white/10 backdrop-blur-sm rounded-lg p-8 border border-white/20 mb-20" data-editable>
+            <div className="bg-white/10 backdrop-blur-sm rounded-lg p-8 border border-white/20 mb-20" >
               <h2 className="text-4xl font-bold text-white mb-8 text-center">Our Story</h2>
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
                 <div>
@@ -83,7 +81,7 @@ export default function AboutPage() {
             </div>
 
             {/* Mission & Values */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-20" data-editable>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-20" >
               <div className="bg-white/10 backdrop-blur-sm rounded-lg p-8 border border-white/20">
                 <h3 className="text-2xl font-bold text-white mb-6">Our Mission</h3>
                 <p className="text-white/80 leading-relaxed">
@@ -104,7 +102,7 @@ export default function AboutPage() {
             </div>
 
             {/* Team Section */}
-            <div className="mb-20" data-editable>
+            <div className="mb-20" >
               <h2 className="text-4xl font-bold text-white mb-12 text-center">Meet Our Team</h2>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                 {teamMembers.map((member, index) => (
@@ -132,7 +130,7 @@ export default function AboutPage() {
             </div>
 
             {/* Studio Information */}
-            <div className="bg-white/10 backdrop-blur-sm rounded-lg p-8 border border-white/20 mb-20" data-editable>
+            <div className="bg-white/10 backdrop-blur-sm rounded-lg p-8 border border-white/20 mb-20" >
               <h2 className="text-4xl font-bold text-white mb-8 text-center">Our Studio</h2>
               <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
                 <div className="text-center">
@@ -151,7 +149,7 @@ export default function AboutPage() {
             </div>
 
             {/* CTA Section */}
-            <div className="text-center" data-editable>
+            <div className="text-center" >
               <h3 className="text-3xl font-bold text-white mb-8">
                 Ready to Work With Us?
               </h3>
@@ -171,9 +169,8 @@ export default function AboutPage() {
                   </button>
                 </Link>
               </div>
+              </div>
             </div>
-          </AdvancedLiveEditor>
-        </div>
       </main>
 
       <Footer />

@@ -4,7 +4,6 @@ import Header from "@/components/header"
 import Footer from "@/components/footer"
 import ShaderBackground from "@/components/shader-background"
 import Link from "next/link"
-import AdvancedLiveEditor from "@/components/advanced-live-editor"
 
 interface Project {
   id: string
@@ -86,10 +85,9 @@ export default function WorkPage() {
       <Header />
       
       <main className="relative z-20 w-full min-h-screen pt-32 pb-20 px-8 lg:px-16">
-        <div className="max-w-6xl mx-auto">
-          <AdvancedLiveEditor pageId="music" pageSlug="music">
+            <div className="max-w-6xl mx-auto">
             {/* Page Header */}
-            <div className="text-center mb-20" data-editable>
+            <div className="text-center mb-20" >
               <h1 className="text-6xl md:text-7xl font-bold text-white mb-8">
                 Our Work
               </h1>
@@ -100,7 +98,7 @@ export default function WorkPage() {
             </div>
 
             {/* Projects Grid */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-20" data-editable>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-20" >
               {projects.map((project) => (
                 <div key={project.id} className="bg-white/10 backdrop-blur-sm rounded-lg p-6 border border-white/20 hover:border-white/40 transition-all duration-300">
                   <div className="aspect-square bg-gray-300 rounded-lg mb-4 flex items-center justify-center">
@@ -136,7 +134,7 @@ export default function WorkPage() {
             </div>
 
             {/* Statistics Section */}
-            <div className="bg-white/10 backdrop-blur-sm rounded-lg p-8 border border-white/20 mb-20" data-editable>
+            <div className="bg-white/10 backdrop-blur-sm rounded-lg p-8 border border-white/20 mb-20" >
               <h2 className="text-3xl font-bold text-white text-center mb-8">
                 Studio Statistics
               </h2>
@@ -161,7 +159,7 @@ export default function WorkPage() {
             </div>
 
             {/* CTA Section */}
-            <div className="text-center" data-editable>
+            <div className="text-center" >
               <h3 className="text-3xl font-bold text-white mb-8">
                 Ready to Create Something Amazing?
               </h3>
@@ -181,9 +179,8 @@ export default function WorkPage() {
                   </button>
                 </Link>
               </div>
+              </div>
             </div>
-          </AdvancedLiveEditor>
-        </div>
       </main>
 
       <Footer />

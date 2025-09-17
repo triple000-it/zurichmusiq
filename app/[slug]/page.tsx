@@ -3,7 +3,6 @@ import { prisma } from '@/lib/prisma'
 import Header from '@/components/header'
 import Footer from '@/components/footer'
 import ShaderBackground from '@/components/shader-background'
-import AdvancedLiveEditor from '@/components/advanced-live-editor'
 
 interface PageProps {
   params: {
@@ -44,20 +43,16 @@ export default async function DynamicPage({ params }: PageProps) {
           <div className="text-center mb-12">
             <h1 
               className="text-5xl md:text-6xl font-bold text-white mb-8"
-              data-editable
             >
               {page.title}
             </h1>
           </div>
 
-          {/* Page Content */}
-          <AdvancedLiveEditor pageId={page.id} pageSlug={page.slug}>
-            <div 
-              className="prose prose-lg prose-invert max-w-none"
-              dangerouslySetInnerHTML={{ __html: page.content }}
-              data-editable
-            />
-          </AdvancedLiveEditor>
+                {/* Page Content */}
+                <div 
+                  className="prose prose-lg prose-invert max-w-none"
+                  dangerouslySetInnerHTML={{ __html: page.content }}
+                />
         </div>
       </main>
 

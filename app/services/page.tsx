@@ -7,7 +7,6 @@ import Header from "@/components/header"
 import Footer from "@/components/footer"
 import ShaderBackground from "@/components/shader-background"
 import PulsingCircle from "@/components/pulsing-circle"
-import AdvancedLiveEditor from "@/components/advanced-live-editor"
 
 
 
@@ -121,10 +120,9 @@ export default function ServicesPage() {
       <Header />
       
       <main className="relative z-20 w-full min-h-screen pt-32 pb-20 px-8 lg:px-16">
-        <div className="max-w-6xl mx-auto">
-          <AdvancedLiveEditor pageId="services" pageSlug="services">
+            <div className="max-w-6xl mx-auto">
             {/* Page Header */}
-            <div className="text-center mb-20" data-editable>
+            <div className="text-center mb-20" >
               <h1 className="text-6xl md:text-7xl font-bold text-white mb-8">
                 Our Services
               </h1>
@@ -135,7 +133,7 @@ export default function ServicesPage() {
             </div>
 
             {/* Service Categories Menu */}
-            <div className="flex flex-wrap justify-center gap-4 mb-16" data-editable>
+            <div className="flex flex-wrap justify-center gap-4 mb-16" >
               {services.map((service) => (
                 <button
                   key={service.id}
@@ -199,7 +197,7 @@ export default function ServicesPage() {
           </div>
 
             {/* Additional Info Section */}
-            <div className="mt-20 text-center" data-editable>
+            <div className="mt-20 text-center" >
               <h3 className="text-3xl font-bold text-white mb-8">
                 Ready to Start Your Project?
               </h3>
@@ -219,9 +217,8 @@ export default function ServicesPage() {
                   </button>
                 </Link>
               </div>
+              </div>
             </div>
-          </AdvancedLiveEditor>
-        </div>
       </main>
 
       <Footer />

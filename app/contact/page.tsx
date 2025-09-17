@@ -6,7 +6,6 @@ import Footer from "@/components/footer"
 import ShaderBackground from "@/components/shader-background"
 import Link from "next/link"
 import PulsingCircle from "@/components/pulsing-circle"
-import AdvancedLiveEditor from "@/components/advanced-live-editor"
 
 export default function ContactPage() {
   const [formData, setFormData] = useState({
@@ -37,10 +36,9 @@ export default function ContactPage() {
       <Header />
       
       <main className="relative z-20 w-full min-h-screen pt-32 pb-20 px-8 lg:px-16">
-        <div className="max-w-6xl mx-auto">
-          <AdvancedLiveEditor pageId="contact" pageSlug="contact">
+            <div className="max-w-6xl mx-auto">
             {/* Page Header */}
-            <div className="text-center mb-20" data-editable>
+            <div className="text-center mb-20" >
               <h1 className="text-6xl md:text-7xl font-bold text-white mb-8">
                 Contact Us
               </h1>
@@ -284,7 +282,7 @@ export default function ContactPage() {
           </div>
 
             {/* Response Time Info */}
-            <div className="mt-20 text-center" data-editable>
+            <div className="mt-20 text-center" >
               <div className="bg-white/10 backdrop-blur-sm rounded-lg p-8 border border-white/20 max-w-2xl mx-auto">
                 <h3 className="text-2xl font-bold text-white mb-4">
                   What Happens Next?
@@ -300,9 +298,8 @@ export default function ContactPage() {
                   <div>💬 WhatsApp: 1 hour</div>
                 </div>
               </div>
+              </div>
             </div>
-          </AdvancedLiveEditor>
-        </div>
       </main>
 
       <Footer />
