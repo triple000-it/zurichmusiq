@@ -3,7 +3,7 @@
 import { useState } from "react"
 import { signIn, getSession } from "next-auth/react"
 import { useRouter } from "next/navigation"
-import { Eye, EyeOff } from "lucide-react"
+import { Eye, EyeOff, Github } from "lucide-react"
 
 export default function SignIn() {
   const [email, setEmail] = useState("")
@@ -42,6 +42,22 @@ export default function SignIn() {
       setLoading(false)
     }
   }
+
+  const handleGitHubSignIn = async () => {
+    setLoading(true)
+    setError("")
+    
+    try {
+      await signIn("github", { 
+        callbackUrl: "/admin",
+        redirect: true 
+      })
+    } catch (error) {
+      setError("GitHub sign-in failed. Please try again.")
+      setLoading(false)
+    }
+  }
+
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
@@ -115,9 +131,33 @@ export default function SignIn() {
             </button>
           </div>
 
+          <div className="relative">
+            <div className="absolute inset-0 flex items-center">
+              <div className="w-full border-t border-gray-300" />
+            </div>
+            <div className="relative flex justify-center text-sm">
+              <span className="px-2 bg-gray-50 text-gray-500">Or continue with</span>
+            </div>
+          </div>
+
+          <div>
+            <button
+              type="button"
+              onClick={handleGitHubSignIn}
+              disabled={loading}
+              className="group relative w-full flex justify-center py-2 px-4 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#4fdce5] disabled:opacity-50"
+            >
+              <Github className="h-5 w-5 mr-2" />
+              {loading ? "Signing in..." : "Sign in with GitHub"}
+            </button>
+          </div>
+
           <div className="text-center">
             <p className="text-sm text-gray-600">
               Default admin: info@000-it.com / Admin123!
+            </p>
+            <p className="text-xs text-gray-500 mt-1">
+              GitHub users will be assigned USER role by default
             </p>
           </div>
         </form>
