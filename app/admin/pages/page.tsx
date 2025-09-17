@@ -19,6 +19,7 @@ import {
   X,
   AlertTriangle
 } from "lucide-react"
+import ComprehensivePageEditor from "@/components/admin/comprehensive-page-editor"
 
 interface Page {
   id: string
@@ -45,6 +46,8 @@ export default function PagesPage() {
   const [showDeleteModal, setShowDeleteModal] = useState(false)
   const [pageToDelete, setPageToDelete] = useState<Page | null>(null)
   const [deleting, setDeleting] = useState(false)
+  const [showEditor, setShowEditor] = useState(false)
+  const [pageToEdit, setPageToEdit] = useState<Page | null>(null)
 
   // Check user permissions
   const canView = session?.user?.role && ["SUPER_ADMIN", "ADMIN", "MANAGER"].includes(session.user.role)
@@ -81,8 +84,42 @@ export default function PagesPage() {
   }
 
   const handleEdit = (page: Page) => {
-    // For now, we'll just show an alert. In a real app, you'd navigate to an edit page
-    alert(`Edit functionality for "${page.title}" would open here.`)
+    setPageToEdit(page)
+    setShowEditor(true)
+  }
+
+  const handleEditorSave = async (updatedPage: Partial<Page>) => {
+    if (!pageToEdit) return
+    
+    try {
+      const response = await fetch(`/api/pages/${pageToEdit.id}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(updatedPage),
+      })
+      
+      if (response.ok) {
+        // Update the page in the local state
+        setPages(pages.map(p => 
+          p.id === pageToEdit.id 
+            ? { ...p, ...updatedPage, updatedAt: new Date().toISOString() }
+            : p
+        ))
+        setShowEditor(false)
+        setPageToEdit(null)
+      } else {
+        throw new Error('Failed to update page')
+      }
+    } catch (error) {
+      throw error
+    }
+  }
+
+  const handleEditorCancel = () => {
+    setShowEditor(false)
+    setPageToEdit(null)
   }
 
   const handleDeleteClick = (page: Page) => {
@@ -335,6 +372,15 @@ export default function PagesPage() {
             </div>
           </div>
         </div>
+      )}
+
+      {/* Comprehensive Page Editor */}
+      {showEditor && pageToEdit && (
+        <ComprehensivePageEditor
+          page={pageToEdit}
+          onSave={handleEditorSave}
+          onCancel={handleEditorCancel}
+        />
       )}
     </div>
   )
