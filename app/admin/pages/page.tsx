@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react"
 import { useSession } from "next-auth/react"
+import { useRouter } from "next/navigation"
 import { 
   FileText, 
   Plus, 
@@ -14,7 +15,9 @@ import {
   User,
   Globe,
   Lock,
-  Unlock
+  Unlock,
+  X,
+  AlertTriangle
 } from "lucide-react"
 
 interface Page {
@@ -32,16 +35,30 @@ interface Page {
 }
 
 export default function PagesPage() {
-  const { data: session } = useSession()
+  const { data: session, status } = useSession()
+  const router = useRouter()
   const [pages, setPages] = useState<Page[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState("")
   const [searchTerm, setSearchTerm] = useState("")
   const [filterStatus, setFilterStatus] = useState<"all" | "published" | "draft">("all")
+  const [showDeleteModal, setShowDeleteModal] = useState(false)
+  const [pageToDelete, setPageToDelete] = useState<Page | null>(null)
+  const [deleting, setDeleting] = useState(false)
+
+  // Check user permissions
+  const canView = session?.user?.role && ["SUPER_ADMIN", "ADMIN", "MANAGER"].includes(session.user.role)
+  const canEdit = session?.user?.role && ["SUPER_ADMIN", "ADMIN", "MANAGER"].includes(session.user.role)
+  const canDelete = session?.user?.role && ["SUPER_ADMIN", "ADMIN"].includes(session.user.role)
 
   useEffect(() => {
+    if (status === "loading") return
+    if (!canView) {
+      router.push('/auth/signin')
+      return
+    }
     fetchPages()
-  }, [])
+  }, [status, canView, router])
 
   const fetchPages = async () => {
     try {
@@ -59,6 +76,48 @@ export default function PagesPage() {
     }
   }
 
+  const handleView = (page: Page) => {
+    window.open(`/${page.slug}`, '_blank')
+  }
+
+  const handleEdit = (page: Page) => {
+    // For now, we'll just show an alert. In a real app, you'd navigate to an edit page
+    alert(`Edit functionality for "${page.title}" would open here.`)
+  }
+
+  const handleDeleteClick = (page: Page) => {
+    setPageToDelete(page)
+    setShowDeleteModal(true)
+  }
+
+  const handleDeleteConfirm = async () => {
+    if (!pageToDelete) return
+    
+    setDeleting(true)
+    try {
+      const response = await fetch(`/api/pages/${pageToDelete.id}`, {
+        method: 'DELETE',
+      })
+      
+      if (response.ok) {
+        setPages(pages.filter(p => p.id !== pageToDelete.id))
+        setShowDeleteModal(false)
+        setPageToDelete(null)
+      } else {
+        setError('Failed to delete page')
+      }
+    } catch (error) {
+      setError('Error deleting page')
+    } finally {
+      setDeleting(false)
+    }
+  }
+
+  const handleDeleteCancel = () => {
+    setShowDeleteModal(false)
+    setPageToDelete(null)
+  }
+
   const filteredPages = pages.filter(page => {
     const matchesSearch = page.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
                          page.slug.toLowerCase().includes(searchTerm.toLowerCase())
@@ -68,10 +127,22 @@ export default function PagesPage() {
     return matchesSearch && matchesFilter
   })
 
-  if (loading) {
+  if (status === "loading" || loading) {
     return (
       <div className="flex items-center justify-center h-64">
         <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#4fdce5]"></div>
+      </div>
+    )
+  }
+
+  if (!canView) {
+    return (
+      <div className="flex items-center justify-center h-64">
+        <div className="text-center">
+          <Lock className="h-12 w-12 text-gray-400 mx-auto mb-4" />
+          <h3 className="text-lg font-medium text-gray-900 mb-2">Access Denied</h3>
+          <p className="text-gray-600">You don't have permission to view this page.</p>
+        </div>
       </div>
     )
   }
@@ -185,15 +256,33 @@ export default function PagesPage() {
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                       <div className="flex justify-end space-x-2">
-                        <button className="text-[#4fdce5] hover:text-[#3cc9d3]">
-                          <Eye className="h-4 w-4" />
-                        </button>
-                        <button className="text-gray-600 hover:text-gray-900">
-                          <Edit className="h-4 w-4" />
-                        </button>
-                        <button className="text-red-600 hover:text-red-900">
-                          <Trash2 className="h-4 w-4" />
-                        </button>
+                        {canView && (
+                          <button 
+                            onClick={() => handleView(page)}
+                            className="text-[#4fdce5] hover:text-[#3cc9d3] p-1 rounded hover:bg-gray-100"
+                            title="View Page"
+                          >
+                            <Eye className="h-4 w-4" />
+                          </button>
+                        )}
+                        {canEdit && (
+                          <button 
+                            onClick={() => handleEdit(page)}
+                            className="text-gray-600 hover:text-gray-900 p-1 rounded hover:bg-gray-100"
+                            title="Edit Page"
+                          >
+                            <Edit className="h-4 w-4" />
+                          </button>
+                        )}
+                        {canDelete && (
+                          <button 
+                            onClick={() => handleDeleteClick(page)}
+                            className="text-red-600 hover:text-red-900 p-1 rounded hover:bg-gray-100"
+                            title="Delete Page"
+                          >
+                            <Trash2 className="h-4 w-4" />
+                          </button>
+                        )}
                       </div>
                     </td>
                   </tr>
@@ -203,6 +292,50 @@ export default function PagesPage() {
           </div>
         )}
       </div>
+
+      {/* Delete Confirmation Modal */}
+      {showDeleteModal && pageToDelete && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white rounded-lg p-6 max-w-md w-full mx-4">
+            <div className="flex items-center mb-4">
+              <AlertTriangle className="h-6 w-6 text-red-600 mr-3" />
+              <h3 className="text-lg font-semibold text-gray-900">Delete Page</h3>
+            </div>
+            
+            <p className="text-gray-600 mb-6">
+              Are you sure you want to delete the page <strong>"{pageToDelete.title}"</strong>? 
+              This action cannot be undone.
+            </p>
+            
+            <div className="flex justify-end space-x-3">
+              <button
+                onClick={handleDeleteCancel}
+                disabled={deleting}
+                className="px-4 py-2 text-gray-700 bg-gray-100 rounded-lg hover:bg-gray-200 disabled:opacity-50"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={handleDeleteConfirm}
+                disabled={deleting}
+                className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 disabled:opacity-50 flex items-center"
+              >
+                {deleting ? (
+                  <>
+                    <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
+                    Deleting...
+                  </>
+                ) : (
+                  <>
+                    <Trash2 className="h-4 w-4 mr-2" />
+                    Delete
+                  </>
+                )}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   )
 }
