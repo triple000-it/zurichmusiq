@@ -19,7 +19,7 @@ import {
   X,
   AlertTriangle
 } from "lucide-react"
-import ComprehensivePageEditor from "@/components/admin/comprehensive-page-editor"
+import QuillPageEditor from "@/components/admin/quill-page-editor"
 
 interface Page {
   id: string
@@ -374,9 +374,9 @@ export default function PagesPage() {
         </div>
       )}
 
-      {/* Comprehensive Page Editor */}
+      {/* Quill Page Editor */}
       {showEditor && pageToEdit && (
-        <ComprehensivePageEditor
+        <QuillPageEditor
           page={pageToEdit}
           onSave={handleEditorSave}
           onCancel={handleEditorCancel}
