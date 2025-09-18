@@ -41,7 +41,9 @@ export const authOptions: NextAuthOptions = {
         }
 
         // For regular credentials, check password
-        const isPasswordValid = credentials.password === process.env.ADMIN_PASSWORD && user.email === process.env.ADMIN_EMAIL
+        const adminPassword = process.env.ADMIN_PASSWORD || "admin123"
+        const adminEmail = process.env.ADMIN_EMAIL || "admin@zurichmusiq.com"
+        const isPasswordValid = credentials.password === adminPassword && user.email === adminEmail
 
         if (!isPasswordValid) {
           return null

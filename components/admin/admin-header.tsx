@@ -2,6 +2,7 @@
 
 import { useSession, signOut } from "next-auth/react"
 import { User, LogOut } from "lucide-react"
+import Image from "next/image"
 
 export default function AdminHeader() {
   const { data: session } = useSession()
@@ -11,8 +12,24 @@ export default function AdminHeader() {
       <div className="px-6 py-4">
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-2xl font-bold text-gray-900">Admin Dashboard</h1>
-            <p className="text-sm text-gray-600">Manage your music studio</p>
+            <Image
+              src="/LOGO-ZURICHMUSIQ.png"
+              alt="Zurich Musiq"
+              width={200}
+              height={60}
+              className="h-12 w-auto"
+              priority
+              onError={(e) => {
+                console.error("Failed to load logo:", e)
+                // Fallback to text if image fails to load
+                const target = e.target as HTMLImageElement
+                target.style.display = 'none'
+                const parent = target.parentElement
+                if (parent) {
+                  parent.innerHTML = '<h1 class="text-2xl font-bold text-gray-900">Zurich Musiq</h1>'
+                }
+              }}
+            />
           </div>
           
           <div className="flex items-center space-x-4">

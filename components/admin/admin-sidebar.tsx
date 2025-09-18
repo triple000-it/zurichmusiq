@@ -29,11 +29,6 @@ export default function AdminSidebar() {
 
   return (
     <div className="w-64 bg-white shadow-lg h-screen">
-      <div className="p-6">
-        <h2 className="text-xl font-bold text-gray-800">Zurich Musiq</h2>
-        <p className="text-sm text-gray-600">Admin Dashboard</p>
-      </div>
-      
       <nav className="mt-6">
         {navigation.map((item) => {
           const isActive = pathname === item.href

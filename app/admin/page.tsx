@@ -2,7 +2,6 @@
 
 import { useSession } from "next-auth/react"
 import { useEffect, useState } from "react"
-import { prisma } from "@/lib/prisma"
 import { 
   Users, 
   Calendar, 
@@ -37,15 +36,20 @@ export default function AdminDashboard() {
   useEffect(() => {
     // In a real app, you'd fetch this data from an API
     // For now, we'll use mock data
-    setStats({
-      totalUsers: 156,
-      totalBookings: 89,
-      totalStudios: 2,
-      totalServices: 6,
-      monthlyRevenue: 12500,
-      pendingBookings: 12
-    })
-    setLoading(false)
+    try {
+      setStats({
+        totalUsers: 156,
+        totalBookings: 89,
+        totalStudios: 2,
+        totalServices: 6,
+        monthlyRevenue: 12500,
+        pendingBookings: 12
+      })
+    } catch (error) {
+      console.error("Error loading dashboard stats:", error)
+    } finally {
+      setLoading(false)
+    }
   }, [])
 
   const statCards = [
