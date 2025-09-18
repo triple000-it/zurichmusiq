@@ -5,7 +5,9 @@ import bcrypt from "bcryptjs"
 import { prisma } from "./prisma"
 
 export const authOptions: NextAuthOptions = {
-  adapter: PrismaAdapter(prisma),
+  // Temporarily disable adapter for production testing
+  // adapter: PrismaAdapter(prisma),
+  secret: process.env.NEXTAUTH_SECRET || "fallback-secret-for-development",
   providers: [
     CredentialsProvider({
       name: "credentials",
@@ -14,47 +16,24 @@ export const authOptions: NextAuthOptions = {
         password: { label: "Password", type: "password" }
       },
       async authorize(credentials) {
-        if (!credentials?.email) {
+        if (!credentials?.email || !credentials?.password) {
           return null
         }
 
-        const user = await prisma.user.findUnique({
-          where: {
-            email: credentials.email
-          }
-        })
-
-        if (!user) {
-          return null
-        }
-
-        // Check if this is device authentication (no password provided)
-        if (!credentials.password) {
-          // For device auth, we'll allow any user to sign in
-          // The device auth flow already validated the user
-          return {
-            id: user.id,
-            email: user.email,
-            name: user.name,
-            role: user.role,
-          }
-        }
-
-        // For regular credentials, check password
+        // Simple hardcoded admin for testing
         const adminPassword = process.env.ADMIN_PASSWORD || "admin123"
         const adminEmail = process.env.ADMIN_EMAIL || "admin@zurichmusiq.com"
-        const isPasswordValid = credentials.password === adminPassword && user.email === adminEmail
-
-        if (!isPasswordValid) {
-          return null
+        
+        if (credentials.email === adminEmail && credentials.password === adminPassword) {
+          return {
+            id: "1",
+            email: adminEmail,
+            name: "Admin User",
+            role: "SUPER_ADMIN",
+          }
         }
 
-        return {
-          id: user.id,
-          email: user.email,
-          name: user.name,
-          role: user.role,
-        }
+        return null
       }
     })
   ],
