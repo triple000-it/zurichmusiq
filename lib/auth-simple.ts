@@ -1,18 +1,7 @@
 import { NextAuthOptions } from "next-auth"
-import { PrismaAdapter } from "@auth/prisma-adapter"
 import CredentialsProvider from "next-auth/providers/credentials"
-import bcrypt from "bcryptjs"
-import { prisma } from "./prisma"
-
-// Ensure we have required environment variables
-const NEXTAUTH_URL = process.env.NEXTAUTH_URL || process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : "http://localhost:3000"
-const NEXTAUTH_SECRET = process.env.NEXTAUTH_SECRET || "fallback-secret-for-development"
 
 export const authOptions: NextAuthOptions = {
-  // Temporarily disable adapter for production testing
-  // adapter: PrismaAdapter(prisma),
-  secret: NEXTAUTH_SECRET,
-  debug: process.env.NODE_ENV === "development",
   providers: [
     CredentialsProvider({
       name: "credentials",
@@ -62,8 +51,5 @@ export const authOptions: NextAuthOptions = {
   },
   pages: {
     signIn: "/auth/signin",
-    signUp: "/auth/signup",
   },
-  // Add URL configuration
-  url: NEXTAUTH_URL,
 }
