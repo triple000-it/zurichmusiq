@@ -31,3 +31,6 @@ next-env.d.ts
 
 # build artifacts
 /lib/generated/prisma
+
+# macOS
+.DS_Store
