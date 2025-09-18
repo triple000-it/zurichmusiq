@@ -15,18 +15,24 @@ export default function AdminLayout({
   const router = useRouter()
 
   useEffect(() => {
+    console.log("Admin layout - Status:", status, "Session:", session)
+    
     if (status === "loading") return
 
     if (!session) {
+      console.log("No session, redirecting to signin")
       router.push("/auth/signin")
       return
     }
 
     // Check if user has admin role
     if (!session.user?.role || !["SUPER_ADMIN", "ADMIN", "MANAGER"].includes(session.user.role)) {
+      console.log("User doesn't have admin role, redirecting to home")
       router.push("/")
       return
     }
+    
+    console.log("User has admin access")
   }, [session, status, router])
 
   if (status === "loading") {

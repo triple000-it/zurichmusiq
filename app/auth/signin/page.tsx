@@ -19,24 +19,32 @@ export default function SignIn() {
     setError("")
 
     try {
+      console.log("Attempting signin with:", email)
       const result = await signIn("credentials", {
         email,
         password,
         redirect: false,
       })
 
+      console.log("Signin result:", result)
+
       if (result?.error) {
+        console.log("Signin error:", result.error)
         setError("Invalid credentials")
       } else {
         // Check if user has admin role
         const session = await getSession()
+        console.log("Session after signin:", session)
         if (session?.user?.role && ["SUPER_ADMIN", "ADMIN", "MANAGER"].includes(session.user.role)) {
+          console.log("User has admin role, redirecting to admin")
           router.push("/admin")
         } else {
+          console.log("User doesn't have admin role")
           setError("Access denied. Admin privileges required.")
         }
       }
     } catch (error) {
+      console.error("Signin error:", error)
       setError("An error occurred. Please try again.")
     } finally {
       setLoading(false)
