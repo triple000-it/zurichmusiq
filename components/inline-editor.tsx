@@ -240,35 +240,40 @@ export default function InlineEditor({ pageSlug, pageTitle }: InlineEditorProps)
     }, 100)
   }
 
-  const handleSaveInline = async (input: HTMLInputElement, element: HTMLElement) => {
-    const newContent = input.value
-    element.textContent = newContent
-    
-    // Mark element as edited
-    element.setAttribute('data-edited', 'true')
-    
-    // Save to database
-    setIsSaving(true)
-    try {
-      const response = await fetch(`/api/pages/slug/${pageSlug}`, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          content: `<div class="inline-edit-${Date.now()}">${newContent}</div>`,
-          elementType: element.tagName.toLowerCase(),
-          elementText: newContent,
-          updatedBy: session?.user?.name || 'Inline Editor',
-          editMetadata: {
-            elementId: element.id || `element-${Date.now()}`,
-            elementClass: element.className,
-            elementTag: element.tagName.toLowerCase(),
-            timestamp: new Date().toISOString(),
-            pageSlug: pageSlug
-          }
-        }),
-      })
+      const handleSaveInline = async (input: HTMLInputElement, element: HTMLElement) => {
+        const newContent = input.value
+        element.textContent = newContent
+
+        // Mark element as edited
+        element.setAttribute('data-edited', 'true')
+
+        // Save to database
+        setIsSaving(true)
+        try {
+          // Get the current page content by finding the main content area
+          const mainContent = document.querySelector('main')
+          const pageContent = mainContent ? mainContent.innerHTML : document.body.innerHTML
+
+          const response = await fetch(`/api/pages/slug/${pageSlug}`, {
+            method: 'PUT',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              content: pageContent,
+              elementType: element.tagName.toLowerCase(),
+              elementText: newContent,
+              updatedBy: session?.user?.name || 'Inline Editor',
+              editMetadata: {
+                elementId: element.id || `element-${Date.now()}`,
+                elementClass: element.className,
+                elementTag: element.tagName.toLowerCase(),
+                timestamp: new Date().toISOString(),
+                pageSlug: pageSlug,
+                elementIndex: Array.from(element.parentElement?.children || []).indexOf(element)
+              }
+            }),
+          })
       
       if (response.ok) {
         // Show success indicator
