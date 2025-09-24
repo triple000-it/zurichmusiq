@@ -21,42 +21,23 @@ export default function UsersPage() {
   const [showAddUser, setShowAddUser] = useState(false)
 
   useEffect(() => {
-    // Mock data - in real app, fetch from API
-    setUsers([
-      {
-        id: "1",
-        name: "Super Admin",
-        email: "info@000-it.com",
-        role: "SUPER_ADMIN",
-        createdAt: "2024-01-01T00:00:00Z",
-        lastLogin: "2024-01-15T10:30:00Z"
-      },
-      {
-        id: "2",
-        name: "John Doe",
-        email: "john@example.com",
-        role: "ADMIN",
-        createdAt: "2024-01-05T00:00:00Z",
-        lastLogin: "2024-01-14T15:20:00Z"
-      },
-      {
-        id: "3",
-        name: "Jane Smith",
-        email: "jane@example.com",
-        role: "MANAGER",
-        createdAt: "2024-01-10T00:00:00Z",
-        lastLogin: "2024-01-13T09:15:00Z"
-      },
-      {
-        id: "4",
-        name: "Mike Johnson",
-        email: "mike@example.com",
-        role: "USER",
-        createdAt: "2024-01-12T00:00:00Z",
-        lastLogin: "2024-01-15T08:45:00Z"
+    const fetchUsers = async () => {
+      try {
+        const response = await fetch('/api/users')
+        if (response.ok) {
+          const usersData = await response.json()
+          setUsers(usersData)
+        } else {
+          console.error('Failed to fetch users')
+        }
+      } catch (error) {
+        console.error('Error fetching users:', error)
+      } finally {
+        setLoading(false)
       }
-    ])
-    setLoading(false)
+    }
+
+    fetchUsers()
   }, [])
 
   const filteredUsers = users.filter(user => {
