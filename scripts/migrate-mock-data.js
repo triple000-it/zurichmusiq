@@ -32,6 +32,14 @@ async function migrateMockData() {
         slug: 'about',
         title: 'About Us',
         content: `
+          <div class="text-center mb-20">
+            <h1 class="text-6xl md:text-7xl font-bold text-white mb-8">About Us</h1>
+            <p class="text-xl md:text-2xl text-white/80 max-w-3xl mx-auto leading-relaxed">
+              We're a passionate team of music professionals dedicated to helping artists 
+              create their best work in a world-class recording environment.
+            </p>
+          </div>
+
           <div class="bg-white/10 backdrop-blur-sm rounded-lg p-8 border border-white/20 mb-20">
             <h2 class="text-4xl font-bold text-white mb-8 text-center">Our Story</h2>
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
@@ -69,6 +77,84 @@ async function migrateMockData() {
                 <li>• Sustainable business practices</li>
                 <li>• Community and collaboration</li>
               </ul>
+            </div>
+          </div>
+
+          <div class="mb-20">
+            <h2 class="text-4xl font-bold text-white mb-12 text-center">Meet Our Team</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+              <div class="bg-white/10 backdrop-blur-sm rounded-lg p-6 border border-white/20">
+                <div class="flex items-start space-x-4">
+                  <div class="w-16 h-16 bg-gray-300 rounded-full flex items-center justify-center flex-shrink-0">
+                    <span class="text-gray-600 text-xs">Photo</span>
+                  </div>
+                  <div class="flex-1">
+                    <h3 class="text-xl font-bold text-white mb-1">Marcus Weber</h3>
+                    <p class="text-[#4fdce5] font-medium mb-3">Founder & Lead Engineer</p>
+                    <p class="text-white/80 text-sm leading-relaxed mb-4">With over 15 years of experience in music production, Marcus has worked with artists across all genres. His passion for sound quality and attention to detail has made him one of Switzerland's most sought-after engineers.</p>
+                    <div class="flex flex-wrap gap-2">
+                      <span class="px-2 py-1 bg-[#4fdce5]/20 text-[#4fdce5] text-xs rounded">Recording</span>
+                      <span class="px-2 py-1 bg-[#4fdce5]/20 text-[#4fdce5] text-xs rounded">Mixing</span>
+                      <span class="px-2 py-1 bg-[#4fdce5]/20 text-[#4fdce5] text-xs rounded">Production</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="bg-white/10 backdrop-blur-sm rounded-lg p-6 border border-white/20">
+                <div class="flex items-start space-x-4">
+                  <div class="w-16 h-16 bg-gray-300 rounded-full flex items-center justify-center flex-shrink-0">
+                    <span class="text-gray-600 text-xs">Photo</span>
+                  </div>
+                  <div class="flex-1">
+                    <h3 class="text-xl font-bold text-white mb-1">Sophia Müller</h3>
+                    <p class="text-[#4fdce5] font-medium mb-3">Studio Manager</p>
+                    <p class="text-white/80 text-sm leading-relaxed mb-4">Sophia ensures the smooth operation of our studios and provides exceptional client support. Her organizational skills and friendly demeanor make every artist feel at home.</p>
+                    <div class="flex flex-wrap gap-2">
+                      <span class="px-2 py-1 bg-[#4fdce5]/20 text-[#4fdce5] text-xs rounded">Management</span>
+                      <span class="px-2 py-1 bg-[#4fdce5]/20 text-[#4fdce5] text-xs rounded">Client Relations</span>
+                      <span class="px-2 py-1 bg-[#4fdce5]/20 text-[#4fdce5] text-xs rounded">Scheduling</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="bg-white/10 backdrop-blur-sm rounded-lg p-8 border border-white/20 mb-20">
+            <h2 class="text-4xl font-bold text-white mb-8 text-center">Our Studio</h2>
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+              <div class="text-center">
+                <div class="text-4xl font-bold text-[#4fdce5] mb-2">2</div>
+                <div class="text-white/80">Professional Studios</div>
+              </div>
+              <div class="text-center">
+                <div class="text-4xl font-bold text-[#4fdce5] mb-2">24/7</div>
+                <div class="text-white/80">Access Available</div>
+              </div>
+              <div class="text-center">
+                <div class="text-4xl font-bold text-[#4fdce5] mb-2">State-of-the-Art</div>
+                <div class="text-white/80">Equipment</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="text-center">
+            <h3 class="text-3xl font-bold text-white mb-8">Ready to Work With Us?</h3>
+            <p class="text-white/80 text-lg mb-8 max-w-2xl mx-auto">
+              Whether you're looking to record your next hit or develop your skills,
+              we're here to help you achieve your musical goals.
+            </p>
+            <div class="flex flex-col sm:flex-row gap-4 justify-center">
+              <a href="/contact">
+                <button class="px-10 py-4 bg-[#4fdce5] text-black font-semibold text-lg rounded-lg hover:bg-[#3cc9d3] hover:scale-105 transition-all duration-300">
+                  Get in Touch
+                </button>
+              </a>
+              <a href="/services">
+                <button class="px-10 py-4 bg-transparent border-2 border-white/30 text-white font-semibold text-lg rounded-lg hover:bg-white/10 hover:border-white/50 transition-all duration-300">
+                  View Services
+                </button>
+              </a>
             </div>
           </div>
         `,
