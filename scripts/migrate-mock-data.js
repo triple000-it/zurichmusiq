@@ -347,17 +347,18 @@ async function migrateMockData() {
       },
       {
         slug: 'booking',
-        title: 'Book Studio Time - Zurich Musiq',
+        title: 'Book Studio Time',
         content: `
-          <div class="booking-section">
-            <h1>Book Studio Time</h1>
-            <p>Reserve studio time for your next recording session.</p>
-            <h2>Available Studios</h2>
-            <p>Choose from our professional recording studios.</p>
+          <div class="text-center mb-20">
+            <h1 class="text-6xl md:text-7xl font-bold text-white mb-8">Book Your Studio Time</h1>
+            <p class="text-xl md:text-2xl text-white/80 max-w-3xl mx-auto leading-relaxed">
+              Choose from our two professional recording studios, each equipped with state-of-the-art gear 
+              and designed for exceptional sound quality. Book your session and start creating your masterpiece.
+            </p>
           </div>
         `,
         metaTitle: 'Book Studio Time - Zurich Musiq',
-        metaDescription: 'Book professional recording studio time at Zurich Musiq.',
+        metaDescription: 'Book professional recording studio time at Zurich Musiq. Choose from our state-of-the-art studios.',
         isPublished: true,
         createdBy: 'System',
         updatedBy: 'System'
