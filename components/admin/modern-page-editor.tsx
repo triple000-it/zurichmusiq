@@ -3,6 +3,8 @@
 import { useState, useEffect, useRef } from "react"
 import dynamic from "next/dynamic"
 import { useSession } from "next-auth/react"
+import Header from "@/components/header"
+import Footer from "@/components/footer"
 import { 
   Save, 
   Eye, 
@@ -598,17 +600,39 @@ export default function ModernPageEditor({
           {/* Main Editor Area */}
           <div className="flex-1 flex flex-col">
             {isPreview ? (
-              <div className="flex-1 p-6 overflow-auto bg-white">
-                <div 
-                  className="editor-content prose max-w-none"
-                  style={{
-                    fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
-                    fontSize: '14px',
-                    lineHeight: '1.6',
-                    color: '#333'
-                  }}
-                  dangerouslySetInnerHTML={{ __html: content }}
-                />
+              <div className="flex-1 overflow-auto bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 relative">
+                {/* Cosmic background effect */}
+                <div className="absolute inset-0 opacity-40">
+                  <div className="absolute inset-0 bg-[radial-gradient(circle_at_1px_1px,rgba(255,255,255,0.15)_1px,transparent_0)] bg-[length:20px_20px]"></div>
+                </div>
+                
+                {/* Header */}
+                <div className="relative z-20">
+                  <Header />
+                </div>
+                
+                {/* Preview Content */}
+                <div className="relative z-10 w-full min-h-screen pt-32 pb-20 px-8 lg:px-16">
+                  <div className="max-w-6xl mx-auto">
+                    {/* Page Title */}
+                    <div className="text-center mb-12">
+                      <h1 className="text-5xl md:text-6xl font-bold text-white mb-8">
+                        {title || 'Page Title'}
+                      </h1>
+                    </div>
+
+                    {/* Page Content */}
+                    <div 
+                      className="prose prose-lg prose-invert max-w-none"
+                      dangerouslySetInnerHTML={{ __html: content }}
+                    />
+                  </div>
+                </div>
+                
+                {/* Footer */}
+                <div className="relative z-20">
+                  <Footer />
+                </div>
               </div>
             ) : editorMode === 'markdown' ? (
               <div className="flex-1">
