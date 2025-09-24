@@ -115,10 +115,10 @@ export default function AdminDashboard() {
       {/* Stats Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {statCards.map((stat, index) => (
-          <div key={index} className="bg-white rounded-lg shadow p-6">
+          <div key={index} className="bg-white/90 backdrop-blur-sm rounded-xl shadow-lg p-6 border border-white/20">
             <div className="flex items-center">
-              <div className={`p-3 rounded-full ${stat.color}`}>
-                <stat.icon className="h-6 w-6 text-white" />
+              <div className="p-3 rounded-full bg-gray-100">
+                <stat.icon className="h-6 w-6 text-gray-700" />
               </div>
               <div className="ml-4">
                 <p className="text-sm font-medium text-gray-600">{stat.title}</p>
@@ -132,7 +132,7 @@ export default function AdminDashboard() {
 
       {/* Recent Activity */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <div className="bg-white rounded-lg shadow p-6">
+        <div className="bg-white/90 backdrop-blur-sm rounded-xl shadow-lg p-6 border border-white/20">
           <h3 className="text-lg font-semibold text-gray-900 mb-4">Recent Bookings</h3>
           <div className="space-y-3">
             {[
@@ -157,7 +157,7 @@ export default function AdminDashboard() {
           </div>
         </div>
 
-        <div className="bg-white rounded-lg shadow p-6">
+        <div className="bg-white/90 backdrop-blur-sm rounded-xl shadow-lg p-6 border border-white/20">
           <h3 className="text-lg font-semibold text-gray-900 mb-4">Quick Actions</h3>
           <div className="space-y-3">
             <button className="w-full text-left p-3 bg-[#4fdce5] text-white rounded-lg hover:bg-[#3cc9d3] transition-colors">
