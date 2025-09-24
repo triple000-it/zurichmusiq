@@ -134,51 +134,47 @@ export default function AboutPage() {
               />
             </div>
 
-            {/* Dynamic Content from Database */}
-            <div 
-              className="prose prose-lg prose-invert max-w-none"
-              dangerouslySetInnerHTML={{ __html: page?.content || `
-                <div class="bg-white/10 backdrop-blur-sm rounded-lg p-8 border border-white/20 mb-20">
-                  <h2 class="text-4xl font-bold text-white mb-8 text-center">Our Story</h2>
-                  <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
-                    <div>
-                      <p class="text-white/80 text-lg leading-relaxed mb-6">
-                        Founded in 2010, Zurich Musiq began as a small recording studio with a big dream: to provide world-class recording facilities to artists of all levels. What started as a passion project has grown into one of Switzerland's most respected recording studios.
-                      </p>
-                      <p class="text-white/80 text-lg leading-relaxed mb-6">
-                        Over the years, we've had the privilege of working with emerging artists, established musicians, and everything in between. Our commitment to quality and innovation has earned us recognition in the music industry and the trust of our clients.
-                      </p>
-                      <p class="text-white/80 text-lg leading-relaxed">
-                        Today, we continue to push the boundaries of what's possible in music production, combining cutting-edge technology with time-tested techniques to help artists create their best work.
-                      </p>
-                    </div>
-                    <div class="bg-gray-300 rounded-lg aspect-square flex items-center justify-center">
-                      <span class="text-gray-600 text-sm">Studio Photo</span>
-                    </div>
-                  </div>
+            {/* Company Story */}
+            <div className="bg-white/10 backdrop-blur-sm rounded-lg p-8 border border-white/20 mb-20" >
+              <h2 className="text-4xl font-bold text-white mb-8 text-center">Our Story</h2>
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
+                <div>
+                  <p className="text-white/80 text-lg leading-relaxed mb-6">
+                    Founded in 2010, Zurich Musiq began as a small recording studio with a big dream: to provide world-class recording facilities to artists of all levels. What started as a passion project has grown into one of Switzerland's most respected recording studios.
+                  </p>
+                  <p className="text-white/80 text-lg leading-relaxed mb-6">
+                    Over the years, we've had the privilege of working with emerging artists, established musicians, and everything in between. Our commitment to quality and innovation has earned us recognition in the music industry and the trust of our clients.
+                  </p>
+                  <p className="text-white/80 text-lg leading-relaxed">
+                    Today, we continue to push the boundaries of what's possible in music production, combining cutting-edge technology with time-tested techniques to help artists create their best work.
+                  </p>
                 </div>
+                <div className="bg-gray-300 rounded-lg aspect-square flex items-center justify-center">
+                  <span className="text-gray-600 text-sm">Studio Photo</span>
+                </div>
+              </div>
+            </div>
 
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-20">
-                  <div class="bg-white/10 backdrop-blur-sm rounded-lg p-8 border border-white/20">
-                    <h3 class="text-2xl font-bold text-white mb-6">Our Mission</h3>
-                    <p class="text-white/80 leading-relaxed">
-                      To provide world-class recording facilities and professional guidance that empowers artists 
-                      to create their best work, regardless of their budget or experience level.
-                    </p>
-                  </div>
-                  <div class="bg-white/10 backdrop-blur-sm rounded-lg p-8 border border-white/20">
-                    <h3 class="text-2xl font-bold text-white mb-6">Our Values</h3>
-                    <ul class="text-white/80 space-y-2">
-                      <li>• Quality without compromise</li>
-                      <li>• Innovation in technology and technique</li>
-                      <li>• Support for emerging artists</li>
-                      <li>• Sustainable business practices</li>
-                      <li>• Community and collaboration</li>
-                    </ul>
-                  </div>
-                </div>
-              ` }}
-            />
+            {/* Mission & Values */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-20" >
+              <div className="bg-white/10 backdrop-blur-sm rounded-lg p-8 border border-white/20">
+                <h3 className="text-2xl font-bold text-white mb-6">Our Mission</h3>
+                <p className="text-white/80 leading-relaxed">
+                  To provide world-class recording facilities and professional guidance that empowers artists 
+                  to create their best work, regardless of their budget or experience level.
+                </p>
+              </div>
+              <div className="bg-white/10 backdrop-blur-sm rounded-lg p-8 border border-white/20">
+                <h3 className="text-2xl font-bold text-white mb-6">Our Values</h3>
+                <ul className="text-white/80 space-y-2">
+                  <li>• Quality without compromise</li>
+                  <li>• Innovation in technology and technique</li>
+                  <li>• Support for emerging artists</li>
+                  <li>• Sustainable business practices</li>
+                  <li>• Community and collaboration</li>
+                </ul>
+              </div>
+            </div>
 
             {/* Team Section */}
             <div className="mb-20" >
