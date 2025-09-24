@@ -602,9 +602,21 @@ async function migrateMockData() {
     ]
 
     for (const booking of bookings) {
-      await prisma.booking.create({
-        data: booking
+      // Check if booking already exists
+      const existingBooking = await prisma.booking.findFirst({
+        where: {
+          studioId: booking.studioId,
+          userId: booking.userId,
+          date: booking.date,
+          startTime: booking.startTime
+        }
       })
+      
+      if (!existingBooking) {
+        await prisma.booking.create({
+          data: booking
+        })
+      }
     }
     console.log('✅ Sample bookings created successfully')
 
