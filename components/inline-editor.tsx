@@ -13,9 +13,12 @@ export default function InlineEditor({ pageSlug, pageTitle }: InlineEditorProps)
   const { data: session, status } = useSession()
   const [isEditing, setIsEditing] = useState(false)
   const [isVisible, setIsVisible] = useState(false)
-  const [editingElement, setEditingElement] = useState<HTMLElement | null>(null)
-  const [originalContent, setOriginalContent] = useState("")
-  const [isSaving, setIsSaving] = useState(false)
+      const [editingElement, setEditingElement] = useState<HTMLElement | null>(null)
+      const [originalContent, setOriginalContent] = useState("")
+      const [isSaving, setIsSaving] = useState(false)
+      const [showImageUpload, setShowImageUpload] = useState(false)
+      const [selectedImage, setSelectedImage] = useState<HTMLImageElement | null>(null)
+      const [imageFile, setImageFile] = useState<File | null>(null)
   
   // Check if user is admin
   const isAdmin = session?.user?.role && ['SUPER_ADMIN', 'ADMIN', 'MANAGER'].includes(session.user.role)
@@ -134,19 +137,37 @@ export default function InlineEditor({ pageSlug, pageTitle }: InlineEditorProps)
     return null
   }
 
-  const handleEditMode = () => {
-    setIsEditing(true)
-    
-    // Add click listeners to all editable elements
-    const editableElements = document.querySelectorAll('h1, h2, h3, h4, h5, h6, p, span, div[class*="text"], button')
-    
-    editableElements.forEach(element => {
-      element.style.cursor = 'pointer'
-      element.style.outline = '2px dashed #4fdce5'
-      element.style.outlineOffset = '2px'
-      
-      element.addEventListener('click', handleElementClick)
-    })
+      const handleEditMode = () => {
+        setIsEditing(true)
+
+        // Add click listeners to all editable elements
+        const editableElements = document.querySelectorAll('h1, h2, h3, h4, h5, h6, p, span, div[class*="text"], button')
+        const imageElements = document.querySelectorAll('img')
+
+        editableElements.forEach(element => {
+          element.style.cursor = 'pointer'
+          element.style.outline = '2px dashed #4fdce5'
+          element.style.outlineOffset = '2px'
+
+          element.addEventListener('click', handleElementClick)
+        })
+
+        imageElements.forEach(element => {
+          element.style.cursor = 'pointer'
+          element.style.outline = '2px dashed #4fdce5'
+          element.style.outlineOffset = '2px'
+
+          element.addEventListener('click', handleImageClick)
+        })
+      }
+
+  const handleImageClick = (e: Event) => {
+    e.preventDefault()
+    e.stopPropagation()
+
+    const imgElement = e.target as HTMLImageElement
+    setSelectedImage(imgElement)
+    setShowImageUpload(true)
   }
 
   const handleElementClick = (e: Event) => {
@@ -300,6 +321,79 @@ export default function InlineEditor({ pageSlug, pageTitle }: InlineEditorProps)
     element.textContent = originalContent
   }
 
+  const handleImageUpload = async () => {
+    if (!imageFile || !selectedImage) return
+
+    setIsSaving(true)
+    try {
+      // Upload the image
+      const formData = new FormData()
+      formData.append('file', imageFile)
+
+      const uploadResponse = await fetch('/api/upload', {
+        method: 'POST',
+        body: formData,
+      })
+
+      if (!uploadResponse.ok) {
+        throw new Error('Failed to upload image')
+      }
+
+      const uploadData = await uploadResponse.json()
+      const newImageUrl = uploadData.url
+
+      // Update the image src
+      selectedImage.src = newImageUrl
+      selectedImage.alt = imageFile.name
+
+      // Save the updated content to the database
+      const response = await fetch(`/api/pages/slug/${pageSlug}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          content: document.documentElement.outerHTML,
+          updatedBy: session?.user?.name || 'Inline Editor',
+          editMetadata: {
+            elementId: selectedImage.id || `img-${Date.now()}`,
+            elementClass: selectedImage.className,
+            elementTag: 'img',
+            timestamp: new Date().toISOString(),
+            pageSlug: pageSlug,
+            newImageUrl: newImageUrl
+          }
+        }),
+      })
+
+      if (response.ok) {
+        showSuccessMessage('Image uploaded successfully!')
+        
+        // Trigger page refresh to show changes
+        setTimeout(() => {
+          window.location.reload()
+        }, 1000)
+      } else {
+        throw new Error('Failed to save image')
+      }
+    } catch (error) {
+      console.error('Error uploading image:', error)
+      showErrorMessage('Failed to upload image')
+    } finally {
+      setIsSaving(false)
+      setShowImageUpload(false)
+      setSelectedImage(null)
+      setImageFile(null)
+    }
+  }
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0]
+    if (file) {
+      setImageFile(file)
+    }
+  }
+
   const showSuccessMessage = (message: string) => {
     const notification = document.createElement('div')
     notification.textContent = message
@@ -371,18 +465,27 @@ export default function InlineEditor({ pageSlug, pageTitle }: InlineEditorProps)
     const editElements = document.querySelectorAll('[style*="border: 2px solid #4fdce5"]')
     editElements.forEach(element => element.remove())
     
-    // Remove all edit styling from page elements
-    const editableElements = document.querySelectorAll('h1, h2, h3, h4, h5, h6, p, span, div, button')
-    editableElements.forEach(element => {
-      element.style.cursor = ''
-      element.style.outline = ''
-      element.style.outlineOffset = ''
-      element.style.backgroundColor = ''
-      element.style.border = ''
-      element.style.opacity = '1'
-      element.removeEventListener('click', handleElementClick)
-      element.removeAttribute('data-edited')
-    })
+        // Remove all edit styling from page elements
+        const editableElements = document.querySelectorAll('h1, h2, h3, h4, h5, h6, p, span, div, button')
+        const imageElements = document.querySelectorAll('img')
+        
+        editableElements.forEach(element => {
+          element.style.cursor = ''
+          element.style.outline = ''
+          element.style.outlineOffset = ''
+          element.style.backgroundColor = ''
+          element.style.border = ''
+          element.style.opacity = '1'
+          element.removeEventListener('click', handleElementClick)
+          element.removeAttribute('data-edited')
+        })
+
+        imageElements.forEach(element => {
+          element.style.cursor = ''
+          element.style.outline = ''
+          element.style.outlineOffset = ''
+          element.removeEventListener('click', handleImageClick)
+        })
     
     // Save silently
     saveAllPendingChangesSilently()
@@ -506,16 +609,65 @@ export default function InlineEditor({ pageSlug, pageTitle }: InlineEditorProps)
         {isEditing ? <X className="h-5 w-5" /> : <Edit3 className="h-5 w-5" />}
       </button>
 
-      {/* Edit Mode Indicator - Yellow one that you want back */}
-      {isEditing && (
-        <div className="fixed top-16 right-4 z-50 bg-yellow-500 text-black px-4 py-2 rounded-lg shadow-lg">
-          <div className="flex items-center space-x-2">
-            <Edit3 className="h-4 w-4" />
-            <span className="font-medium">Click any text to edit</span>
-          </div>
-        </div>
-      )}
+          {/* Edit Mode Indicator - Yellow one that you want back */}
+          {isEditing && (
+            <div className="fixed top-16 right-4 z-50 bg-yellow-500 text-black px-4 py-2 rounded-lg shadow-lg">
+              <div className="flex items-center space-x-2">
+                <Edit3 className="h-4 w-4" />
+                <span className="font-medium">Click any text or image to edit</span>
+              </div>
+            </div>
+          )}
 
-    </>
-  )
-}
+          {/* Image Upload Modal */}
+          {showImageUpload && (
+            <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+              <div className="bg-white rounded-xl shadow-2xl w-full max-w-md p-6">
+                <h3 className="text-xl font-bold text-gray-900 mb-4">Upload New Image</h3>
+                
+                <div className="mb-4">
+                  <label htmlFor="image-upload" className="block text-sm font-medium text-gray-700 mb-2">
+                    Select Image File
+                  </label>
+                  <input
+                    id="image-upload"
+                    type="file"
+                    accept="image/*"
+                    onChange={handleFileChange}
+                    className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#4fdce5] focus:border-[#4fdce5]"
+                  />
+                </div>
+
+                {imageFile && (
+                  <div className="mb-4">
+                    <p className="text-sm text-gray-600 mb-2">Selected file: {imageFile.name}</p>
+                    <p className="text-xs text-gray-500">Size: {(imageFile.size / 1024 / 1024).toFixed(2)} MB</p>
+                  </div>
+                )}
+
+                <div className="flex space-x-3">
+                  <button
+                    onClick={handleImageUpload}
+                    disabled={!imageFile || isSaving}
+                    className="flex-1 bg-[#4fdce5] hover:bg-[#3cc9d3] disabled:bg-gray-300 text-white font-semibold py-2 px-4 rounded-lg transition-colors"
+                  >
+                    {isSaving ? 'Uploading...' : 'Upload Image'}
+                  </button>
+                  <button
+                    onClick={() => {
+                      setShowImageUpload(false)
+                      setSelectedImage(null)
+                      setImageFile(null)
+                    }}
+                    className="flex-1 bg-gray-100 hover:bg-gray-200 text-gray-700 font-semibold py-2 px-4 rounded-lg transition-colors"
+                  >
+                    Cancel
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
+
+        </>
+      )
+    }

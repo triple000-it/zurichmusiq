@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import Image from "next/image"
 import Link from "next/link"
 import Header from "@/components/header"
@@ -8,6 +8,18 @@ import Footer from "@/components/footer"
 import ShaderBackground from "@/components/shader-background"
 import PulsingCircle from "@/components/pulsing-circle"
 import InlineEditor from "@/components/inline-editor"
+
+interface Page {
+  id: string
+  slug: string
+  title: string
+  content: string
+  metaTitle: string | null
+  metaDescription: string | null
+  createdAt: string
+  updatedAt: string
+  updatedBy: string | null
+}
 
 
 
@@ -114,7 +126,64 @@ const services: Service[] = [
 ]
 
 export default function ServicesPage() {
+  const [page, setPage] = useState<Page | null>(null)
+  const [loading, setLoading] = useState(true)
   const [selectedService, setSelectedService] = useState<Service>(services[0])
+
+  useEffect(() => {
+    const fetchPage = async () => {
+      try {
+        const response = await fetch('/api/pages/slug/services')
+        if (response.ok) {
+          const pageData = await response.json()
+          setPage(pageData)
+        }
+      } catch (error) {
+        console.error('Error fetching services page:', error)
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    fetchPage()
+  }, [])
+
+  const handleSave = async (data: {
+    title: string
+    content: string
+    metaTitle?: string
+    metaDescription?: string
+  }) => {
+    if (!page) return
+
+    const response = await fetch(`/api/pages/slug/services`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        ...data,
+        updatedBy: 'Inline Editor'
+      }),
+    })
+
+    if (response.ok) {
+      const updatedPage = await response.json()
+      setPage(updatedPage)
+    }
+  }
+
+  if (loading) {
+    return (
+      <ShaderBackground>
+        <Header />
+        <main className="relative z-20 w-full min-h-screen pt-32 pb-20 px-8 lg:px-16 flex items-center justify-center">
+          <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-white"></div>
+        </main>
+        <Footer />
+      </ShaderBackground>
+    )
+  }
 
   return (
     <ShaderBackground>
@@ -128,12 +197,12 @@ export default function ServicesPage() {
             {/* Page Header */}
             <div className="text-center mb-20" >
               <h1 className="text-6xl md:text-7xl font-bold text-white mb-8">
-                Our Services
+                {page?.title || "Our Services"}
               </h1>
-              <p className="text-xl md:text-2xl text-white/80 max-w-3xl mx-auto leading-relaxed">
-                Professional music production, recording, and artist development services 
-                to help you create, record, and succeed in the music industry.
-              </p>
+              <div 
+                className="text-xl md:text-2xl text-white/80 max-w-3xl mx-auto leading-relaxed"
+                dangerouslySetInnerHTML={{ __html: page?.content || "Professional music production, recording, and artist development services to help you create, record, and succeed in the music industry." }}
+              />
             </div>
 
             {/* Service Categories Menu */}

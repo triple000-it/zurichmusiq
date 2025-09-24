@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import Header from "@/components/header"
 import Footer from "@/components/footer"
 import ShaderBackground from "@/components/shader-background"
@@ -187,13 +187,37 @@ const addonServices = [
 ]
 
 export default function BookingPage() {
-  const [selectedStudio, setSelectedStudio] = useState<Studio>(studios[0])
+  const [studios, setStudios] = useState<Studio[]>([])
+  const [loading, setLoading] = useState(true)
+  const [selectedStudio, setSelectedStudio] = useState<Studio | null>(null)
   const [selectedDate, setSelectedDate] = useState("")
   const [selectedTime, setSelectedTime] = useState("")
   const [duration, setDuration] = useState("4")
   const [addons, setAddons] = useState<string[]>([])
 
+  useEffect(() => {
+    const fetchStudios = async () => {
+      try {
+        const response = await fetch('/api/studios')
+        if (response.ok) {
+          const studiosData = await response.json()
+          setStudios(studiosData)
+          if (studiosData.length > 0) {
+            setSelectedStudio(studiosData[0])
+          }
+        }
+      } catch (error) {
+        console.error('Error fetching studios:', error)
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    fetchStudios()
+  }, [])
+
   const calculateTotal = () => {
+    if (!selectedStudio) return 0
     const baseRate = selectedStudio.hourlyRate * parseInt(duration)
     const addonCost = addons.reduce((total, addon) => {
       const service = addonServices.find(s => s.name === addon)
@@ -212,6 +236,33 @@ export default function BookingPage() {
       addons,
       total: calculateTotal()
     })
+  }
+
+  if (loading) {
+    return (
+      <ShaderBackground>
+        <Header />
+        <main className="relative z-20 w-full min-h-screen pt-32 pb-20 px-8 lg:px-16 flex items-center justify-center">
+          <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-white"></div>
+        </main>
+        <Footer />
+      </ShaderBackground>
+    )
+  }
+
+  if (!selectedStudio) {
+    return (
+      <ShaderBackground>
+        <Header />
+        <main className="relative z-20 w-full min-h-screen pt-32 pb-20 px-8 lg:px-16 flex items-center justify-center">
+          <div className="text-center">
+            <h1 className="text-4xl font-bold text-white mb-4">No Studios Available</h1>
+            <p className="text-white/80">Please check back later or contact us for availability.</p>
+          </div>
+        </main>
+        <Footer />
+      </ShaderBackground>
+    )
   }
 
   return (

@@ -1,0 +1,389 @@
+const { PrismaClient } = require('@prisma/client')
+
+const prisma = new PrismaClient()
+
+async function migrateMockData() {
+  try {
+    console.log('🚀 Starting migration of mock data to database...')
+
+    // 1. Create Pages
+    console.log('📄 Creating pages...')
+    const pages = [
+      {
+        slug: 'home',
+        title: 'Zurich Musiq - Professional Music Studio',
+        content: `
+          <div class="hero-section">
+            <h1>Welcome to Zurich Musiq</h1>
+            <p>Professional music recording studio in the heart of Zurich</p>
+          </div>
+          <div class="services-preview">
+            <h2>Our Services</h2>
+            <p>Professional recording, mixing, mastering, and music production services</p>
+          </div>
+        `,
+        metaTitle: 'Zurich Musiq - Professional Music Studio',
+        metaDescription: 'Professional music recording studio in Zurich offering recording, mixing, mastering, and production services.',
+        isPublished: true,
+        createdBy: 'System',
+        updatedBy: 'System'
+      },
+      {
+        slug: 'about',
+        title: 'About Us - Zurich Musiq',
+        content: `
+          <div class="about-section">
+            <h1>About Zurich Musiq</h1>
+            <p>We are a professional music studio dedicated to bringing your musical vision to life.</p>
+            <h2>Our Team</h2>
+            <p>Experienced engineers and producers with years of industry experience.</p>
+          </div>
+        `,
+        metaTitle: 'About Us - Zurich Musiq',
+        metaDescription: 'Learn about Zurich Musiq, our team, and our commitment to professional music production.',
+        isPublished: true,
+        createdBy: 'System',
+        updatedBy: 'System'
+      },
+      {
+        slug: 'contact',
+        title: 'Contact Us - Zurich Musiq',
+        content: `
+          <div class="contact-section">
+            <h1>Contact Us</h1>
+            <p>Get in touch with us for bookings and inquiries.</p>
+            <h2>Studio Location</h2>
+            <p>Located in the heart of Zurich with easy access and parking.</p>
+          </div>
+        `,
+        metaTitle: 'Contact Us - Zurich Musiq',
+        metaDescription: 'Contact Zurich Musiq for studio bookings and music production inquiries.',
+        isPublished: true,
+        createdBy: 'System',
+        updatedBy: 'System'
+      },
+      {
+        slug: 'services',
+        title: 'Our Services - Zurich Musiq',
+        content: `
+          <div class="services-section">
+            <h1>Our Services</h1>
+            <p>Professional music production services for artists and bands.</p>
+            <h2>Recording</h2>
+            <p>High-quality recording in our professional studios.</p>
+            <h2>Mixing & Mastering</h2>
+            <p>Professional mixing and mastering services.</p>
+          </div>
+        `,
+        metaTitle: 'Our Services - Zurich Musiq',
+        metaDescription: 'Professional music production services including recording, mixing, mastering, and production.',
+        isPublished: true,
+        createdBy: 'System',
+        updatedBy: 'System'
+      },
+      {
+        slug: 'music',
+        title: 'Our Work - Zurich Musiq',
+        content: `
+          <div class="portfolio-section">
+            <h1>Our Work</h1>
+            <p>Check out some of our recent projects and collaborations.</p>
+            <h2>Featured Projects</h2>
+            <p>Showcasing our diverse range of musical productions.</p>
+          </div>
+        `,
+        metaTitle: 'Our Work - Zurich Musiq',
+        metaDescription: 'Explore our portfolio of music production projects and collaborations.',
+        isPublished: true,
+        createdBy: 'System',
+        updatedBy: 'System'
+      },
+      {
+        slug: 'booking',
+        title: 'Book Studio Time - Zurich Musiq',
+        content: `
+          <div class="booking-section">
+            <h1>Book Studio Time</h1>
+            <p>Reserve studio time for your next recording session.</p>
+            <h2>Available Studios</h2>
+            <p>Choose from our professional recording studios.</p>
+          </div>
+        `,
+        metaTitle: 'Book Studio Time - Zurich Musiq',
+        metaDescription: 'Book professional recording studio time at Zurich Musiq.',
+        isPublished: true,
+        createdBy: 'System',
+        updatedBy: 'System'
+      }
+    ]
+
+    for (const page of pages) {
+      await prisma.page.upsert({
+        where: { slug: page.slug },
+        update: page,
+        create: page
+      })
+    }
+    console.log('✅ Pages created successfully')
+
+    // 2. Create Studios
+    console.log('🏢 Creating studios...')
+    const studios = [
+      {
+        id: 'studio-s',
+        name: 'Studio S - Production Suite',
+        description: 'A versatile production studio perfect for mixing, mastering, vocal recording, and electronic music production. Features a smaller, more intimate space with state-of-the-art digital tools and excellent acoustic treatment.',
+        size: '80 m²',
+        capacity: '2-4 people',
+        hourlyRate: 120,
+        dailyRate: 800,
+        weeklyRate: 4000,
+        features: ['Digital Mixing Console', 'Professional Monitors', 'Acoustic Treatment', 'Vocal Booth', 'Electronic Music Setup'],
+        equipment: {
+          console: 'SSL Matrix2',
+          monitors: 'Genelec 8351B',
+          microphones: ['Neumann U87', 'AKG C414', 'Shure SM7B'],
+          instruments: ['MIDI Controller', 'Synthesizer', 'Drum Machine']
+        },
+        images: ['/STUDIO-S.png'],
+        isActive: true
+      },
+      {
+        id: 'studio-xl',
+        name: 'Studio XL - Full Production Suite',
+        description: 'Our flagship studio designed for full-band recordings, orchestral sessions, and large-scale productions. Features a spacious live room, multiple isolation booths, and a large control room with analog and digital mixing capabilities.',
+        size: '150 m²',
+        capacity: '8-12 people',
+        hourlyRate: 200,
+        dailyRate: 1400,
+        weeklyRate: 7000,
+        features: ['Analog Mixing Console', 'Large Live Room', 'Multiple Isolation Booths', 'Professional Monitors', 'Full Band Setup'],
+        equipment: {
+          console: 'SSL AWS 948',
+          monitors: 'ATC SCM45A Pro',
+          microphones: ['Neumann U87', 'AKG C414', 'Shure SM7B', 'Royer R-121', 'Coles 4038'],
+          instruments: ['Grand Piano', 'Drum Kit', 'Guitar Amps', 'Bass Amps']
+        },
+        images: ['/STUDIO-XL.png'],
+        isActive: true
+      }
+    ]
+
+    for (const studio of studios) {
+      await prisma.studio.upsert({
+        where: { id: studio.id },
+        update: studio,
+        create: studio
+      })
+    }
+    console.log('✅ Studios created successfully')
+
+    // 3. Create Services
+    console.log('🎵 Creating services...')
+    const services = [
+      {
+        id: 'mixing-mastering',
+        title: 'Mixing & Mastering',
+        description: 'Get your projects professionally mixed and mastered by our experienced engineers, ensuring they are polished, balanced, and ready for release on any platform. We use industry-standard equipment and techniques to deliver broadcast-quality results.',
+        features: [
+          'Professional mixing on SSL consoles',
+          'Mastering for all streaming platforms',
+          'Reference track analysis',
+          'Multiple format delivery',
+          'Unlimited revisions'
+        ],
+        pricing: 'Starting from CHF 200 per song',
+        duration: '3-5 days per song',
+        isActive: true
+      },
+      {
+        id: 'music-production',
+        title: 'Music Production',
+        description: 'Full-service music production from concept to completion. Our producers work closely with artists to develop their sound, arrange songs, and create professional recordings that stand out in today\'s competitive market.',
+        features: [
+          'Song arrangement and development',
+          'Professional recording',
+          'Instrument programming',
+          'Vocal production',
+          'Creative direction'
+        ],
+        pricing: 'Starting from CHF 500 per song',
+        duration: '1-2 weeks per song',
+        isActive: true
+      },
+      {
+        id: 'professional-recording',
+        title: 'Professional Recording',
+        description: 'High-quality recording services in our state-of-the-art studios. Whether you need to record vocals, instruments, or full band sessions, our engineers will capture your performance with pristine quality.',
+        features: [
+          'Multi-track recording',
+          'Professional microphones',
+          'Acoustic treatment',
+          'Real-time monitoring',
+          'Backup recordings'
+        ],
+        pricing: 'Starting from CHF 120 per hour',
+        duration: 'Flexible scheduling',
+        isActive: true
+      },
+      {
+        id: 'artist-development',
+        title: 'Artist Development',
+        description: 'Comprehensive artist development services to help emerging artists refine their sound, build their brand, and navigate the music industry. We provide guidance on everything from songwriting to marketing.',
+        features: [
+          'Songwriting workshops',
+          'Performance coaching',
+          'Industry networking',
+          'Brand development',
+          'Career planning'
+        ],
+        pricing: 'Starting from CHF 300 per session',
+        duration: 'Ongoing support',
+        isActive: true
+      }
+    ]
+
+    for (const service of services) {
+      await prisma.service.upsert({
+        where: { id: service.id },
+        update: service,
+        create: service
+      })
+    }
+    console.log('✅ Services created successfully')
+
+    // 4. Create Projects
+    console.log('🎤 Creating projects...')
+    const projects = [
+      {
+        id: 'project-1',
+        title: 'Midnight Dreams',
+        artist: 'Luna Echo',
+        genre: 'Alternative Pop',
+        description: 'A hauntingly beautiful alternative pop album featuring ethereal vocals and atmospheric production. Recorded and mixed at Zurich Musiq.',
+        services: ['Recording', 'Mixing', 'Mastering'],
+        year: '2024',
+        image: '/placeholder.jpg',
+        isPublished: true
+      },
+      {
+        id: 'project-2',
+        title: 'Urban Rhythms',
+        artist: 'City Beats Collective',
+        genre: 'Hip-Hop',
+        description: 'High-energy hip-hop tracks with innovative beats and powerful lyrics. Full production and mixing services.',
+        services: ['Music Production', 'Mixing', 'Mastering'],
+        year: '2024',
+        image: '/placeholder.jpg',
+        isPublished: true
+      },
+      {
+        id: 'project-3',
+        title: 'Classical Fusion',
+        artist: 'Swiss Symphony',
+        genre: 'Classical',
+        description: 'Modern classical compositions with electronic elements. Orchestral recording and post-production.',
+        services: ['Recording', 'Mixing', 'Mastering'],
+        year: '2023',
+        image: '/placeholder.jpg',
+        isPublished: true
+      },
+      {
+        id: 'project-4',
+        title: 'Jazz Nights',
+        artist: 'Zurich Jazz Quartet',
+        genre: 'Jazz',
+        description: 'Intimate jazz recordings capturing the essence of live performance. Natural acoustic recording.',
+        services: ['Recording', 'Mixing'],
+        year: '2023',
+        image: '/placeholder.jpg',
+        isPublished: true
+      }
+    ]
+
+    for (const project of projects) {
+      await prisma.project.upsert({
+        where: { id: project.id },
+        update: project,
+        create: project
+      })
+    }
+    console.log('✅ Projects created successfully')
+
+    // 5. Create Admin User
+    console.log('👤 Creating admin user...')
+    const adminUser = await prisma.user.upsert({
+      where: { email: 'admin@zurichmusiq.com' },
+      update: {
+        name: 'Admin User',
+        role: 'SUPER_ADMIN'
+      },
+      create: {
+        name: 'Admin User',
+        email: 'admin@zurichmusiq.com',
+        role: 'SUPER_ADMIN'
+      }
+    })
+    console.log('✅ Admin user created successfully')
+
+    // 6. Create Sample Bookings
+    console.log('📅 Creating sample bookings...')
+    const bookings = [
+      {
+        studioId: 'studio-s',
+        userId: adminUser.id,
+        date: new Date('2024-02-15'),
+        startTime: '10:00',
+        duration: 4,
+        totalCost: 480,
+        status: 'CONFIRMED',
+        addons: ['Professional Engineer'],
+        notes: 'Vocal recording session'
+      },
+      {
+        studioId: 'studio-xl',
+        userId: adminUser.id,
+        date: new Date('2024-02-20'),
+        startTime: '14:00',
+        duration: 8,
+        totalCost: 1600,
+        status: 'PENDING',
+        addons: ['Professional Engineer', 'Backup Recording'],
+        notes: 'Full band recording'
+      }
+    ]
+
+    for (const booking of bookings) {
+      await prisma.booking.create({
+        data: booking
+      })
+    }
+    console.log('✅ Sample bookings created successfully')
+
+    console.log('🎉 Migration completed successfully!')
+    console.log('\n📊 Summary:')
+    console.log(`- ${pages.length} pages created`)
+    console.log(`- ${studios.length} studios created`)
+    console.log(`- ${services.length} services created`)
+    console.log(`- ${projects.length} projects created`)
+    console.log(`- 1 admin user created`)
+    console.log(`- ${bookings.length} sample bookings created`)
+
+  } catch (error) {
+    console.error('❌ Migration failed:', error)
+    throw error
+  } finally {
+    await prisma.$disconnect()
+  }
+}
+
+// Run migration
+migrateMockData()
+  .then(() => {
+    console.log('✅ Migration script completed')
+    process.exit(0)
+  })
+  .catch((error) => {
+    console.error('❌ Migration script failed:', error)
+    process.exit(1)
+  })
