@@ -313,18 +313,17 @@ export default function InlineEditor({ pageSlug, pageTitle }: InlineEditorProps)
     setIsEditing(false)
     setIsSaving(false)
     
-    // Remove ALL popup elements from DOM
-    const popups = document.querySelectorAll('[style*="position: fixed"]')
-    popups.forEach(popup => {
-      if (popup !== document.querySelector('button[title*="Edit"]') && 
-          popup !== document.querySelector('button[title*="Exit"]')) {
-        popup.remove()
-      }
-    })
+    // Remove white popup elements (input fields) but keep yellow indicator until state changes
+    const inputs = document.querySelectorAll('input[style*="position: absolute"]')
+    inputs.forEach(input => input.remove())
     
-    // Remove all edit styling
-    const allElements = document.querySelectorAll('*')
-    allElements.forEach(element => {
+    // Remove any white popup boxes with blue borders
+    const whitePopups = document.querySelectorAll('[style*="background: white"][style*="border"]')
+    whitePopups.forEach(popup => popup.remove())
+    
+    // Remove all edit styling from page elements
+    const editableElements = document.querySelectorAll('h1, h2, h3, h4, h5, h6, p, span, div, button')
+    editableElements.forEach(element => {
       element.style.cursor = ''
       element.style.outline = ''
       element.style.outlineOffset = ''
@@ -334,10 +333,6 @@ export default function InlineEditor({ pageSlug, pageTitle }: InlineEditorProps)
       element.removeEventListener('click', handleElementClick)
       element.removeAttribute('data-edited')
     })
-    
-    // Remove any input fields
-    const inputs = document.querySelectorAll('input[style*="position: absolute"]')
-    inputs.forEach(input => input.remove())
     
     // Save silently
     saveAllPendingChangesSilently()
@@ -450,6 +445,16 @@ export default function InlineEditor({ pageSlug, pageTitle }: InlineEditorProps)
       >
         {isEditing ? <X className="h-5 w-5" /> : <Edit3 className="h-5 w-5" />}
       </button>
+
+      {/* Edit Mode Indicator - Yellow one that you want back */}
+      {isEditing && (
+        <div className="fixed top-16 right-4 z-50 bg-yellow-500 text-black px-4 py-2 rounded-lg shadow-lg">
+          <div className="flex items-center space-x-2">
+            <Edit3 className="h-4 w-4" />
+            <span className="font-medium">Click any text to edit</span>
+          </div>
+        </div>
+      )}
 
     </>
   )
