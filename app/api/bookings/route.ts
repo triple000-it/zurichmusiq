@@ -3,23 +3,36 @@ import { getServerSession } from 'next-auth'
 import { authOptions } from '@/lib/auth-simple'
 import { prisma } from '@/lib/prisma'
 
-// GET /api/bookings - Get all bookings
+// GET /api/bookings - Get all bookings (admin only) or user's bookings
 export async function GET(request: NextRequest) {
   try {
     const session = await getServerSession(authOptions)
     
-    if (!session?.user?.role || !['SUPER_ADMIN', 'ADMIN', 'MANAGER'].includes(session.user.role)) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 403 })
+    if (!session?.user) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
 
+    // If admin, get all bookings
+    if (session.user.role && ['SUPER_ADMIN', 'ADMIN', 'MANAGER'].includes(session.user.role)) {
+      const bookings = await prisma.booking.findMany({
+        include: {
+          studio: true,
+          user: true
+        },
+        orderBy: { createdAt: 'desc' }
+      })
+      return NextResponse.json(bookings)
+    }
+
+    // If regular user, get only their bookings
     const bookings = await prisma.booking.findMany({
+      where: { userId: session.user.id },
       include: {
-        studio: true,
-        user: true
+        studio: true
       },
       orderBy: { createdAt: 'desc' }
     })
-
+    
     return NextResponse.json(bookings)
   } catch (error) {
     console.error('Error fetching bookings:', error)
@@ -32,24 +45,49 @@ export async function POST(request: NextRequest) {
   try {
     const session = await getServerSession(authOptions)
     
-    if (!session?.user?.role || !['SUPER_ADMIN', 'ADMIN', 'MANAGER'].includes(session.user.role)) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 403 })
+    if (!session?.user) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
 
     const body = await request.json()
-    const { studioId, userId, date, startTime, duration, totalCost, addons, notes } = body
+    const { 
+      studioId, 
+      date, 
+      startTime, 
+      duration, 
+      totalCost, 
+      notes,
+      addonServices 
+    } = body
 
+    // Validate required fields
+    if (!studioId || !date || !startTime || !duration) {
+      return NextResponse.json({ error: 'Missing required fields' }, { status: 400 })
+    }
+
+    // Check if studio exists
+    const studio = await prisma.studio.findUnique({
+      where: { id: studioId }
+    })
+
+    if (!studio) {
+      return NextResponse.json({ error: 'Studio not found' }, { status: 404 })
+    }
+
+    // Create booking
     const booking = await prisma.booking.create({
       data: {
+        userId: session.user.id,
         studioId,
-        userId,
         date: new Date(date),
         startTime,
-        duration,
-        totalCost,
-        addons,
-        notes,
-        status: 'PENDING'
+        duration: parseInt(duration),
+        totalCost: parseFloat(totalCost),
+        status: 'PENDING',
+        notes: notes || '',
+        addonServices: addonServices || [],
+        createdAt: new Date(),
+        updatedAt: new Date()
       },
       include: {
         studio: true,

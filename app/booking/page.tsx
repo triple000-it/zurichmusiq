@@ -207,6 +207,9 @@ export default function BookingPage() {
   const [selectedTime, setSelectedTime] = useState("")
   const [duration, setDuration] = useState("4")
   const [addons, setAddons] = useState<string[]>([])
+  const [notes, setNotes] = useState("")
+  const [isSubmitting, setIsSubmitting] = useState(false)
+  const [submitMessage, setSubmitMessage] = useState("")
 
   useEffect(() => {
     const fetchData = async () => {
@@ -245,6 +248,55 @@ export default function BookingPage() {
       return total + (service ? service.hourlyRate * parseInt(duration) : 0)
     }, 0)
     return baseRate + addonCost
+  }
+
+  const handleBookingSubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
+    
+    if (!selectedStudio || !selectedDate || !selectedTime) {
+      setSubmitMessage("Please fill in all required fields")
+      return
+    }
+
+    setIsSubmitting(true)
+    setSubmitMessage("")
+
+    try {
+      const response = await fetch('/api/bookings', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          studioId: selectedStudio.id,
+          date: selectedDate,
+          startTime: selectedTime,
+          duration: parseInt(duration),
+          totalCost: calculateTotal(),
+          notes: notes,
+          addonServices: addons
+        }),
+      })
+
+      if (response.ok) {
+        const booking = await response.json()
+        setSubmitMessage(`Booking created successfully! Booking ID: ${booking.id}`)
+        // Reset form
+        setSelectedDate("")
+        setSelectedTime("")
+        setDuration("4")
+        setAddons([])
+        setNotes("")
+      } else {
+        const error = await response.json()
+        setSubmitMessage(`Error: ${error.error}`)
+      }
+    } catch (error) {
+      console.error('Booking submission error:', error)
+      setSubmitMessage("An error occurred while submitting your booking")
+    } finally {
+      setIsSubmitting(false)
+    }
   }
 
   const handleBooking = (e: React.FormEvent) => {
@@ -386,16 +438,35 @@ export default function BookingPage() {
               <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-8 border border-white/20">
                 <h3 className="text-2xl font-bold text-white mb-6">Equipment & Gear</h3>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  {selectedStudio.equipment.map((category, index) => (
-                    <div key={index}>
-                      <h4 className="text-lg font-semibold text-[#4fdce5] mb-3">{category.category}</h4>
-                      <ul className="space-y-2">
-                        {category.items.map((item, itemIndex) => (
-                          <li key={itemIndex} className="text-white/70 text-sm">• {item}</li>
-                        ))}
-                      </ul>
-                    </div>
-                  ))}
+                  {selectedStudio.equipment && typeof selectedStudio.equipment === 'object' ? (
+                    // Handle database JSON format
+                    Object.entries(selectedStudio.equipment).map(([category, items], index) => (
+                      <div key={index}>
+                        <h4 className="text-lg font-semibold text-[#4fdce5] mb-3 capitalize">{category}</h4>
+                        <ul className="space-y-2">
+                          {Array.isArray(items) ? (
+                            items.map((item, itemIndex) => (
+                              <li key={itemIndex} className="text-white/70 text-sm">• {item}</li>
+                            ))
+                          ) : (
+                            <li className="text-white/70 text-sm">• {items}</li>
+                          )}
+                        </ul>
+                      </div>
+                    ))
+                  ) : (
+                    // Handle array format (fallback)
+                    Array.isArray(selectedStudio.equipment) && selectedStudio.equipment.map((category, index) => (
+                      <div key={index}>
+                        <h4 className="text-lg font-semibold text-[#4fdce5] mb-3">{category.category}</h4>
+                        <ul className="space-y-2">
+                          {category.items.map((item, itemIndex) => (
+                            <li key={itemIndex} className="text-white/70 text-sm">• {item}</li>
+                          ))}
+                        </ul>
+                      </div>
+                    ))
+                  )}
                 </div>
               </div>
             </div>
@@ -404,7 +475,7 @@ export default function BookingPage() {
             <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-8 border border-white/20">
               <h3 className="text-2xl font-bold text-white mb-6">Book Your Session</h3>
               
-              <form onSubmit={handleBooking} className="max-w-2xl mx-auto">
+              <form onSubmit={handleBookingSubmit} className="max-w-2xl mx-auto">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
                   {/* Date & Time */}
                   <div>
@@ -486,6 +557,18 @@ export default function BookingPage() {
                   </div>
                 </div>
 
+                {/* Notes */}
+                <div className="mb-6">
+                  <label className="block text-white font-medium mb-2">Additional Notes</label>
+                  <textarea
+                    value={notes}
+                    onChange={(e) => setNotes(e.target.value)}
+                    className="w-full p-3 bg-white/5 border border-white/20 rounded-lg text-white placeholder-white/50 focus:ring-2 focus:ring-[#4fdce5] focus:border-[#4fdce5]"
+                    rows={3}
+                    placeholder="Any special requirements or notes for your session..."
+                  />
+                </div>
+
                 {/* Total Cost */}
                 <div className="bg-white/10 rounded-lg p-4 border border-white/20 mb-6">
                   <div className="flex justify-between items-center text-lg">
@@ -498,12 +581,24 @@ export default function BookingPage() {
                   </div>
                 </div>
 
+                {/* Submit Message */}
+                {submitMessage && (
+                  <div className={`mb-6 p-4 rounded-lg ${
+                    submitMessage.includes('successfully') 
+                      ? 'bg-green-500/20 border border-green-500/30 text-green-300' 
+                      : 'bg-red-500/20 border border-red-500/30 text-red-300'
+                  }`}>
+                    {submitMessage}
+                  </div>
+                )}
+
                 {/* Submit Button */}
                 <button
                   type="submit"
-                  className="w-full px-8 py-4 bg-gradient-to-r from-[#5A9BB8] to-[#6BAAC7] text-white font-semibold text-lg rounded-lg hover:scale-105 transition-all duration-300"
+                  disabled={isSubmitting}
+                  className="w-full px-8 py-4 bg-gradient-to-r from-[#5A9BB8] to-[#6BAAC7] text-white font-semibold text-lg rounded-lg hover:scale-105 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
                 >
-                  Book Studio Time
+                  {isSubmitting ? 'Creating Booking...' : 'Book Studio Time'}
                 </button>
               </form>
 
