@@ -207,10 +207,6 @@ export default function AdminBookingsPage() {
     )
   }
 
-  const filteredBookings = bookings.filter(booking => 
-    statusFilter === 'ALL' || booking.status === statusFilter
-  )
-
   const isAdmin = session?.user?.role && ['SUPER_ADMIN', 'ADMIN'].includes(session.user.role)
 
   return (
