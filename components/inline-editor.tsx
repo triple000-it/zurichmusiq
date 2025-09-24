@@ -32,6 +32,16 @@ export default function InlineEditor({ pageSlug, pageTitle }: InlineEditorProps)
     }
   }, [status, isAdmin])
 
+  // Cleanup when component unmounts or when isEditing changes to false
+  useEffect(() => {
+    if (!isEditing) {
+      // Force cleanup when exiting edit mode
+      setTimeout(() => {
+        cleanupEditMode()
+      }, 100)
+    }
+  }, [isEditing])
+
   // Restore inline edits from localStorage
   const restoreInlineEdits = () => {
     try {
@@ -262,46 +272,86 @@ export default function InlineEditor({ pageSlug, pageTitle }: InlineEditorProps)
   }
 
   const handleExitEditMode = async () => {
-    // First, save any pending changes
-    await saveAllPendingChanges()
-    
-    setIsEditing(false)
-    
-    // Remove all edit styling and listeners
-    const editableElements = document.querySelectorAll('h1, h2, h3, h4, h5, h6, p, span, div[class*="text"], button')
-    
-    editableElements.forEach(element => {
-      element.style.cursor = ''
-      element.style.outline = ''
-      element.style.outlineOffset = ''
-      element.removeEventListener('click', handleElementClick)
-    })
-    
-    // Clean up any remaining edit indicators
-    cleanupEditMode()
-    
-    // Show final success message
-    showSuccessMessage('All changes saved successfully!')
+    try {
+      // Show saving indicator
+      setIsSaving(true)
+      
+      // First, save any pending changes
+      await saveAllPendingChanges()
+      
+      // Clean up all edit mode elements
+      cleanupEditMode()
+      
+      // Remove all edit styling and listeners
+      const editableElements = document.querySelectorAll('h1, h2, h3, h4, h5, h6, p, span, div[class*="text"], button')
+      
+      editableElements.forEach(element => {
+        element.style.cursor = ''
+        element.style.outline = ''
+        element.style.outlineOffset = ''
+        element.style.backgroundColor = ''
+        element.style.border = ''
+        element.style.opacity = '1'
+        element.removeEventListener('click', handleElementClick)
+        element.removeAttribute('data-edited')
+      })
+      
+      // Reset state
+      setIsEditing(false)
+      setIsSaving(false)
+      
+      // Show final success message
+      showSuccessMessage('All changes saved successfully!')
+      
+    } catch (error) {
+      console.error('Error exiting edit mode:', error)
+      setIsSaving(false)
+      showErrorMessage('Error saving changes')
+    }
   }
 
   const cleanupEditMode = () => {
     // Remove any remaining input fields
     const remainingInputs = document.querySelectorAll('input[style*="position: absolute"]')
-    remainingInputs.forEach(input => input.remove())
+    remainingInputs.forEach(input => {
+      input.remove()
+    })
     
     // Remove any edit styling from elements
     const editedElements = document.querySelectorAll('[data-edited="true"]')
     editedElements.forEach(element => {
       element.removeAttribute('data-edited')
       element.style.opacity = '1'
+      element.style.backgroundColor = ''
+      element.style.border = ''
     })
     
-    // Remove any edit outlines
+    // Remove any edit outlines and styling
     const outlinedElements = document.querySelectorAll('[style*="outline"]')
     outlinedElements.forEach(element => {
       element.style.outline = ''
       element.style.outlineOffset = ''
       element.style.cursor = ''
+      element.style.backgroundColor = ''
+      element.style.border = ''
+    })
+    
+    // Remove any elements with dashed outlines
+    const dashedElements = document.querySelectorAll('[style*="dashed"]')
+    dashedElements.forEach(element => {
+      element.style.outline = ''
+      element.style.outlineOffset = ''
+      element.style.cursor = ''
+    })
+    
+    // Reset all elements to normal state
+    const allElements = document.querySelectorAll('*')
+    allElements.forEach(element => {
+      if (element.style.outline === '2px dashed #4fdce5') {
+        element.style.outline = ''
+        element.style.outlineOffset = ''
+        element.style.cursor = ''
+      }
     })
   }
 
