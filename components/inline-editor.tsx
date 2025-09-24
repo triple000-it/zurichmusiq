@@ -272,6 +272,11 @@ export default function InlineEditor({ pageSlug, pageTitle }: InlineEditorProps)
         // Remove edited flag since it's saved
         element.removeAttribute('data-edited')
         
+        // Trigger page refresh to show changes immediately
+        setTimeout(() => {
+          window.location.reload()
+        }, 1000)
+        
       } else {
         throw new Error('Failed to save')
       }
@@ -427,6 +432,11 @@ export default function InlineEditor({ pageSlug, pageTitle }: InlineEditorProps)
           
           // Remove the edited flag
           element.removeAttribute('data-edited')
+          
+          // Trigger page refresh to show changes
+          setTimeout(() => {
+            window.location.reload()
+          }, 500)
         }
       }).catch(error => {
         console.error('Error saving pending change:', error)

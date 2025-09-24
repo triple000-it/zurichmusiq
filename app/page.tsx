@@ -1,5 +1,6 @@
 "use client"
 
+import { useState, useEffect } from "react"
 import Header from "@/components/header"
 import HeroContent from "@/components/hero-content"
 import PulsingCircle from "@/components/pulsing-circle"
@@ -8,7 +9,64 @@ import Footer from "@/components/footer"
 import PerformanceMonitor from "@/components/performance-monitor"
 import InlineEditor from "@/components/inline-editor"
 
+interface Page {
+  id: string
+  slug: string
+  title: string
+  content: string
+  metaTitle: string | null
+  metaDescription: string | null
+  createdAt: string
+  updatedAt: string
+  updatedBy: string | null
+}
+
 export default function ShaderShowcase() {
+  const [page, setPage] = useState<Page | null>(null)
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    const fetchPage = async () => {
+      try {
+        const response = await fetch('/api/pages/slug/home')
+        if (response.ok) {
+          const pageData = await response.json()
+          setPage(pageData)
+        }
+      } catch (error) {
+        console.error('Error fetching homepage:', error)
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    fetchPage()
+  }, [])
+
+  const handleSave = async (data: {
+    title: string
+    content: string
+    metaTitle?: string
+    metaDescription?: string
+  }) => {
+    if (!page) return
+
+    const response = await fetch(`/api/pages/slug/home`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        ...data,
+        updatedBy: 'Inline Editor'
+      }),
+    })
+
+    if (response.ok) {
+      const updatedPage = await response.json()
+      setPage(updatedPage)
+    }
+  }
   return (
     <ShaderBackground>
       <Header />
