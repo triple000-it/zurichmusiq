@@ -6,15 +6,15 @@ import PulsingCircle from "@/components/pulsing-circle"
 import ShaderBackground from "@/components/shader-background"
 import Footer from "@/components/footer"
 import PerformanceMonitor from "@/components/performance-monitor"
-import UniversalEditButton from "@/components/universal-edit-button"
+import InlineEditor from "@/components/inline-editor"
 
 export default function ShaderShowcase() {
   return (
     <ShaderBackground>
       <Header />
       
-      {/* Universal Edit Button */}
-      <UniversalEditButton pageSlug="home" pageTitle="Homepage" />
+      {/* Inline Editor */}
+      <InlineEditor pageSlug="home" pageTitle="Homepage" />
       
       <HeroContent />
       <br /><br />
