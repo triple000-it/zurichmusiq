@@ -16,15 +16,27 @@ export default function UniversalEditButton({ pageSlug, pageTitle }: UniversalEd
   // Check if user is admin
   const isAdmin = session?.user?.role && ['SUPER_ADMIN', 'ADMIN', 'MANAGER'].includes(session.user.role)
   
+  // Debug logging
+  useEffect(() => {
+    console.log('UniversalEditButton Debug:', {
+      status,
+      session: session ? { user: session.user } : null,
+      isAdmin,
+      pageSlug,
+      pageTitle
+    })
+  }, [status, session, isAdmin, pageSlug, pageTitle])
+  
   // Show button after session is loaded
   useEffect(() => {
     if (status === 'authenticated' && isAdmin) {
+      console.log('Setting edit button visible for:', pageTitle)
       const timer = setTimeout(() => {
         setIsVisible(true)
       }, 500)
       return () => clearTimeout(timer)
     }
-  }, [status, isAdmin])
+  }, [status, isAdmin, pageTitle])
 
   // Don't render anything if user is not admin or not visible yet
   if (!isAdmin || !isVisible) {

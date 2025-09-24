@@ -7,6 +7,7 @@ import ShaderBackground from "@/components/shader-background"
 import Footer from "@/components/footer"
 import PerformanceMonitor from "@/components/performance-monitor"
 import UniversalEditButton from "@/components/universal-edit-button"
+import DebugSession from "@/components/debug-session"
 
 export default function ShaderShowcase() {
   return (
@@ -42,6 +43,7 @@ export default function ShaderShowcase() {
       <Footer />
       <PulsingCircle />
       <PerformanceMonitor />
+      <DebugSession />
     </ShaderBackground>
   )
 }
