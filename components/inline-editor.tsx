@@ -147,23 +147,22 @@ export default function InlineEditor({ pageSlug, pageTitle }: InlineEditorProps)
     const newContent = input.value
     element.textContent = newContent
     
+    // Mark element as edited
+    element.setAttribute('data-edited', 'true')
+    
     // Save to database
     setIsSaving(true)
     try {
-      // For now, we'll create a simple content update
-      // In a real application, you'd want more sophisticated content management
       const response = await fetch(`/api/pages/${pageSlug}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          // Create a simple content update with the new text
           content: `<div class="inline-edit-${Date.now()}">${newContent}</div>`,
           elementType: element.tagName.toLowerCase(),
           elementText: newContent,
           updatedBy: session?.user?.name || 'Inline Editor',
-          // Add metadata about the edit
           editMetadata: {
             elementId: element.id || `element-${Date.now()}`,
             elementClass: element.className,
@@ -194,6 +193,9 @@ export default function InlineEditor({ pageSlug, pageTitle }: InlineEditorProps)
           timestamp: new Date().toISOString()
         }))
         
+        // Remove edited flag since it's saved
+        element.removeAttribute('data-edited')
+        
       } else {
         throw new Error('Failed to save')
       }
@@ -208,6 +210,7 @@ export default function InlineEditor({ pageSlug, pageTitle }: InlineEditorProps)
         element.style.border = ''
       }, 2000)
       showErrorMessage('Failed to save changes')
+      // Keep edited flag since save failed
     }
     setIsSaving(false)
   }
@@ -258,7 +261,10 @@ export default function InlineEditor({ pageSlug, pageTitle }: InlineEditorProps)
     }, 3000)
   }
 
-  const handleExitEditMode = () => {
+  const handleExitEditMode = async () => {
+    // First, save any pending changes
+    await saveAllPendingChanges()
+    
     setIsEditing(false)
     
     // Remove all edit styling and listeners
@@ -270,6 +276,80 @@ export default function InlineEditor({ pageSlug, pageTitle }: InlineEditorProps)
       element.style.outlineOffset = ''
       element.removeEventListener('click', handleElementClick)
     })
+    
+    // Clean up any remaining edit indicators
+    cleanupEditMode()
+    
+    // Show final success message
+    showSuccessMessage('All changes saved successfully!')
+  }
+
+  const cleanupEditMode = () => {
+    // Remove any remaining input fields
+    const remainingInputs = document.querySelectorAll('input[style*="position: absolute"]')
+    remainingInputs.forEach(input => input.remove())
+    
+    // Remove any edit styling from elements
+    const editedElements = document.querySelectorAll('[data-edited="true"]')
+    editedElements.forEach(element => {
+      element.removeAttribute('data-edited')
+      element.style.opacity = '1'
+    })
+    
+    // Remove any edit outlines
+    const outlinedElements = document.querySelectorAll('[style*="outline"]')
+    outlinedElements.forEach(element => {
+      element.style.outline = ''
+      element.style.outlineOffset = ''
+      element.style.cursor = ''
+    })
+  }
+
+  const saveAllPendingChanges = async () => {
+    // Find any elements that might have been edited but not saved
+    const editedElements = document.querySelectorAll('[data-edited="true"]')
+    
+    for (const element of editedElements) {
+      const newContent = element.textContent || ""
+      const elementType = element.tagName.toLowerCase()
+      
+      try {
+        const response = await fetch(`/api/pages/${pageSlug}`, {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            content: `<div class="inline-edit-${Date.now()}">${newContent}</div>`,
+            elementType: elementType,
+            elementText: newContent,
+            updatedBy: session?.user?.name || 'Inline Editor',
+            editMetadata: {
+              elementId: element.id || `element-${Date.now()}`,
+              elementClass: element.className,
+              elementTag: elementType,
+              timestamp: new Date().toISOString(),
+              pageSlug: pageSlug
+            }
+          }),
+        })
+        
+        if (response.ok) {
+          // Store in localStorage
+          const editKey = `inline-edit-${pageSlug}-${elementType}-${Date.now()}`
+          localStorage.setItem(editKey, JSON.stringify({
+            content: newContent,
+            elementType: elementType,
+            timestamp: new Date().toISOString()
+          }))
+          
+          // Remove the edited flag
+          element.removeAttribute('data-edited')
+        }
+      } catch (error) {
+        console.error('Error saving pending change:', error)
+      }
+    }
   }
 
   return (
