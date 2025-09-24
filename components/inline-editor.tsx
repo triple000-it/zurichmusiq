@@ -99,15 +99,6 @@ export default function InlineEditor({ pageSlug, pageTitle }: InlineEditorProps)
     }
   }, [status, isAdmin])
 
-  // Cleanup when component unmounts or when isEditing changes to false
-  useEffect(() => {
-    if (!isEditing) {
-      // Force cleanup when exiting edit mode
-      setTimeout(() => {
-        cleanupEditMode()
-      }, 100)
-    }
-  }, [isEditing])
 
   // Don't render anything if user is not admin or not visible yet
   if (!isAdmin || !isVisible) {
@@ -317,46 +308,76 @@ export default function InlineEditor({ pageSlug, pageTitle }: InlineEditorProps)
     }, 3000)
   }
 
-  const handleExitEditMode = async () => {
-    try {
-      // Show saving indicator
-      setIsSaving(true)
+  const handleExitEditMode = () => {
+    // Immediately exit edit mode - no popups, no delays
+    setIsEditing(false)
+    setIsSaving(false)
+    
+    // Clean up everything silently
+    cleanupEditMode()
+    
+    // Remove all edit styling and listeners
+    const editableElements = document.querySelectorAll('h1, h2, h3, h4, h5, h6, p, span, div[class*="text"], button')
+    
+    editableElements.forEach(element => {
+      element.style.cursor = ''
+      element.style.outline = ''
+      element.style.outlineOffset = ''
+      element.style.backgroundColor = ''
+      element.style.border = ''
+      element.style.opacity = '1'
+      element.removeEventListener('click', handleElementClick)
+      element.removeAttribute('data-edited')
+    })
+    
+    // Save changes in background without showing any indicators
+    saveAllPendingChangesSilently()
+  }
+
+  const saveAllPendingChangesSilently = () => {
+    // Save changes in background without any UI indicators
+    const editedElements = document.querySelectorAll('[data-edited="true"]')
+    
+    editedElements.forEach(element => {
+      const newContent = element.textContent || ""
+      const elementType = element.tagName.toLowerCase()
       
-      // First, save any pending changes
-      await saveAllPendingChanges()
-      
-      // Reset state first
-      setIsEditing(false)
-      
-      // Clean up all edit mode elements
-      cleanupEditMode()
-      
-      // Remove all edit styling and listeners
-      const editableElements = document.querySelectorAll('h1, h2, h3, h4, h5, h6, p, span, div[class*="text"], button')
-      
-      editableElements.forEach(element => {
-        element.style.cursor = ''
-        element.style.outline = ''
-        element.style.outlineOffset = ''
-        element.style.backgroundColor = ''
-        element.style.border = ''
-        element.style.opacity = '1'
-        element.removeEventListener('click', handleElementClick)
-        element.removeAttribute('data-edited')
+      // Save to database silently
+      fetch(`/api/pages/slug/${pageSlug}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          content: `<div class="inline-edit-${Date.now()}">${newContent}</div>`,
+          elementType: elementType,
+          elementText: newContent,
+          updatedBy: session?.user?.name || 'Inline Editor',
+          editMetadata: {
+            elementId: element.id || `element-${Date.now()}`,
+            elementClass: element.className,
+            elementTag: elementType,
+            timestamp: new Date().toISOString(),
+            pageSlug: pageSlug
+          }
+        }),
+      }).then(response => {
+        if (response.ok) {
+          // Store in localStorage
+          const editKey = `inline-edit-${pageSlug}-${elementType}-${Date.now()}`
+          localStorage.setItem(editKey, JSON.stringify({
+            content: newContent,
+            elementType: elementType,
+            timestamp: new Date().toISOString()
+          }))
+          
+          // Remove the edited flag
+          element.removeAttribute('data-edited')
+        }
+      }).catch(error => {
+        console.error('Error saving pending change:', error)
       })
-      
-      // Reset saving state
-      setIsSaving(false)
-      
-      // Show final success message
-      showSuccessMessage('All changes saved successfully!')
-      
-    } catch (error) {
-      console.error('Error exiting edit mode:', error)
-      setIsSaving(false)
-      setIsEditing(false) // Force exit even on error
-      showErrorMessage('Error saving changes')
-    }
+    })
   }
 
   const saveAllPendingChanges = async () => {
