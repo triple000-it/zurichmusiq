@@ -55,13 +55,9 @@ export default function AdminLayout({
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 relative overflow-hidden">
-      {/* Cosmic background effect */}
-      <div className="absolute inset-0 opacity-40">
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_1px_1px,rgba(255,255,255,0.15)_1px,transparent_0)] bg-[length:20px_20px]"></div>
-      </div>
+    <div className="min-h-screen bg-gray-50">
       <AdminHeader />
-      <div className="flex relative z-10">
+      <div className="flex">
         <AdminSidebar />
         <main className="flex-1 p-6">
           {children}
