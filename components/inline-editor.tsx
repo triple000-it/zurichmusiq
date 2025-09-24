@@ -153,7 +153,7 @@ export default function InlineEditor({ pageSlug, pageTitle }: InlineEditorProps)
     // Save to database
     setIsSaving(true)
     try {
-      const response = await fetch(`/api/pages/${pageSlug}`, {
+      const response = await fetch(`/api/pages/slug/${pageSlug}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -314,7 +314,7 @@ export default function InlineEditor({ pageSlug, pageTitle }: InlineEditorProps)
       const elementType = element.tagName.toLowerCase()
       
       try {
-        const response = await fetch(`/api/pages/${pageSlug}`, {
+        const response = await fetch(`/api/pages/slug/${pageSlug}`, {
           method: 'PUT',
           headers: {
             'Content-Type': 'application/json',
