@@ -274,7 +274,7 @@ export default function BookingPage() {
           duration: parseInt(duration),
           totalCost: calculateTotal(),
           notes: notes,
-          addonServices: addons
+          addons: addons
         }),
       })
 

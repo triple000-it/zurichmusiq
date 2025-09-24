@@ -26,7 +26,7 @@ interface Booking {
   totalCost: number
   status: 'PENDING' | 'CONFIRMED' | 'COMPLETED' | 'CANCELLED'
   notes: string
-  addonServices: string[]
+  addons: string[]
   createdAt: string
   updatedAt: string
   studio: {
@@ -583,9 +583,9 @@ export default function AdminBookingsPage() {
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">Add-on Services</label>
                     <div className="bg-gray-50 p-3 rounded-lg">
-                      {selectedBooking.addonServices.length > 0 ? (
+                      {selectedBooking.addons && selectedBooking.addons.length > 0 ? (
                         <ul className="space-y-1">
-                          {selectedBooking.addonServices.map((service, index) => (
+                          {selectedBooking.addons.map((service, index) => (
                             <li key={index} className="text-gray-900">• {service}</li>
                           ))}
                         </ul>

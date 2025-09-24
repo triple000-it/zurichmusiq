@@ -57,7 +57,7 @@ export async function POST(request: NextRequest) {
       duration, 
       totalCost, 
       notes,
-      addonServices 
+      addons 
     } = body
 
     // Validate required fields
@@ -85,7 +85,7 @@ export async function POST(request: NextRequest) {
         totalCost: parseFloat(totalCost),
         status: 'PENDING',
         notes: notes || '',
-        addonServices: addonServices || [],
+        addons: addons || [],
         createdAt: new Date(),
         updatedAt: new Date()
       },
