@@ -20,27 +20,51 @@ export default function InlineEditor({ pageSlug, pageTitle }: InlineEditorProps)
   // Check if user is admin
   const isAdmin = session?.user?.role && ['SUPER_ADMIN', 'ADMIN', 'MANAGER'].includes(session.user.role)
   
-  // Show button after session is loaded
-  useEffect(() => {
-    if (status === 'authenticated' && isAdmin) {
-      const timer = setTimeout(() => {
-        setIsVisible(true)
-        // Restore any previous inline edits from localStorage
-        restoreInlineEdits()
-      }, 500)
-      return () => clearTimeout(timer)
-    }
-  }, [status, isAdmin])
-
-  // Cleanup when component unmounts or when isEditing changes to false
-  useEffect(() => {
-    if (!isEditing) {
-      // Force cleanup when exiting edit mode
-      setTimeout(() => {
-        cleanupEditMode()
-      }, 100)
-    }
-  }, [isEditing])
+  // Define cleanup function first
+  const cleanupEditMode = () => {
+    // Remove any remaining input fields
+    const remainingInputs = document.querySelectorAll('input[style*="position: absolute"]')
+    remainingInputs.forEach(input => {
+      input.remove()
+    })
+    
+    // Remove any edit styling from elements
+    const editedElements = document.querySelectorAll('[data-edited="true"]')
+    editedElements.forEach(element => {
+      element.removeAttribute('data-edited')
+      element.style.opacity = '1'
+      element.style.backgroundColor = ''
+      element.style.border = ''
+    })
+    
+    // Remove any edit outlines and styling
+    const outlinedElements = document.querySelectorAll('[style*="outline"]')
+    outlinedElements.forEach(element => {
+      element.style.outline = ''
+      element.style.outlineOffset = ''
+      element.style.cursor = ''
+      element.style.backgroundColor = ''
+      element.style.border = ''
+    })
+    
+    // Remove any elements with dashed outlines
+    const dashedElements = document.querySelectorAll('[style*="dashed"]')
+    dashedElements.forEach(element => {
+      element.style.outline = ''
+      element.style.outlineOffset = ''
+      element.style.cursor = ''
+    })
+    
+    // Reset all elements to normal state
+    const allElements = document.querySelectorAll('*')
+    allElements.forEach(element => {
+      if (element.style.outline === '2px dashed #4fdce5') {
+        element.style.outline = ''
+        element.style.outlineOffset = ''
+        element.style.cursor = ''
+      }
+    })
+  }
 
   // Restore inline edits from localStorage
   const restoreInlineEdits = () => {
@@ -62,6 +86,28 @@ export default function InlineEditor({ pageSlug, pageTitle }: InlineEditorProps)
       console.error('Error restoring inline edits:', error)
     }
   }
+
+  // Show button after session is loaded
+  useEffect(() => {
+    if (status === 'authenticated' && isAdmin) {
+      const timer = setTimeout(() => {
+        setIsVisible(true)
+        // Restore any previous inline edits from localStorage
+        restoreInlineEdits()
+      }, 500)
+      return () => clearTimeout(timer)
+    }
+  }, [status, isAdmin])
+
+  // Cleanup when component unmounts or when isEditing changes to false
+  useEffect(() => {
+    if (!isEditing) {
+      // Force cleanup when exiting edit mode
+      setTimeout(() => {
+        cleanupEditMode()
+      }, 100)
+    }
+  }, [isEditing])
 
   // Don't render anything if user is not admin or not visible yet
   if (!isAdmin || !isVisible) {
@@ -279,6 +325,9 @@ export default function InlineEditor({ pageSlug, pageTitle }: InlineEditorProps)
       // First, save any pending changes
       await saveAllPendingChanges()
       
+      // Reset state first
+      setIsEditing(false)
+      
       // Clean up all edit mode elements
       cleanupEditMode()
       
@@ -296,8 +345,7 @@ export default function InlineEditor({ pageSlug, pageTitle }: InlineEditorProps)
         element.removeAttribute('data-edited')
       })
       
-      // Reset state
-      setIsEditing(false)
+      // Reset saving state
       setIsSaving(false)
       
       // Show final success message
@@ -306,53 +354,9 @@ export default function InlineEditor({ pageSlug, pageTitle }: InlineEditorProps)
     } catch (error) {
       console.error('Error exiting edit mode:', error)
       setIsSaving(false)
+      setIsEditing(false) // Force exit even on error
       showErrorMessage('Error saving changes')
     }
-  }
-
-  const cleanupEditMode = () => {
-    // Remove any remaining input fields
-    const remainingInputs = document.querySelectorAll('input[style*="position: absolute"]')
-    remainingInputs.forEach(input => {
-      input.remove()
-    })
-    
-    // Remove any edit styling from elements
-    const editedElements = document.querySelectorAll('[data-edited="true"]')
-    editedElements.forEach(element => {
-      element.removeAttribute('data-edited')
-      element.style.opacity = '1'
-      element.style.backgroundColor = ''
-      element.style.border = ''
-    })
-    
-    // Remove any edit outlines and styling
-    const outlinedElements = document.querySelectorAll('[style*="outline"]')
-    outlinedElements.forEach(element => {
-      element.style.outline = ''
-      element.style.outlineOffset = ''
-      element.style.cursor = ''
-      element.style.backgroundColor = ''
-      element.style.border = ''
-    })
-    
-    // Remove any elements with dashed outlines
-    const dashedElements = document.querySelectorAll('[style*="dashed"]')
-    dashedElements.forEach(element => {
-      element.style.outline = ''
-      element.style.outlineOffset = ''
-      element.style.cursor = ''
-    })
-    
-    // Reset all elements to normal state
-    const allElements = document.querySelectorAll('*')
-    allElements.forEach(element => {
-      if (element.style.outline === '2px dashed #4fdce5') {
-        element.style.outline = ''
-        element.style.outlineOffset = ''
-        element.style.cursor = ''
-      }
-    })
   }
 
   const saveAllPendingChanges = async () => {
