@@ -166,13 +166,141 @@ async function migrateMockData() {
       },
       {
         slug: 'contact',
-        title: 'Contact Us - Zurich Musiq',
+        title: 'Contact Us',
         content: `
-          <div class="contact-section">
-            <h1>Contact Us</h1>
-            <p>Get in touch with us for bookings and inquiries.</p>
-            <h2>Studio Location</h2>
-            <p>Located in the heart of Zurich with easy access and parking.</p>
+          <div class="text-center mb-20">
+            <h1 class="text-6xl md:text-7xl font-bold text-white mb-8">Contact Us</h1>
+            <p class="text-xl md:text-2xl text-white/80 max-w-3xl mx-auto leading-relaxed">
+              Ready to start your next project? Get in touch with us to discuss your needs, 
+              get a quote, or book studio time.
+            </p>
+          </div>
+
+          <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
+            <div class="bg-white/10 backdrop-blur-sm rounded-lg p-8 border border-white/20">
+              <h2 class="text-3xl font-bold text-white mb-8">Send Us a Message</h2>
+              <form class="space-y-6">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div>
+                    <label class="block text-white text-sm font-medium mb-2">Name</label>
+                    <input type="text" class="w-full p-3 bg-white/5 border border-white/20 rounded-lg text-white focus:ring-2 focus:ring-[#4fdce5] focus:border-[#4fdce5]" placeholder="Your name" />
+                  </div>
+                  <div>
+                    <label class="block text-white text-sm font-medium mb-2">Email</label>
+                    <input type="email" class="w-full p-3 bg-white/5 border border-white/20 rounded-lg text-white focus:ring-2 focus:ring-[#4fdce5] focus:border-[#4fdce5]" placeholder="your@email.com" />
+                  </div>
+                </div>
+                <div>
+                  <label class="block text-white text-sm font-medium mb-2">Phone</label>
+                  <input type="tel" class="w-full p-3 bg-white/5 border border-white/20 rounded-lg text-white focus:ring-2 focus:ring-[#4fdce5] focus:border-[#4fdce5]" placeholder="+41 XX XXX XX XX" />
+                </div>
+                <div>
+                  <label class="block text-white text-sm font-medium mb-2">Service Needed</label>
+                  <select class="w-full p-3 bg-white/5 border border-white/20 rounded-lg text-white focus:ring-2 focus:ring-[#4fdce5] focus:border-[#4fdce5]">
+                    <option>Recording</option>
+                    <option>Mixing</option>
+                    <option>Mastering</option>
+                    <option>Production</option>
+                    <option>Other</option>
+                  </select>
+                </div>
+                <div>
+                  <label class="block text-white text-sm font-medium mb-2">Message</label>
+                  <textarea rows="4" class="w-full p-3 bg-white/5 border border-white/20 rounded-lg text-white focus:ring-2 focus:ring-[#4fdce5] focus:border-[#4fdce5]" placeholder="Tell us about your project..."></textarea>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div>
+                    <label class="block text-white text-sm font-medium mb-2">Budget Range</label>
+                    <select class="w-full p-3 bg-white/5 border border-white/20 rounded-lg text-white focus:ring-2 focus:ring-[#4fdce5] focus:border-[#4fdce5]">
+                      <option>Under CHF 500</option>
+                      <option>CHF 500 - 1,000</option>
+                      <option>CHF 1,000 - 2,500</option>
+                      <option>CHF 2,500 - 5,000</option>
+                      <option>Over CHF 5,000</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label class="block text-white text-sm font-medium mb-2">Timeline</label>
+                    <select class="w-full p-3 bg-white/5 border border-white/20 rounded-lg text-white focus:ring-2 focus:ring-[#4fdce5] focus:border-[#4fdce5]">
+                      <option>ASAP</option>
+                      <option>Within 1 week</option>
+                      <option>Within 1 month</option>
+                      <option>Within 3 months</option>
+                      <option>Flexible</option>
+                    </select>
+                  </div>
+                </div>
+                <button type="submit" class="w-full bg-[#4fdce5] hover:bg-[#3cc9d3] text-white font-bold py-3 px-4 rounded-lg transition-colors">
+                  Send Message
+                </button>
+              </form>
+            </div>
+
+            <div class="space-y-8">
+              <div class="bg-white/10 backdrop-blur-sm rounded-lg p-8 border border-white/20">
+                <h3 class="text-2xl font-bold text-white mb-6">Studio Information</h3>
+                <div class="space-y-4">
+                  <div class="flex items-start space-x-3">
+                    <div class="w-6 h-6 bg-[#4fdce5] rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+                      <span class="text-black text-xs font-bold">📍</span>
+                    </div>
+                    <div>
+                      <p class="text-white font-medium">Address</p>
+                      <p class="text-white/80">Bahnhofstrasse 123<br />8001 Zurich, Switzerland</p>
+                    </div>
+                  </div>
+                  <div class="flex items-start space-x-3">
+                    <div class="w-6 h-6 bg-[#4fdce5] rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+                      <span class="text-black text-xs font-bold">📞</span>
+                    </div>
+                    <div>
+                      <p class="text-white font-medium">Phone</p>
+                      <p class="text-white/80">+41 44 123 45 67</p>
+                    </div>
+                  </div>
+                  <div class="flex items-start space-x-3">
+                    <div class="w-6 h-6 bg-[#4fdce5] rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+                      <span class="text-black text-xs font-bold">✉️</span>
+                    </div>
+                    <div>
+                      <p class="text-white font-medium">Email</p>
+                      <p class="text-white/80">info@zurichmusiq.com</p>
+                    </div>
+                  </div>
+                  <div class="flex items-start space-x-3">
+                    <div class="w-6 h-6 bg-[#4fdce5] rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+                      <span class="text-black text-xs font-bold">🕒</span>
+                    </div>
+                    <div>
+                      <p class="text-white font-medium">Hours</p>
+                      <p class="text-white/80">Mon-Fri: 9:00 - 22:00<br />Sat-Sun: 10:00 - 20:00</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="bg-white/10 backdrop-blur-sm rounded-lg p-8 border border-white/20">
+                <h3 class="text-2xl font-bold text-white mb-6">Quick Response</h3>
+                <p class="text-white/80 mb-4">
+                  We typically respond to all inquiries within 24 hours. For urgent bookings, 
+                  please call us directly.
+                </p>
+                <div class="space-y-3">
+                  <div class="flex items-center space-x-3">
+                    <div class="w-2 h-2 bg-[#4fdce5] rounded-full"></div>
+                    <span class="text-white/80">Free consultation call</span>
+                  </div>
+                  <div class="flex items-center space-x-3">
+                    <div class="w-2 h-2 bg-[#4fdce5] rounded-full"></div>
+                    <span class="text-white/80">Custom project quotes</span>
+                  </div>
+                  <div class="flex items-center space-x-3">
+                    <div class="w-2 h-2 bg-[#4fdce5] rounded-full"></div>
+                    <span class="text-white/80">Flexible scheduling</span>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         `,
         metaTitle: 'Contact Us - Zurich Musiq',

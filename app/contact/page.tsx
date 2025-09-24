@@ -6,7 +6,7 @@ import Footer from "@/components/footer"
 import ShaderBackground from "@/components/shader-background"
 import Link from "next/link"
 import PulsingCircle from "@/components/pulsing-circle"
-import InlineEditor from "@/components/inline-editor"
+import SimpleInlineEditor from "@/components/simple-inline-editor"
 
 interface Page {
   id: string
@@ -105,21 +105,24 @@ export default function ContactPage() {
     <ShaderBackground>
       <Header />
       
-      {/* Inline Editor */}
-      <InlineEditor pageSlug="contact" pageTitle="Contact Us" />
+      {/* Simple Inline Editor */}
+      <SimpleInlineEditor pageSlug="contact" pageTitle="Contact Us" />
       
       <main className="relative z-20 w-full min-h-screen pt-32 pb-20 px-8 lg:px-16">
             <div className="max-w-6xl mx-auto">
-            {/* Page Header */}
-            <div className="text-center mb-20" >
-              <h1 className="text-6xl md:text-7xl font-bold text-white mb-8">
-                {page?.title || "Contact Us"}
-              </h1>
-              <div 
-                className="text-xl md:text-2xl text-white/80 max-w-3xl mx-auto leading-relaxed"
-                dangerouslySetInnerHTML={{ __html: page?.content || "Ready to start your next project? Get in touch with us to discuss your needs, get a quote, or book studio time." }}
-              />
-            </div>
+            {/* Dynamic Content from Database */}
+            <div 
+              className="prose prose-lg prose-invert max-w-none"
+              dangerouslySetInnerHTML={{ __html: page?.content || `
+                <div class="text-center mb-20">
+                  <h1 class="text-6xl md:text-7xl font-bold text-white mb-8">Contact Us</h1>
+                  <p class="text-xl md:text-2xl text-white/80 max-w-3xl mx-auto leading-relaxed">
+                    Ready to start your next project? Get in touch with us to discuss your needs, 
+                    get a quote, or book studio time.
+                  </p>
+                </div>
+              ` }}
+            />
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
             {/* Contact Form */}

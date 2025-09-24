@@ -5,7 +5,7 @@ import Header from "@/components/header"
 import Footer from "@/components/footer"
 import ShaderBackground from "@/components/shader-background"
 import Link from "next/link"
-import InlineEditor from "@/components/inline-editor"
+import SimpleInlineEditor from "@/components/simple-inline-editor"
 
 interface Page {
   id: string
@@ -156,21 +156,24 @@ export default function WorkPage() {
     <ShaderBackground>
       <Header />
       
-      {/* Inline Editor */}
-      <InlineEditor pageSlug="music" pageTitle="Our Work" />
+      {/* Simple Inline Editor */}
+      <SimpleInlineEditor pageSlug="music" pageTitle="Our Work" />
       
       <main className="relative z-20 w-full min-h-screen pt-32 pb-20 px-8 lg:px-16">
             <div className="max-w-6xl mx-auto">
-            {/* Page Header */}
-            <div className="text-center mb-20" >
-              <h1 className="text-6xl md:text-7xl font-bold text-white mb-8">
-                {page?.title || "Our Work"}
-              </h1>
-              <div 
-                className="text-xl md:text-2xl text-white/80 max-w-3xl mx-auto leading-relaxed"
-                dangerouslySetInnerHTML={{ __html: page?.content || "Discover our portfolio of successful projects across various genres. From intimate acoustic sessions to full orchestral recordings, we've helped artists bring their vision to life." }}
-              />
-            </div>
+            {/* Dynamic Content from Database */}
+            <div 
+              className="prose prose-lg prose-invert max-w-none"
+              dangerouslySetInnerHTML={{ __html: page?.content || `
+                <div class="text-center mb-20">
+                  <h1 class="text-6xl md:text-7xl font-bold text-white mb-8">Our Work</h1>
+                  <p class="text-xl md:text-2xl text-white/80 max-w-3xl mx-auto leading-relaxed">
+                    Discover our portfolio of successful projects across various genres. 
+                    From intimate acoustic sessions to full orchestral recordings, we've helped artists bring their vision to life.
+                  </p>
+                </div>
+              ` }}
+            />
 
             {/* Projects Grid */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-20" >
