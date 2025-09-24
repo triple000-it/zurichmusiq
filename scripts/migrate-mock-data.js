@@ -580,7 +580,7 @@ async function migrateMockData() {
       {
         studioId: 'studio-s',
         userId: adminUser.id,
-        date: new Date('2024-02-15'),
+        date: new Date('2025-09-24'),
         startTime: '10:00',
         duration: 4,
         totalCost: 480,
@@ -591,7 +591,7 @@ async function migrateMockData() {
       {
         studioId: 'studio-xl',
         userId: adminUser.id,
-        date: new Date('2024-02-20'),
+        date: new Date('2025-09-24'),
         startTime: '14:00',
         duration: 8,
         totalCost: 1600,
