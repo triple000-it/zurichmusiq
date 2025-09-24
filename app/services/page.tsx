@@ -140,8 +140,8 @@ export default function ServicesPage() {
                   onClick={() => setSelectedService(service)}
                   className={`px-6 py-3 rounded-lg transition-all duration-300 ${
                     selectedService.id === service.id
-                      ? "bg-gray-200 text-[#3db5be] font-semibold border border-white"
-                      : "text-white hover:text-[#4fdce5] border border-white/20 hover:border-white/40"
+                      ? "bg-white/20 text-white font-semibold border border-white/40"
+                      : "text-white hover:text-[#4fdce5] border border-white/20 hover:border-white/40 bg-white/10"
                   }`}
                 >
                   {service.title}
@@ -150,26 +150,26 @@ export default function ServicesPage() {
             </div>
 
           {/* Selected Service Details */}
-          <div className="bg-gray-200 rounded-lg p-8 border border-white">
+          <div className="bg-white/10 backdrop-blur-sm rounded-lg p-8 border border-white/20">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
               {/* Service Information */}
               <div>
-                <h2 className="text-4xl font-bold text-[#3db5be] mb-6">
+                <h2 className="text-4xl font-bold text-white mb-6">
                   {selectedService.title}
                 </h2>
-                <p className="text-gray-800 text-lg leading-relaxed mb-6">
+                <p className="text-white/80 text-lg leading-relaxed mb-6">
                   {selectedService.description}
                 </p>
                 
                 {/* Pricing and Duration */}
-                <div className="bg-white rounded-lg p-4 mb-6">
+                <div className="bg-white/20 rounded-lg p-4 mb-6">
                   <div className="flex justify-between items-center">
-                    <span className="text-gray-600 font-medium">Pricing:</span>
-                    <span className="text-[#3db5be] font-bold">{selectedService.pricing}</span>
+                    <span className="text-white/80 font-medium">Pricing:</span>
+                    <span className="text-[#4fdce5] font-bold">{selectedService.pricing}</span>
                   </div>
                   <div className="flex justify-between items-center mt-2">
-                    <span className="text-gray-600 font-medium">Duration:</span>
-                    <span className="text-[#3db5be] font-bold">{selectedService.duration}</span>
+                    <span className="text-white/80 font-medium">Duration:</span>
+                    <span className="text-[#4fdce5] font-bold">{selectedService.duration}</span>
                   </div>
                 </div>
 
@@ -183,12 +183,12 @@ export default function ServicesPage() {
 
               {/* Features List */}
               <div>
-                <h3 className="text-2xl font-bold text-[#3db5be] mb-6">What's Included</h3>
+                <h3 className="text-2xl font-bold text-white mb-6">What's Included</h3>
                 <div className="space-y-4">
                   {selectedService.features.map((feature, index) => (
                     <div key={index} className="flex items-start space-x-3">
                       <div className="w-2 h-2 bg-[#4fdce5] rounded-full mt-2 flex-shrink-0"></div>
-                      <span className="text-gray-700 font-medium">{feature}</span>
+                      <span className="text-white/80 font-medium">{feature}</span>
                     </div>
                   ))}
                 </div>
