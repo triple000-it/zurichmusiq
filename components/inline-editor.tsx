@@ -25,10 +25,33 @@ export default function InlineEditor({ pageSlug, pageTitle }: InlineEditorProps)
     if (status === 'authenticated' && isAdmin) {
       const timer = setTimeout(() => {
         setIsVisible(true)
+        // Restore any previous inline edits from localStorage
+        restoreInlineEdits()
       }, 500)
       return () => clearTimeout(timer)
     }
   }, [status, isAdmin])
+
+  // Restore inline edits from localStorage
+  const restoreInlineEdits = () => {
+    try {
+      const keys = Object.keys(localStorage).filter(key => key.startsWith(`inline-edit-${pageSlug}-`))
+      keys.forEach(key => {
+        const editData = JSON.parse(localStorage.getItem(key) || '{}')
+        if (editData.content && editData.elementType) {
+          // Find the element and restore its content
+          const elements = document.querySelectorAll(editData.elementType)
+          if (elements.length > 0) {
+            // Apply the edit to the first matching element
+            // In a real app, you'd want more sophisticated element identification
+            elements[0].textContent = editData.content
+          }
+        }
+      })
+    } catch (error) {
+      console.error('Error restoring inline edits:', error)
+    }
+  }
 
   // Don't render anything if user is not admin or not visible yet
   if (!isAdmin || !isVisible) {
@@ -127,34 +150,112 @@ export default function InlineEditor({ pageSlug, pageTitle }: InlineEditorProps)
     // Save to database
     setIsSaving(true)
     try {
+      // For now, we'll create a simple content update
+      // In a real application, you'd want more sophisticated content management
       const response = await fetch(`/api/pages/${pageSlug}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          content: newContent,
-          updatedBy: session?.user?.name || 'Inline Editor'
+          // Create a simple content update with the new text
+          content: `<div class="inline-edit-${Date.now()}">${newContent}</div>`,
+          elementType: element.tagName.toLowerCase(),
+          elementText: newContent,
+          updatedBy: session?.user?.name || 'Inline Editor',
+          // Add metadata about the edit
+          editMetadata: {
+            elementId: element.id || `element-${Date.now()}`,
+            elementClass: element.className,
+            elementTag: element.tagName.toLowerCase(),
+            timestamp: new Date().toISOString(),
+            pageSlug: pageSlug
+          }
         }),
       })
       
       if (response.ok) {
         // Show success indicator
         element.style.backgroundColor = '#d4edda'
+        element.style.border = '2px solid #28a745'
         setTimeout(() => {
           element.style.backgroundColor = ''
-        }, 1000)
+          element.style.border = ''
+        }, 2000)
+        
+        // Show success message
+        showSuccessMessage('Saved successfully!')
+        
+        // Store the edit in localStorage for persistence across page reloads
+        const editKey = `inline-edit-${pageSlug}-${element.tagName.toLowerCase()}-${Date.now()}`
+        localStorage.setItem(editKey, JSON.stringify({
+          content: newContent,
+          elementType: element.tagName.toLowerCase(),
+          timestamp: new Date().toISOString()
+        }))
+        
+      } else {
+        throw new Error('Failed to save')
       }
     } catch (error) {
       console.error('Error saving:', error)
       // Revert on error
       element.textContent = originalContent
+      element.style.backgroundColor = '#f8d7da'
+      element.style.border = '2px solid #dc3545'
+      setTimeout(() => {
+        element.style.backgroundColor = ''
+        element.style.border = ''
+      }, 2000)
+      showErrorMessage('Failed to save changes')
     }
     setIsSaving(false)
   }
 
   const handleCancelInline = (element: HTMLElement) => {
     element.textContent = originalContent
+  }
+
+  const showSuccessMessage = (message: string) => {
+    const notification = document.createElement('div')
+    notification.textContent = message
+    notification.style.cssText = `
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      background: #28a745;
+      color: white;
+      padding: 12px 20px;
+      border-radius: 8px;
+      z-index: 10000;
+      font-weight: 500;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    `
+    document.body.appendChild(notification)
+    setTimeout(() => {
+      notification.remove()
+    }, 3000)
+  }
+
+  const showErrorMessage = (message: string) => {
+    const notification = document.createElement('div')
+    notification.textContent = message
+    notification.style.cssText = `
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      background: #dc3545;
+      color: white;
+      padding: 12px 20px;
+      border-radius: 8px;
+      z-index: 10000;
+      font-weight: 500;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    `
+    document.body.appendChild(notification)
+    setTimeout(() => {
+      notification.remove()
+    }, 3000)
   }
 
   const handleExitEditMode = () => {
