@@ -108,22 +108,22 @@ export default function AdminDashboard() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-3xl font-bold text-gray-900">Dashboard</h1>
-        <p className="text-gray-600">Welcome back, {session?.user?.name}!</p>
+        <h1 className="text-3xl font-bold text-white">Dashboard</h1>
+        <p className="text-white/80">Welcome back, {session?.user?.name}!</p>
       </div>
 
       {/* Stats Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {statCards.map((stat, index) => (
-          <div key={index} className="bg-white/90 backdrop-blur-sm rounded-xl shadow-lg p-6 border border-white/20">
+          <div key={index} className="bg-white/20 backdrop-blur-sm rounded-xl shadow-lg p-6 border border-white/30">
             <div className="flex items-center">
-              <div className="p-3 rounded-full bg-gray-100">
-                <stat.icon className="h-6 w-6 text-gray-700" />
+              <div className="p-3 rounded-full bg-white/30">
+                <stat.icon className="h-6 w-6 text-white" />
               </div>
               <div className="ml-4">
-                <p className="text-sm font-medium text-gray-600">{stat.title}</p>
-                <p className="text-2xl font-bold text-gray-900">{stat.value}</p>
-                <p className="text-sm text-green-600">{stat.change} from last month</p>
+                <p className="text-sm font-medium text-white/80">{stat.title}</p>
+                <p className="text-2xl font-bold text-white">{stat.value}</p>
+                <p className="text-sm text-green-400">{stat.change} from last month</p>
               </div>
             </div>
           </div>
@@ -132,18 +132,18 @@ export default function AdminDashboard() {
 
       {/* Recent Activity */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <div className="bg-white/90 backdrop-blur-sm rounded-xl shadow-lg p-6 border border-white/20">
-          <h3 className="text-lg font-semibold text-gray-900 mb-4">Recent Bookings</h3>
+        <div className="bg-white/20 backdrop-blur-sm rounded-xl shadow-lg p-6 border border-white/30">
+          <h3 className="text-lg font-semibold text-white mb-4">Recent Bookings</h3>
           <div className="space-y-3">
             {[
               { id: 1, studio: "Studio XL", date: "2024-01-15", time: "14:00", status: "Confirmed" },
               { id: 2, studio: "Studio S", date: "2024-01-16", time: "10:00", status: "Pending" },
               { id: 3, studio: "Studio XL", date: "2024-01-17", time: "16:00", status: "Confirmed" },
             ].map((booking) => (
-              <div key={booking.id} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+              <div key={booking.id} className="flex items-center justify-between p-3 bg-white/20 rounded-lg">
                 <div>
-                  <p className="font-medium text-gray-900">{booking.studio}</p>
-                  <p className="text-sm text-gray-600">{booking.date} at {booking.time}</p>
+                  <p className="font-medium text-white">{booking.studio}</p>
+                  <p className="text-sm text-white/70">{booking.date} at {booking.time}</p>
                 </div>
                 <span className={`px-2 py-1 text-xs rounded-full ${
                   booking.status === "Confirmed" 
@@ -157,19 +157,19 @@ export default function AdminDashboard() {
           </div>
         </div>
 
-        <div className="bg-white/90 backdrop-blur-sm rounded-xl shadow-lg p-6 border border-white/20">
-          <h3 className="text-lg font-semibold text-gray-900 mb-4">Quick Actions</h3>
+        <div className="bg-white/20 backdrop-blur-sm rounded-xl shadow-lg p-6 border border-white/30">
+          <h3 className="text-lg font-semibold text-white mb-4">Quick Actions</h3>
           <div className="space-y-3">
             <button className="w-full text-left p-3 bg-[#4fdce5] text-white rounded-lg hover:bg-[#3cc9d3] transition-colors">
               Create New Booking
             </button>
-            <button className="w-full text-left p-3 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors">
+            <button className="w-full text-left p-3 bg-white/20 text-white rounded-lg hover:bg-white/30 transition-colors">
               Add New User
             </button>
-            <button className="w-full text-left p-3 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors">
+            <button className="w-full text-left p-3 bg-white/20 text-white rounded-lg hover:bg-white/30 transition-colors">
               Manage Studios
             </button>
-            <button className="w-full text-left p-3 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors">
+            <button className="w-full text-left p-3 bg-white/20 text-white rounded-lg hover:bg-white/30 transition-colors">
               View Reports
             </button>
           </div>
