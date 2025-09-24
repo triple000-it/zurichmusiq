@@ -19,7 +19,7 @@ import {
   X,
   AlertTriangle
 } from "lucide-react"
-import ModernPageEditor from "@/components/admin/modern-page-editor"
+import SimplePageEditor from "@/components/admin/simple-page-editor"
 
 interface Page {
   id: string
@@ -374,9 +374,9 @@ export default function PagesPage() {
         </div>
       )}
 
-      {/* Modern Page Editor */}
+      {/* Simple Page Editor */}
       {showEditor && pageToEdit && (
-        <ModernPageEditor
+        <SimplePageEditor
           page={pageToEdit}
           onSave={handleEditorSave}
           onCancel={handleEditorCancel}
