@@ -311,15 +311,14 @@ async function migrateMockData() {
       },
       {
         slug: 'services',
-        title: 'Our Services - Zurich Musiq',
+        title: 'Our Services',
         content: `
-          <div class="services-section">
-            <h1>Our Services</h1>
-            <p>Professional music production services for artists and bands.</p>
-            <h2>Recording</h2>
-            <p>High-quality recording in our professional studios.</p>
-            <h2>Mixing & Mastering</h2>
-            <p>Professional mixing and mastering services.</p>
+          <div class="text-center mb-20">
+            <h1 class="text-6xl md:text-7xl font-bold text-white mb-8">Our Services</h1>
+            <p class="text-xl md:text-2xl text-white/80 max-w-3xl mx-auto leading-relaxed">
+              Professional music production, recording, and artist development services 
+              to help you create, record, and succeed in the music industry.
+            </p>
           </div>
         `,
         metaTitle: 'Our Services - Zurich Musiq',
@@ -330,13 +329,14 @@ async function migrateMockData() {
       },
       {
         slug: 'music',
-        title: 'Our Work - Zurich Musiq',
+        title: 'Our Work',
         content: `
-          <div class="portfolio-section">
-            <h1>Our Work</h1>
-            <p>Check out some of our recent projects and collaborations.</p>
-            <h2>Featured Projects</h2>
-            <p>Showcasing our diverse range of musical productions.</p>
+          <div class="text-center mb-20">
+            <h1 class="text-6xl md:text-7xl font-bold text-white mb-8">Our Work</h1>
+            <p class="text-xl md:text-2xl text-white/80 max-w-3xl mx-auto leading-relaxed">
+              Discover our portfolio of successful projects across various genres. 
+              From intimate acoustic sessions to full orchestral recordings, we've helped artists bring their vision to life.
+            </p>
           </div>
         `,
         metaTitle: 'Our Work - Zurich Musiq',
