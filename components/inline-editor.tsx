@@ -309,17 +309,22 @@ export default function InlineEditor({ pageSlug, pageTitle }: InlineEditorProps)
   }
 
   const handleExitEditMode = () => {
-    // Immediately exit edit mode - no popups, no delays
+    // Force exit immediately
     setIsEditing(false)
     setIsSaving(false)
     
-    // Clean up everything silently
-    cleanupEditMode()
+    // Remove ALL popup elements from DOM
+    const popups = document.querySelectorAll('[style*="position: fixed"]')
+    popups.forEach(popup => {
+      if (popup !== document.querySelector('button[title*="Edit"]') && 
+          popup !== document.querySelector('button[title*="Exit"]')) {
+        popup.remove()
+      }
+    })
     
-    // Remove all edit styling and listeners
-    const editableElements = document.querySelectorAll('h1, h2, h3, h4, h5, h6, p, span, div[class*="text"], button')
-    
-    editableElements.forEach(element => {
+    // Remove all edit styling
+    const allElements = document.querySelectorAll('*')
+    allElements.forEach(element => {
       element.style.cursor = ''
       element.style.outline = ''
       element.style.outlineOffset = ''
@@ -330,7 +335,11 @@ export default function InlineEditor({ pageSlug, pageTitle }: InlineEditorProps)
       element.removeAttribute('data-edited')
     })
     
-    // Save changes in background without showing any indicators
+    // Remove any input fields
+    const inputs = document.querySelectorAll('input[style*="position: absolute"]')
+    inputs.forEach(input => input.remove())
+    
+    // Save silently
     saveAllPendingChangesSilently()
   }
 
@@ -442,25 +451,6 @@ export default function InlineEditor({ pageSlug, pageTitle }: InlineEditorProps)
         {isEditing ? <X className="h-5 w-5" /> : <Edit3 className="h-5 w-5" />}
       </button>
 
-      {/* Edit Mode Indicator */}
-      {isEditing && (
-        <div className="fixed top-16 right-4 z-50 bg-yellow-500 text-black px-4 py-2 rounded-lg shadow-lg">
-          <div className="flex items-center space-x-2">
-            <Edit3 className="h-4 w-4" />
-            <span className="font-medium">Click any text to edit</span>
-          </div>
-        </div>
-      )}
-
-      {/* Saving Indicator */}
-      {isSaving && (
-        <div className="fixed top-24 right-4 z-50 bg-green-500 text-white px-4 py-2 rounded-lg shadow-lg">
-          <div className="flex items-center space-x-2">
-            <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
-            <span>Saving...</span>
-          </div>
-        </div>
-      )}
     </>
   )
 }

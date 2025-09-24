@@ -6,12 +6,13 @@ import { prisma } from '@/lib/prisma'
 // GET /api/pages/slug/[slug] - Get page by slug
 export async function GET(
   request: NextRequest,
-  { params }: { params: { slug: string } }
+  { params }: { params: Promise<{ slug: string }> }
 ) {
   try {
+    const { slug } = await params
     const page = await prisma.page.findUnique({
       where: { 
-        slug: params.slug,
+        slug: slug,
         isPublished: true 
       }
     })
@@ -30,9 +31,10 @@ export async function GET(
 // PUT /api/pages/slug/[slug] - Update page by slug
 export async function PUT(
   request: NextRequest,
-  { params }: { params: { slug: string } }
+  { params }: { params: Promise<{ slug: string }> }
 ) {
   try {
+    const { slug } = await params
     const session = await getServerSession(authOptions)
     
     if (!session?.user?.role || !['SUPER_ADMIN', 'ADMIN', 'MANAGER'].includes(session.user.role)) {
@@ -44,7 +46,7 @@ export async function PUT(
 
     // Find the page by slug
     const existingPage = await prisma.page.findUnique({
-      where: { slug: params.slug }
+      where: { slug: slug }
     })
 
     if (!existingPage) {
@@ -84,7 +86,7 @@ export async function PUT(
     if (metaDescription !== undefined) updateData.metaDescription = metaDescription
 
     const page = await prisma.page.update({
-      where: { slug: params.slug },
+      where: { slug: slug },
       data: updateData
     })
 
