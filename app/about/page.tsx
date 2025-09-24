@@ -6,6 +6,7 @@ import PulsingCircle from "@/components/pulsing-circle"
 import ShaderBackground from "@/components/shader-background"
 import Image from "next/image"
 import Link from "next/link"
+import UniversalEditButton from "@/components/universal-edit-button"
 
 interface TeamMember {
   name: string
@@ -45,6 +46,9 @@ export default function AboutPage() {
   return (
     <ShaderBackground>
       <Header />
+      
+      {/* Universal Edit Button */}
+      <UniversalEditButton pageSlug="about" pageTitle="About Us" />
       
       <main className="relative z-20 w-full min-h-screen pt-32 pb-20 px-8 lg:px-16">
             <div className="max-w-6xl mx-auto">

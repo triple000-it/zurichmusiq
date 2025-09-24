@@ -7,6 +7,7 @@ import Header from "@/components/header"
 import Footer from "@/components/footer"
 import ShaderBackground from "@/components/shader-background"
 import PulsingCircle from "@/components/pulsing-circle"
+import UniversalEditButton from "@/components/universal-edit-button"
 
 
 
@@ -118,6 +119,9 @@ export default function ServicesPage() {
   return (
     <ShaderBackground>
       <Header />
+      
+      {/* Universal Edit Button */}
+      <UniversalEditButton pageSlug="services" pageTitle="Our Services" />
       
       <main className="relative z-20 w-full min-h-screen pt-32 pb-20 px-8 lg:px-16">
             <div className="max-w-6xl mx-auto">
