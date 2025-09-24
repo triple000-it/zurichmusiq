@@ -113,9 +113,11 @@ export default function SimpleInlineEditor({ pageSlug, pageTitle }: SimpleInline
     }
 
     try {
-      // Get the current page content
+      // Get the current page content - get the entire main content
       const mainContent = document.querySelector('main')
-      const pageContent = mainContent ? mainContent.innerHTML : document.body.innerHTML
+      if (!mainContent) {
+        throw new Error('Could not find main content')
+      }
 
       const response = await fetch(`/api/pages/slug/${pageSlug}`, {
         method: 'PUT',
@@ -123,7 +125,7 @@ export default function SimpleInlineEditor({ pageSlug, pageTitle }: SimpleInline
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          content: pageContent,
+          content: mainContent.innerHTML,
           updatedBy: session?.user?.name || 'Simple Editor',
         }),
       })
@@ -132,14 +134,16 @@ export default function SimpleInlineEditor({ pageSlug, pageTitle }: SimpleInline
         showNotification('Changes saved successfully!', 'success')
         setPendingChanges(new Map())
         
-        // Refresh page after 1 second
+        // Refresh page after 1 second to show changes
         setTimeout(() => {
           window.location.reload()
         }, 1000)
       } else {
-        throw new Error('Failed to save')
+        const errorData = await response.json()
+        throw new Error(errorData.error || 'Failed to save')
       }
     } catch (error) {
+      console.error('Save error:', error)
       showNotification('Failed to save changes', 'error')
     }
   }

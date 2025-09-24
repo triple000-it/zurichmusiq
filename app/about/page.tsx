@@ -1,5 +1,6 @@
 "use client"
 
+import { useState, useEffect } from "react"
 import Header from "@/components/header"
 import Footer from "@/components/footer"
 import PulsingCircle from "@/components/pulsing-circle"
@@ -7,6 +8,18 @@ import ShaderBackground from "@/components/shader-background"
 import Image from "next/image"
 import Link from "next/link"
 import SimpleInlineEditor from "@/components/simple-inline-editor"
+
+interface Page {
+  id: string
+  slug: string
+  title: string
+  content: string
+  metaTitle: string | null
+  metaDescription: string | null
+  createdAt: string
+  updatedAt: string
+  updatedBy: string | null
+}
 
 interface TeamMember {
   name: string
