@@ -19,7 +19,7 @@ import {
   X,
   AlertTriangle
 } from "lucide-react"
-import WorkingPageEditor from "@/components/admin/working-page-editor"
+// Frontend editor is now integrated into public pages
 
 interface Page {
   id: string
@@ -374,13 +374,32 @@ export default function PagesPage() {
         </div>
       )}
 
-      {/* Simple Page Editor */}
+      {/* Frontend Editor Info */}
       {showEditor && pageToEdit && (
-        <WorkingPageEditor
-          page={pageToEdit}
-          onSave={handleEditorSave}
-          onCancel={handleEditorCancel}
-        />
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-xl shadow-2xl w-full max-w-2xl p-8">
+            <div className="text-center">
+              <h2 className="text-2xl font-bold text-gray-900 mb-4">Frontend Editing</h2>
+              <p className="text-gray-600 mb-6">
+                To edit this page, visit the public page and click the edit button in the top-right corner.
+                The edit button is only visible when logged in as an admin user.
+              </p>
+              <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6">
+                <p className="text-blue-800 font-medium">
+                  Visit: <a href={`/${pageToEdit.slug}`} target="_blank" rel="noopener noreferrer" className="underline">
+                    /{pageToEdit.slug}
+                  </a>
+                </p>
+              </div>
+              <button
+                onClick={handleEditorCancel}
+                className="px-6 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors"
+              >
+                Close
+              </button>
+            </div>
+          </div>
+        </div>
       )}
     </div>
   )
