@@ -1,25 +1,12 @@
 "use client"
 
-import { useState, useEffect } from "react"
 import Header from "@/components/header"
 import Footer from "@/components/footer"
 import PulsingCircle from "@/components/pulsing-circle"
 import ShaderBackground from "@/components/shader-background"
 import Image from "next/image"
 import Link from "next/link"
-import InlineEditor from "@/components/inline-editor"
-
-interface Page {
-  id: string
-  slug: string
-  title: string
-  content: string
-  metaTitle: string | null
-  metaDescription: string | null
-  createdAt: string
-  updatedAt: string
-  updatedBy: string | null
-}
+import SimpleInlineEditor from "@/components/simple-inline-editor"
 
 interface TeamMember {
   name: string
@@ -56,82 +43,25 @@ const teamMembers: TeamMember[] = [
 ]
 
 export default function AboutPage() {
-  const [page, setPage] = useState<Page | null>(null)
-  const [loading, setLoading] = useState(true)
-
-  useEffect(() => {
-    const fetchPage = async () => {
-      try {
-        const response = await fetch('/api/pages/slug/about')
-        if (response.ok) {
-          const pageData = await response.json()
-          setPage(pageData)
-        }
-      } catch (error) {
-        console.error('Error fetching about page:', error)
-      } finally {
-        setLoading(false)
-      }
-    }
-
-    fetchPage()
-  }, [])
-
-  const handleSave = async (data: {
-    title: string
-    content: string
-    metaTitle?: string
-    metaDescription?: string
-  }) => {
-    if (!page) return
-
-    const response = await fetch(`/api/pages/slug/about`, {
-      method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        ...data,
-        updatedBy: 'Inline Editor'
-      }),
-    })
-
-    if (response.ok) {
-      const updatedPage = await response.json()
-      setPage(updatedPage)
-    }
-  }
-
-  if (loading) {
-    return (
-      <ShaderBackground>
-        <Header />
-        <main className="relative z-20 w-full min-h-screen pt-32 pb-20 px-8 lg:px-16 flex items-center justify-center">
-          <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-white"></div>
-        </main>
-        <Footer />
-      </ShaderBackground>
-    )
-  }
 
   return (
     <ShaderBackground>
       <Header />
       
-      {/* Inline Editor */}
-      <InlineEditor pageSlug="about" pageTitle="About Us" />
+      {/* Simple Inline Editor */}
+      <SimpleInlineEditor pageSlug="about" pageTitle="About Us" />
       
       <main className="relative z-20 w-full min-h-screen pt-32 pb-20 px-8 lg:px-16">
             <div className="max-w-6xl mx-auto">
             {/* Page Header */}
             <div className="text-center mb-20">
               <h1 className="text-6xl md:text-7xl font-bold text-white mb-8">
-                {page?.title || "About Us"}
+                About Us
               </h1>
-              <div 
-                className="text-xl md:text-2xl text-white/80 max-w-3xl mx-auto leading-relaxed"
-                dangerouslySetInnerHTML={{ __html: page?.content || "We're a passionate team of music professionals dedicated to helping artists create their best work in a world-class recording environment." }}
-              />
+              <p className="text-xl md:text-2xl text-white/80 max-w-3xl mx-auto leading-relaxed">
+                We're a passionate team of music professionals dedicated to helping artists 
+                create their best work in a world-class recording environment.
+              </p>
             </div>
 
             {/* Company Story */}
