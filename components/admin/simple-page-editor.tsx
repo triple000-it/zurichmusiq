@@ -194,7 +194,7 @@ export default function SimplePageEditor({
                         type="text"
                         value={title}
                         onChange={(e) => setTitle(e.target.value)}
-                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-gray-900"
                         placeholder="Enter page title"
                       />
                     </div>
@@ -207,7 +207,7 @@ export default function SimplePageEditor({
                         type="text"
                         value={metaTitle}
                         onChange={(e) => setMetaTitle(e.target.value)}
-                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-gray-900"
                         placeholder="SEO title"
                       />
                     </div>
@@ -220,7 +220,7 @@ export default function SimplePageEditor({
                         value={metaDescription}
                         onChange={(e) => setMetaDescription(e.target.value)}
                         rows={3}
-                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-gray-900"
                         placeholder="SEO description"
                       />
                     </div>
@@ -239,7 +239,7 @@ export default function SimplePageEditor({
                   <textarea
                     value={content}
                     onChange={(e) => setContent(e.target.value)}
-                    className="w-full h-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 font-mono text-sm resize-none"
+                    className="w-full h-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 font-mono text-sm resize-none text-gray-900 bg-white"
                     placeholder="Enter your HTML content here..."
                   />
                 </div>
