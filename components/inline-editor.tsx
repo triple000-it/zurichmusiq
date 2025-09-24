@@ -99,6 +99,35 @@ export default function InlineEditor({ pageSlug, pageTitle }: InlineEditorProps)
     }
   }, [status, isAdmin])
 
+  // Force cleanup when isEditing becomes false
+  useEffect(() => {
+    if (!isEditing) {
+      // Aggressive cleanup when exiting edit mode
+      const cleanup = () => {
+        // Remove all input fields
+        const inputs = document.querySelectorAll('input[style*="position: absolute"]')
+        inputs.forEach(input => input.remove())
+        
+        // Remove any edit elements
+        const editElements = document.querySelectorAll('[style*="border: 2px solid #4fdce5"]')
+        editElements.forEach(element => element.remove())
+        
+        // Clean up all styling
+        const allElements = document.querySelectorAll('*')
+        allElements.forEach(element => {
+          if (element.style.outline === '2px dashed #4fdce5') {
+            element.style.outline = ''
+            element.style.outlineOffset = ''
+            element.style.cursor = ''
+          }
+        })
+      }
+      
+      cleanup()
+      // Run cleanup again after a short delay
+      setTimeout(cleanup, 100)
+    }
+  }, [isEditing])
 
   // Don't render anything if user is not admin or not visible yet
   if (!isAdmin || !isVisible) {
@@ -308,18 +337,34 @@ export default function InlineEditor({ pageSlug, pageTitle }: InlineEditorProps)
     }, 3000)
   }
 
-  const handleExitEditMode = () => {
+  const handleExitEditMode = (e: React.MouseEvent) => {
+    // Prevent any event bubbling
+    e.preventDefault()
+    e.stopPropagation()
+    
     // Force exit immediately
     setIsEditing(false)
     setIsSaving(false)
     
-    // Remove white popup elements (input fields) but keep yellow indicator until state changes
-    const inputs = document.querySelectorAll('input[style*="position: absolute"]')
-    inputs.forEach(input => input.remove())
+    // Remove ALL input fields immediately
+    const inputs = document.querySelectorAll('input')
+    inputs.forEach(input => {
+      if (input.style.position === 'absolute' || input.style.border.includes('4fdce5')) {
+        input.remove()
+      }
+    })
     
     // Remove any white popup boxes with blue borders
-    const whitePopups = document.querySelectorAll('[style*="background: white"][style*="border"]')
-    whitePopups.forEach(popup => popup.remove())
+    const whitePopups = document.querySelectorAll('[style*="background: white"], [style*="background:white"]')
+    whitePopups.forEach(popup => {
+      if (popup.style.border && popup.style.border.includes('4fdce5')) {
+        popup.remove()
+      }
+    })
+    
+    // Force remove any elements with the edit styling
+    const editElements = document.querySelectorAll('[style*="border: 2px solid #4fdce5"]')
+    editElements.forEach(element => element.remove())
     
     // Remove all edit styling from page elements
     const editableElements = document.querySelectorAll('h1, h2, h3, h4, h5, h6, p, span, div, button')
@@ -336,6 +381,11 @@ export default function InlineEditor({ pageSlug, pageTitle }: InlineEditorProps)
     
     // Save silently
     saveAllPendingChangesSilently()
+    
+    // Force a re-render to ensure state is updated
+    setTimeout(() => {
+      setIsEditing(false)
+    }, 10)
   }
 
   const saveAllPendingChangesSilently = () => {
