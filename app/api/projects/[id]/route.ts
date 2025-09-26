@@ -3,29 +3,29 @@ import { getServerSession } from 'next-auth'
 import { authOptions } from '@/lib/auth-simple'
 import { prisma } from '@/lib/prisma'
 
-// GET /api/services/[id] - Get specific service
+// GET /api/projects/[id] - Get specific project
 export async function GET(
   request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const { id } = await params
-    const service = await prisma.service.findUnique({
+    const project = await prisma.project.findUnique({
       where: { id }
     })
 
-    if (!service) {
-      return NextResponse.json({ error: 'Service not found' }, { status: 404 })
+    if (!project) {
+      return NextResponse.json({ error: 'Project not found' }, { status: 404 })
     }
 
-    return NextResponse.json(service)
+    return NextResponse.json(project)
   } catch (error) {
-    console.error('Error fetching service:', error)
-    return NextResponse.json({ error: 'Failed to fetch service' }, { status: 500 })
+    console.error('Error fetching project:', error)
+    return NextResponse.json({ error: 'Failed to fetch project' }, { status: 500 })
   }
 }
 
-// PUT /api/services/[id] - Update service
+// PUT /api/projects/[id] - Update project
 export async function PUT(
   request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
@@ -41,21 +41,22 @@ export async function PUT(
     const body = await request.json()
     const { 
       title, 
+      artist, 
+      genre, 
+      year, 
       description, 
-      pricing, 
-      duration, 
-      features, 
-      image,
-      isActive 
+      image, 
+      services, 
+      isPublished 
     } = body
 
-    // Check if service exists
-    const existingService = await prisma.service.findUnique({
+    // Check if project exists
+    const existingProject = await prisma.project.findUnique({
       where: { id }
     })
 
-    if (!existingService) {
-      return NextResponse.json({ error: 'Service not found' }, { status: 404 })
+    if (!existingProject) {
+      return NextResponse.json({ error: 'Project not found' }, { status: 404 })
     }
 
     // Build update data object with only provided fields
@@ -64,26 +65,27 @@ export async function PUT(
     }
 
     if (title !== undefined) updateData.title = title
+    if (artist !== undefined) updateData.artist = artist
+    if (genre !== undefined) updateData.genre = genre
+    if (year !== undefined) updateData.year = year
     if (description !== undefined) updateData.description = description
-    if (pricing !== undefined) updateData.pricing = pricing
-    if (duration !== undefined) updateData.duration = duration
-    if (features !== undefined) updateData.features = features
     if (image !== undefined) updateData.image = image
-    if (isActive !== undefined) updateData.isActive = isActive
+    if (services !== undefined) updateData.services = services
+    if (isPublished !== undefined) updateData.isPublished = isPublished
 
-    const service = await prisma.service.update({
+    const project = await prisma.project.update({
       where: { id },
       data: updateData
     })
 
-    return NextResponse.json(service)
+    return NextResponse.json(project)
   } catch (error) {
-    console.error('Error updating service:', error)
-    return NextResponse.json({ error: 'Failed to update service' }, { status: 500 })
+    console.error('Error updating project:', error)
+    return NextResponse.json({ error: 'Failed to update project' }, { status: 500 })
   }
 }
 
-// DELETE /api/services/[id] - Delete service
+// DELETE /api/projects/[id] - Delete project
 export async function DELETE(
   request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
@@ -96,21 +98,21 @@ export async function DELETE(
       return NextResponse.json({ error: 'Unauthorized' }, { status: 403 })
     }
 
-    const service = await prisma.service.findUnique({
+    const project = await prisma.project.findUnique({
       where: { id }
     })
 
-    if (!service) {
-      return NextResponse.json({ error: 'Service not found' }, { status: 404 })
+    if (!project) {
+      return NextResponse.json({ error: 'Project not found' }, { status: 404 })
     }
 
-    await prisma.service.delete({
+    await prisma.project.delete({
       where: { id }
     })
 
-    return NextResponse.json({ message: 'Service deleted successfully' })
+    return NextResponse.json({ message: 'Project deleted successfully' })
   } catch (error) {
-    console.error('Error deleting service:', error)
-    return NextResponse.json({ error: 'Failed to delete service' }, { status: 500 })
+    console.error('Error deleting project:', error)
+    return NextResponse.json({ error: 'Failed to delete project' }, { status: 500 })
   }
 }

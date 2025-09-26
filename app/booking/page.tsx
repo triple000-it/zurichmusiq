@@ -39,6 +39,19 @@ interface Studio {
   availability: string
 }
 
+interface Service {
+  id: string
+  title: string
+  description: string
+  pricing: string
+  duration: string
+  features: string[]
+  image: string
+  isActive: boolean
+  createdAt: string
+  updatedAt: string
+}
+
 const studios: Studio[] = [
   {
     id: "studio-s",
@@ -171,36 +184,11 @@ const studios: Studio[] = [
   }
 ]
 
-const addonServices = [
-  {
-    name: "Professional Engineer",
-    description: "Experienced recording engineer to assist with your session",
-    hourlyRate: 60,
-    dailyRate: 400
-  },
-  {
-    name: "Producer Services",
-    description: "Creative and technical guidance for your project",
-    hourlyRate: 80,
-    dailyRate: 500
-  },
-  {
-    name: "Additional Equipment",
-    description: "Extra microphones, instruments, or specialized gear",
-    hourlyRate: 20,
-    dailyRate: 120
-  },
-  {
-    name: "Mixing & Mastering",
-    description: "Post-production services for your recordings",
-    hourlyRate: 100,
-    dailyRate: 600
-  }
-]
 
 export default function BookingPage() {
   const [page, setPage] = useState<Page | null>(null)
   const [studios, setStudios] = useState<Studio[]>([])
+  const [services, setServices] = useState<Service[]>([])
   const [loading, setLoading] = useState(true)
   const [selectedStudio, setSelectedStudio] = useState<Studio | null>(null)
   const [selectedDate, setSelectedDate] = useState("")
@@ -230,6 +218,15 @@ export default function BookingPage() {
             setSelectedStudio(studiosData[0])
           }
         }
+
+        // Fetch services
+        const servicesResponse = await fetch('/api/services')
+        if (servicesResponse.ok) {
+          const servicesData = await servicesResponse.json()
+          // Filter only active services
+          const activeServices = servicesData.filter((service: Service) => service.isActive)
+          setServices(activeServices)
+        }
       } catch (error) {
         console.error('Error fetching data:', error)
       } finally {
@@ -243,9 +240,14 @@ export default function BookingPage() {
   const calculateTotal = () => {
     if (!selectedStudio) return 0
     const baseRate = selectedStudio.hourlyRate * parseInt(duration)
-    const addonCost = addons.reduce((total, addon) => {
-      const service = addonServices.find(s => s.name === addon)
-      return total + (service ? service.hourlyRate * parseInt(duration) : 0)
+    const addonCost = addons.reduce((total, addonId) => {
+      const service = services.find(s => s.id === addonId)
+      if (service) {
+        // Extract hourly rate from pricing string (e.g., "€ 80,00" -> 80)
+        const hourlyRate = parseInt(service.pricing.replace(/[^\d]/g, '')) / 100 || 0
+        return total + (hourlyRate * parseInt(duration))
+      }
+      return total
     }, 0)
     return baseRate + addonCost
   }
@@ -274,7 +276,7 @@ export default function BookingPage() {
           duration: parseInt(duration),
           totalCost: calculateTotal(),
           notes: notes,
-          addons: addons
+          services: addons
         }),
       })
 
@@ -529,28 +531,28 @@ export default function BookingPage() {
                   </select>
                 </div>
 
-                {/* Add-on Services */}
+                {/* Additional Services */}
                 <div className="mb-6">
                   <label className="block text-white font-medium mb-2">Additional Services</label>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    {addonServices.map((service) => (
-                      <label key={service.name} className="flex items-center space-x-3 cursor-pointer">
+                    {services.map((service) => (
+                      <label key={service.id} className="flex items-center space-x-3 cursor-pointer">
                         <input
                           type="checkbox"
-                          checked={addons.includes(service.name)}
+                          checked={addons.includes(service.id)}
                           onChange={(e) => {
                             if (e.target.checked) {
-                              setAddons([...addons, service.name])
+                              setAddons([...addons, service.id])
                             } else {
-                              setAddons(addons.filter(a => a !== service.name))
+                              setAddons(addons.filter(a => a !== service.id))
                             }
                           }}
                           className="w-4 h-4 text-[#4fdce5] bg-white/20 border-white/30 rounded focus:ring-[#4fdce5]"
                         />
                         <div className="flex-1">
-                          <div className="text-white font-medium">{service.name}</div>
+                          <div className="text-white font-medium">{service.title}</div>
                           <div className="text-white/60 text-sm">{service.description}</div>
-                          <div className="text-[#4fdce5] text-sm">€ {service.hourlyRate},00/hour</div>
+                          <div className="text-[#4fdce5] text-sm">{service.pricing}</div>
                         </div>
                       </label>
                     ))}
@@ -646,30 +648,14 @@ export default function BookingPage() {
                     <td className="text-[#4fdce5] font-bold text-center">€ 4.000,00</td>
                     <td className="text-white/60 text-center">-</td>
                   </tr>
-                  <tr className="border-t border-white/20">
-                    <td className="text-white/80 py-3">Professional Engineer</td>
-                    <td className="text-white/60 text-center">-</td>
-                    <td className="text-white/60 text-center">-</td>
-                    <td className="text-[#4fdce5] font-bold text-center">€ 60,00/hour</td>
-                  </tr>
-                  <tr>
-                    <td className="text-white/80 py-3">Producer Services</td>
-                    <td className="text-white/60 text-center">-</td>
-                    <td className="text-white/60 text-center">-</td>
-                    <td className="text-[#4fdce5] font-bold text-center">€ 80,00/hour</td>
-                  </tr>
-                  <tr>
-                    <td className="text-white/80 py-3">Additional Equipment</td>
-                    <td className="text-white/60 text-center">-</td>
-                    <td className="text-white/60 text-center">-</td>
-                    <td className="text-[#4fdce5] font-bold text-center">€ 20,00/hour</td>
-                  </tr>
-                  <tr>
-                    <td className="text-white/80 py-3">Mixing & Mastering</td>
-                    <td className="text-white/60 text-center">-</td>
-                    <td className="text-white/60 text-center">-</td>
-                    <td className="text-[#4fdce5] font-bold text-center">€ 100,00/hour</td>
-                  </tr>
+                  {services.map((service, index) => (
+                    <tr key={service.id} className={index === 0 ? "border-t border-white/20" : ""}>
+                      <td className="text-white/80 py-3">{service.title}</td>
+                      <td className="text-white/60 text-center">-</td>
+                      <td className="text-white/60 text-center">-</td>
+                      <td className="text-[#4fdce5] font-bold text-center">{service.pricing}</td>
+                    </tr>
+                  ))}
                 </tbody>
               </table>
             </div>

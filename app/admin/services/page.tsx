@@ -2,12 +2,12 @@
 
 import { useState, useEffect } from 'react'
 import { useSession } from 'next-auth/react'
+import Image from 'next/image'
 import { 
   Wrench, 
   Edit, 
   Trash2, 
   Plus, 
-  DollarSign, 
   Clock, 
   CheckCircle,
   XCircle,
@@ -17,13 +17,13 @@ import {
   Mic,
   Settings
 } from 'lucide-react'
+import ImageUpload from '@/components/image-upload'
 
 interface Service {
   id: string
-  name: string
+  title: string
   description: string
-  category: string
-  price: number
+  pricing: string
   duration: string
   features: string[]
   image: string
@@ -43,10 +43,9 @@ export default function AdminServicesPage() {
   const [serviceToDelete, setServiceToDelete] = useState<Service | null>(null)
   const [isSaving, setIsSaving] = useState(false)
   const [editForm, setEditForm] = useState({
-    name: '',
+    title: '',
     description: '',
-    category: '',
-    price: 0,
+    pricing: '',
     duration: '',
     features: [] as string[],
     image: '',
@@ -77,10 +76,9 @@ export default function AdminServicesPage() {
     
     if (service && (mode === 'edit' || mode === 'create')) {
       setEditForm({
-        name: service.name || '',
+        title: service.title || '',
         description: service.description || '',
-        category: service.category || '',
-        price: service.price || 0,
+        pricing: service.pricing || '',
         duration: service.duration || '',
         features: service.features || [],
         image: service.image || '',
@@ -88,10 +86,9 @@ export default function AdminServicesPage() {
       })
     } else if (mode === 'create') {
       setEditForm({
-        name: '',
+        title: '',
         description: '',
-        category: '',
-        price: 0,
+        pricing: '',
         duration: '',
         features: [],
         image: '',
@@ -178,39 +175,6 @@ export default function AdminServicesPage() {
     }
   }
 
-  const getCategoryIcon = (category: string) => {
-    if (!category) return <Wrench className="h-5 w-5 text-gray-500" />
-    
-    switch (category.toLowerCase()) {
-      case 'recording':
-        return <Mic className="h-5 w-5 text-red-500" />
-      case 'mixing':
-        return <Headphones className="h-5 w-5 text-blue-500" />
-      case 'mastering':
-        return <Settings className="h-5 w-5 text-green-500" />
-      case 'production':
-        return <Music className="h-5 w-5 text-purple-500" />
-      default:
-        return <Wrench className="h-5 w-5 text-gray-500" />
-    }
-  }
-
-  const getCategoryColor = (category: string) => {
-    if (!category) return 'bg-gray-100 text-gray-800 border-gray-200'
-    
-    switch (category.toLowerCase()) {
-      case 'recording':
-        return 'bg-red-100 text-red-800 border-red-200'
-      case 'mixing':
-        return 'bg-blue-100 text-blue-800 border-blue-200'
-      case 'mastering':
-        return 'bg-green-100 text-green-800 border-green-200'
-      case 'production':
-        return 'bg-purple-100 text-purple-800 border-purple-200'
-      default:
-        return 'bg-gray-100 text-gray-800 border-gray-200'
-    }
-  }
 
   const getStatusIcon = (isActive: boolean) => {
     return isActive ? 
@@ -273,12 +237,8 @@ export default function AdminServicesPage() {
             <div className="p-6 border-b border-gray-200">
               <div className="flex justify-between items-start mb-4">
                 <div className="flex items-center gap-3">
-                  {getCategoryIcon(service.category)}
                   <div>
-                    <h3 className="text-xl font-semibold text-gray-900">{service.name}</h3>
-                    <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium border ${getCategoryColor(service.category)}`}>
-                      {service.category}
-                    </span>
+                    <h3 className="text-xl font-semibold text-gray-900">{service.title}</h3>
                   </div>
                 </div>
                 <div className="flex gap-2">
@@ -316,8 +276,7 @@ export default function AdminServicesPage() {
               <div className="mb-6">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2">
-                    <DollarSign className="h-5 w-5 text-[#4fdce5]" />
-                    <span className="text-lg font-bold text-[#4fdce5]">€ {service.price.toFixed(2).replace('.', ',')}</span>
+                    <span className="text-lg font-bold text-[#4fdce5]">{service.pricing}</span>
                   </div>
                   <div className="flex items-center gap-2 text-gray-500">
                     <Clock className="h-4 w-4" />
@@ -388,50 +347,30 @@ export default function AdminServicesPage() {
                       <h3 className="text-lg font-semibold text-gray-900 mb-4">Basic Information</h3>
                       <div className="space-y-3">
                         <div>
-                          <label className="block text-sm font-medium text-gray-700 mb-1">Service Name</label>
+                          <label className="block text-sm font-medium text-gray-700 mb-1">Service Title</label>
                           {modalMode === 'edit' || modalMode === 'create' ? (
                             <input
                               type="text"
-                              value={editForm.name}
-                              onChange={(e) => handleFormChange('name', e.target.value)}
+                              value={editForm.title}
+                              onChange={(e) => handleFormChange('title', e.target.value)}
                               className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#4fdce5] focus:border-[#4fdce5] text-gray-900 bg-white"
                             />
                           ) : (
-                            <p className="text-gray-900 font-medium">{selectedService.name}</p>
+                            <p className="text-gray-900 font-medium">{selectedService.title}</p>
                           )}
                         </div>
                         <div>
-                          <label className="block text-sm font-medium text-gray-700 mb-1">Category</label>
-                          {modalMode === 'edit' || modalMode === 'create' ? (
-                            <select
-                              value={editForm.category}
-                              onChange={(e) => handleFormChange('category', e.target.value)}
-                              className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#4fdce5] focus:border-[#4fdce5] text-gray-900 bg-white"
-                            >
-                              <option value="">Select Category</option>
-                              <option value="Recording">Recording</option>
-                              <option value="Mixing">Mixing</option>
-                              <option value="Mastering">Mastering</option>
-                              <option value="Production">Production</option>
-                            </select>
-                          ) : (
-                            <div className="flex items-center gap-2">
-                              {getCategoryIcon(selectedService.category)}
-                              <span className="text-gray-900">{selectedService.category}</span>
-                            </div>
-                          )}
-                        </div>
-                        <div>
-                          <label className="block text-sm font-medium text-gray-700 mb-1">Price (€)</label>
+                          <label className="block text-sm font-medium text-gray-700 mb-1">Pricing</label>
                           {modalMode === 'edit' || modalMode === 'create' ? (
                             <input
-                              type="number"
-                              value={editForm.price}
-                              onChange={(e) => handleFormChange('price', parseFloat(e.target.value) || 0)}
+                              type="text"
+                              value={editForm.pricing}
+                              onChange={(e) => handleFormChange('pricing', e.target.value)}
                               className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#4fdce5] focus:border-[#4fdce5] text-gray-900 bg-white"
+                              placeholder="e.g., € 80,00"
                             />
                           ) : (
-                            <p className="text-gray-900 font-bold text-lg">€ {selectedService.price.toFixed(2).replace('.', ',')}</p>
+                            <p className="text-gray-900 font-bold text-lg">{selectedService.pricing}</p>
                           )}
                         </div>
                         <div>
@@ -446,6 +385,35 @@ export default function AdminServicesPage() {
                             />
                           ) : (
                             <p className="text-gray-900">{selectedService.duration}</p>
+                          )}
+                        </div>
+                        <div>
+                          <label className="block text-sm font-medium text-gray-700 mb-1">Service Image</label>
+                          {modalMode === 'edit' || modalMode === 'create' ? (
+                            <ImageUpload
+                              currentImage={editForm.image}
+                              onImageChange={(imagePath) => handleFormChange('image', imagePath)}
+                              type="service"
+                            />
+                          ) : (
+                            <div className="w-full h-32 bg-gray-100 rounded-lg overflow-hidden">
+                              {selectedService.image ? (
+                                <img
+                                  src={selectedService.image}
+                                  alt={selectedService.title}
+                                  className="w-full h-full object-cover"
+                                  onError={(e) => {
+                                    const target = e.target as HTMLImageElement
+                                    target.style.display = 'none'
+                                    target.parentElement!.innerHTML = '<div class="w-full h-full flex items-center justify-center text-gray-500"><span>No image</span></div>'
+                                  }}
+                                />
+                              ) : (
+                                <div className="w-full h-full flex items-center justify-center text-gray-500">
+                                  <span>No image</span>
+                                </div>
+                              )}
+                            </div>
                           )}
                         </div>
                         <div>

@@ -1,6 +1,7 @@
 "use client"
 
 import { useState, useEffect } from "react"
+import Image from "next/image"
 import Header from "@/components/header"
 import Footer from "@/components/footer"
 import ShaderBackground from "@/components/shader-background"
@@ -24,95 +25,46 @@ interface Project {
   title: string
   artist: string
   genre: string
-  description: string
-  services: string[]
   year: string
+  description: string
   image: string
+  services: string[]
+  isPublished: boolean
+  createdAt: string
+  updatedAt: string
 }
-
-const projects: Project[] = [
-  {
-    id: "project-1",
-    title: "Midnight Dreams",
-    artist: "Luna Echo",
-    genre: "Alternative Pop",
-    description: "A full-length album featuring 12 tracks of atmospheric pop with electronic elements. We handled the entire production process from recording to final mastering.",
-    services: ["Music Production", "Recording", "Mixing", "Mastering"],
-    year: "2024",
-    image: "/placeholder.jpg"
-  },
-  {
-    id: "project-2",
-    title: "Urban Beats Vol. 3",
-    artist: "Beat Master K",
-    genre: "Hip-Hop",
-    description: "Compilation album featuring 15 tracks from emerging hip-hop artists. Our team provided mixing and mastering services for all tracks.",
-    services: ["Mixing", "Mastering", "Post-Production"],
-    year: "2024",
-    image: "/placeholder.jpg"
-  },
-  {
-    id: "project-3",
-    title: "Classical Fusion",
-    artist: "Zurich Symphony",
-    genre: "Classical",
-    description: "Live recording of a classical concert featuring modern arrangements. Captured in our main studio with full orchestra setup.",
-    services: ["Live Recording", "Post-Production", "Mastering"],
-    year: "2023",
-    image: "/placeholder.jpg"
-  },
-  {
-    id: "project-4",
-    title: "Electronic Journey",
-    artist: "Synthwave Collective",
-    genre: "Electronic",
-    description: "EP featuring 6 tracks of synthwave and electronic music. Complete production including sound design and arrangement.",
-    services: ["Music Production", "Sound Design", "Mixing", "Mastering"],
-    year: "2023",
-    image: "/placeholder.jpg"
-  },
-  {
-    id: "project-5",
-    title: "Acoustic Sessions",
-    artist: "Sarah Rivers",
-    genre: "Folk",
-    description: "Intimate acoustic recording featuring voice and guitar. Minimalist approach with focus on natural sound and emotion.",
-    services: ["Recording", "Mixing", "Mastering"],
-    year: "2023",
-    image: "/placeholder.jpg"
-  },
-  {
-    id: "project-6",
-    title: "Rock Anthems",
-    artist: "Thunder Road",
-    genre: "Rock",
-    description: "Full album recording with live band setup. Features powerful vocals, driving guitars, and dynamic drum performances.",
-    services: ["Recording", "Music Production", "Mixing", "Mastering"],
-    year: "2022",
-    image: "/placeholder.jpg"
-  }
-]
 
 export default function WorkPage() {
   const [page, setPage] = useState<Page | null>(null)
+  const [projects, setProjects] = useState<Project[]>([])
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    const fetchPage = async () => {
+    const fetchData = async () => {
       try {
-        const response = await fetch('/api/pages/slug/music')
-        if (response.ok) {
-          const pageData = await response.json()
+        // Fetch page content
+        const pageResponse = await fetch('/api/pages/slug/music')
+        if (pageResponse.ok) {
+          const pageData = await pageResponse.json()
           setPage(pageData)
         }
+
+        // Fetch projects
+        const projectsResponse = await fetch('/api/projects')
+        if (projectsResponse.ok) {
+          const projectsData = await projectsResponse.json()
+          // Only show published projects
+          const publishedProjects = projectsData.filter((project: Project) => project.isPublished)
+          setProjects(publishedProjects)
+        }
       } catch (error) {
-        console.error('Error fetching music page:', error)
+        console.error('Error fetching data:', error)
       } finally {
         setLoading(false)
       }
     }
 
-    fetchPage()
+    fetchData()
   }, [])
 
   const handleSave = async (data: {
@@ -177,10 +129,26 @@ export default function WorkPage() {
 
             {/* Projects Grid */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-20" >
-              {projects.map((project) => (
+              {projects.length === 0 ? (
+                <div className="col-span-full text-center py-12">
+                  <h3 className="text-2xl font-bold text-white mb-4">No Projects Yet</h3>
+                  <p className="text-white/80">Check back soon for our latest musical creations.</p>
+                </div>
+              ) : (
+                projects.map((project) => (
                 <div key={project.id} className="bg-white/10 backdrop-blur-sm rounded-lg p-6 border border-white/20 hover:border-white/40 transition-all duration-300">
-                  <div className="aspect-square bg-gray-300 rounded-lg mb-4 flex items-center justify-center">
-                    <span className="text-gray-600 text-sm">Project Image</span>
+                  <div className="aspect-square rounded-lg mb-4 overflow-hidden">
+                    <Image
+                      src={project.image}
+                      alt={project.title}
+                      width={400}
+                      height={400}
+                      className="w-full h-full object-cover"
+                      onError={(e) => {
+                        const target = e.target as HTMLImageElement
+                        target.src = '/placeholder.jpg'
+                      }}
+                    />
                   </div>
                   
                   <div className="mb-4">
@@ -208,7 +176,8 @@ export default function WorkPage() {
                     View Details
                   </button>
                 </div>
-              ))}
+                ))
+              )}
             </div>
 
             {/* Statistics Section */}

@@ -29,24 +29,23 @@ export async function POST(request: NextRequest) {
     }
 
     const body = await request.json()
-    const { name, description, category, price, duration, features, image, isActive } = body
+    const { title, description, pricing, duration, features, image, isActive } = body
 
     // Validate required fields
-    if (!name || !description || !category || price === undefined) {
+    if (!title || !description || !pricing) {
       return NextResponse.json({ 
-        error: 'Missing required fields: name, description, category, price' 
+        error: 'Missing required fields: title, description, pricing' 
       }, { status: 400 })
     }
 
     const service = await prisma.service.create({
       data: {
-        name,
+        title,
         description,
-        category,
-        price: parseFloat(price),
+        pricing,
         duration: duration || '',
         features: features || [],
-        image: image || '',
+        image: image || '/placeholder.jpg',
         isActive: isActive !== undefined ? isActive : true,
       }
     })
