@@ -98,7 +98,7 @@ export default function AdminBookingsPage() {
 
   const getBookingsForDate = (date: Date) => {
     const dateString = date.toISOString().split('T')[0]
-    return bookings.filter(booking => 
+    return filteredBookings.filter(booking => 
       booking.date.split('T')[0] === dateString
     )
   }
@@ -247,9 +247,9 @@ export default function AdminBookingsPage() {
       <div className="flex gap-4">
         <button
           onClick={() => setStatusFilter('ALL')}
-          className={`px-4 py-2 rounded-lg font-medium ${
+          className={`px-4 py-2 rounded-lg font-medium transition-colors ${
             statusFilter === 'ALL' 
-              ? 'bg-[#4fdce5] text-white' 
+              ? 'bg-[#4fdce5] text-white shadow-md' 
               : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
           }`}
         >
@@ -257,9 +257,9 @@ export default function AdminBookingsPage() {
         </button>
         <button
           onClick={() => setStatusFilter('PENDING')}
-          className={`px-4 py-2 rounded-lg font-medium ${
+          className={`px-4 py-2 rounded-lg font-medium transition-colors ${
             statusFilter === 'PENDING' 
-              ? 'bg-[#4fdce5] text-white' 
+              ? 'bg-[#4fdce5] text-white shadow-md' 
               : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
           }`}
         >
@@ -267,9 +267,9 @@ export default function AdminBookingsPage() {
         </button>
         <button
           onClick={() => setStatusFilter('CONFIRMED')}
-          className={`px-4 py-2 rounded-lg font-medium ${
+          className={`px-4 py-2 rounded-lg font-medium transition-colors ${
             statusFilter === 'CONFIRMED' 
-              ? 'bg-[#4fdce5] text-white' 
+              ? 'bg-[#4fdce5] text-white shadow-md' 
               : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
           }`}
         >
@@ -277,14 +277,39 @@ export default function AdminBookingsPage() {
         </button>
         <button
           onClick={() => setStatusFilter('COMPLETED')}
-          className={`px-4 py-2 rounded-lg font-medium ${
+          className={`px-4 py-2 rounded-lg font-medium transition-colors ${
             statusFilter === 'COMPLETED' 
-              ? 'bg-[#4fdce5] text-white' 
+              ? 'bg-[#4fdce5] text-white shadow-md' 
               : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
           }`}
         >
           Completed ({bookings.filter(b => b.status === 'COMPLETED').length})
         </button>
+        <button
+          onClick={() => setStatusFilter('CANCELLED')}
+          className={`px-4 py-2 rounded-lg font-medium transition-colors ${
+            statusFilter === 'CANCELLED' 
+              ? 'bg-[#4fdce5] text-white shadow-md' 
+              : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+          }`}
+        >
+          Cancelled ({bookings.filter(b => b.status === 'CANCELLED').length})
+        </button>
+      </div>
+
+      {/* Filter Status */}
+      <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <span className="text-sm font-medium text-blue-800">Current Filter:</span>
+            <span className="px-2 py-1 bg-blue-100 text-blue-800 rounded-full text-sm font-medium">
+              {statusFilter === 'ALL' ? 'All Bookings' : statusFilter}
+            </span>
+          </div>
+          <div className="text-sm text-blue-600">
+            Showing {filteredBookings.length} of {bookings.length} bookings
+          </div>
+        </div>
       </div>
 
       {/* Calendar View */}
