@@ -413,7 +413,7 @@ export default function AdminStudiosPage() {
                               type="text"
                               value={editForm.name}
                               onChange={(e) => handleFormChange('name', e.target.value)}
-                              className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#4fdce5] focus:border-[#4fdce5]"
+                              className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#4fdce5] focus:border-[#4fdce5] text-gray-900 bg-white"
                             />
                           ) : (
                             <p className="text-gray-900 font-medium">{selectedStudio.name}</p>
@@ -426,7 +426,7 @@ export default function AdminStudiosPage() {
                               type="text"
                               value={editForm.size}
                               onChange={(e) => handleFormChange('size', e.target.value)}
-                              className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#4fdce5] focus:border-[#4fdce5]"
+                              className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#4fdce5] focus:border-[#4fdce5] text-gray-900 bg-white"
                             />
                           ) : (
                             <p className="text-gray-900">{selectedStudio.size}</p>
@@ -439,7 +439,7 @@ export default function AdminStudiosPage() {
                               type="text"
                               value={editForm.capacity}
                               onChange={(e) => handleFormChange('capacity', e.target.value)}
-                              className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#4fdce5] focus:border-[#4fdce5]"
+                              className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#4fdce5] focus:border-[#4fdce5] text-gray-900 bg-white"
                             />
                           ) : (
                             <p className="text-gray-900">{selectedStudio.capacity}</p>
@@ -474,7 +474,7 @@ export default function AdminStudiosPage() {
                           value={editForm.description}
                           onChange={(e) => handleFormChange('description', e.target.value)}
                           rows={4}
-                          className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#4fdce5] focus:border-[#4fdce5]"
+                          className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#4fdce5] focus:border-[#4fdce5] text-gray-900 bg-white"
                         />
                       ) : (
                         <p className="text-gray-700 leading-relaxed">{selectedStudio.description}</p>
@@ -496,7 +496,7 @@ export default function AdminStudiosPage() {
                                 type="number"
                                 value={editForm.hourlyRate}
                                 onChange={(e) => handleFormChange('hourlyRate', parseFloat(e.target.value) || 0)}
-                                className="w-full text-center text-2xl font-bold text-blue-600 border border-blue-300 rounded-lg p-2 focus:ring-2 focus:ring-blue-500"
+                                className="w-full text-center text-2xl font-bold text-blue-600 border border-blue-300 rounded-lg p-2 focus:ring-2 focus:ring-blue-500 bg-white"
                               />
                             </div>
                           ) : (
@@ -515,7 +515,7 @@ export default function AdminStudiosPage() {
                                 type="number"
                                 value={editForm.dailyRate}
                                 onChange={(e) => handleFormChange('dailyRate', parseFloat(e.target.value) || 0)}
-                                className="w-full text-center text-2xl font-bold text-green-600 border border-green-300 rounded-lg p-2 focus:ring-2 focus:ring-green-500"
+                                className="w-full text-center text-2xl font-bold text-green-600 border border-green-300 rounded-lg p-2 focus:ring-2 focus:ring-green-500 bg-white"
                               />
                             </div>
                           ) : (
@@ -534,7 +534,7 @@ export default function AdminStudiosPage() {
                                 type="number"
                                 value={editForm.weeklyRate}
                                 onChange={(e) => handleFormChange('weeklyRate', parseFloat(e.target.value) || 0)}
-                                className="w-full text-center text-2xl font-bold text-purple-600 border border-purple-300 rounded-lg p-2 focus:ring-2 focus:ring-purple-500"
+                                className="w-full text-center text-2xl font-bold text-purple-600 border border-purple-300 rounded-lg p-2 focus:ring-2 focus:ring-purple-500 bg-white"
                               />
                             </div>
                           ) : (
@@ -581,7 +581,7 @@ export default function AdminStudiosPage() {
                             <input
                               type="text"
                               placeholder="Enter custom feature..."
-                              className="flex-1 p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#4fdce5] focus:border-[#4fdce5]"
+                              className="flex-1 p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#4fdce5] focus:border-[#4fdce5] text-gray-900 bg-white"
                               onKeyPress={(e) => {
                                 if (e.key === 'Enter') {
                                   const input = e.target as HTMLInputElement
@@ -638,7 +638,7 @@ export default function AdminStudiosPage() {
                                       newItems[itemIndex] = e.target.value
                                       handleEquipmentChange(category, newItems)
                                     }}
-                                    className="flex-1 p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#4fdce5] focus:border-[#4fdce5]"
+                                    className="flex-1 p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#4fdce5] focus:border-[#4fdce5] text-gray-900 bg-white"
                                   />
                                   <button
                                     onClick={() => {
@@ -673,7 +673,7 @@ export default function AdminStudiosPage() {
                             <input
                               type="text"
                               placeholder="Category name (e.g., Microphones)"
-                              className="flex-1 p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#4fdce5] focus:border-[#4fdce5]"
+                              className="flex-1 p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#4fdce5] focus:border-[#4fdce5] text-gray-900 bg-white"
                               onKeyPress={(e) => {
                                 if (e.key === 'Enter') {
                                   const input = e.target as HTMLInputElement
