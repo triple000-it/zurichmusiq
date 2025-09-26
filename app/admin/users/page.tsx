@@ -227,7 +227,7 @@ export default function UsersPage() {
                   <label className="block text-sm font-medium text-gray-700">Name</label>
                   <input
                     type="text"
-                    className="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 focus:ring-[#4fdce5] focus:border-[#4fdce5]"
+                    className="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 focus:ring-[#4fdce5] focus:border-[#4fdce5] text-gray-900 bg-white"
                     value={selectedUser.name}
                     onChange={(e) => setSelectedUser({...selectedUser, name: e.target.value})}
                   />
@@ -237,7 +237,7 @@ export default function UsersPage() {
                   <label className="block text-sm font-medium text-gray-700">Email</label>
                   <input
                     type="email"
-                    className="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 focus:ring-[#4fdce5] focus:border-[#4fdce5]"
+                    className="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 focus:ring-[#4fdce5] focus:border-[#4fdce5] text-gray-900 bg-white"
                     value={selectedUser.email}
                     onChange={(e) => setSelectedUser({...selectedUser, email: e.target.value})}
                   />
@@ -246,7 +246,7 @@ export default function UsersPage() {
                 <div>
                   <label className="block text-sm font-medium text-gray-700">Role</label>
                   <select
-                    className="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 focus:ring-[#4fdce5] focus:border-[#4fdce5]"
+                    className="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 focus:ring-[#4fdce5] focus:border-[#4fdce5] text-gray-900 bg-white"
                     value={selectedUser.role}
                     onChange={(e) => setSelectedUser({...selectedUser, role: e.target.value as User["role"]})}
                   >

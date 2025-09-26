@@ -639,7 +639,7 @@ export default function InlineEditor({ pageSlug, pageTitle }: InlineEditorProps)
                     type="file"
                     accept="image/*"
                     onChange={handleFileChange}
-                    className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#4fdce5] focus:border-[#4fdce5]"
+                    className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#4fdce5] focus:border-[#4fdce5] text-gray-900 bg-white"
                   />
                 </div>
 

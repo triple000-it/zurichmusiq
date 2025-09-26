@@ -206,14 +206,14 @@ export default function PagesPage() {
             <input
               type="text"
               placeholder="Search pages..."
-              className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-[#4fdce5] focus:border-[#4fdce5]"
+              className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-[#4fdce5] focus:border-[#4fdce5] text-gray-900 bg-white"
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
             />
           </div>
         </div>
         <select
-          className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-[#4fdce5] focus:border-[#4fdce5]"
+          className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-[#4fdce5] focus:border-[#4fdce5] text-gray-900 bg-white"
           value={filterStatus}
           onChange={(e) => setFilterStatus(e.target.value as any)}
         >
