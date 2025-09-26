@@ -317,7 +317,7 @@ export default function AdminServicesPage() {
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2">
                     <DollarSign className="h-5 w-5 text-[#4fdce5]" />
-                    <span className="text-lg font-bold text-[#4fdce5]">CHF {service.price}</span>
+                    <span className="text-lg font-bold text-[#4fdce5]">€ {service.price.toFixed(2).replace('.', ',')}</span>
                   </div>
                   <div className="flex items-center gap-2 text-gray-500">
                     <Clock className="h-4 w-4" />
@@ -422,7 +422,7 @@ export default function AdminServicesPage() {
                           )}
                         </div>
                         <div>
-                          <label className="block text-sm font-medium text-gray-700 mb-1">Price (CHF)</label>
+                          <label className="block text-sm font-medium text-gray-700 mb-1">Price (€)</label>
                           {modalMode === 'edit' || modalMode === 'create' ? (
                             <input
                               type="number"
@@ -431,7 +431,7 @@ export default function AdminServicesPage() {
                               className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#4fdce5] focus:border-[#4fdce5] text-gray-900 bg-white"
                             />
                           ) : (
-                            <p className="text-gray-900 font-bold text-lg">CHF {selectedService.price}</p>
+                            <p className="text-gray-900 font-bold text-lg">€ {selectedService.price.toFixed(2).replace('.', ',')}</p>
                           )}
                         </div>
                         <div>
