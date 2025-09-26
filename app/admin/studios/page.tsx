@@ -83,6 +83,29 @@ export default function AdminStudiosPage() {
     setModalMode(mode)
     
     if (studio && (mode === 'edit' || mode === 'create')) {
+      // Ensure equipment is properly structured as an object with arrays
+      let equipment = studio.equipment || {}
+      console.log('Original equipment:', equipment)
+      
+      if (typeof equipment === 'object' && equipment !== null) {
+        // Convert any non-array values to arrays
+        const processedEquipment: any = {}
+        Object.entries(equipment).forEach(([key, value]) => {
+          console.log(`Processing ${key}:`, value, 'Type:', typeof value, 'IsArray:', Array.isArray(value))
+          if (Array.isArray(value)) {
+            processedEquipment[key] = value
+          } else if (typeof value === 'string') {
+            processedEquipment[key] = [value]
+          } else {
+            processedEquipment[key] = []
+          }
+        })
+        equipment = processedEquipment
+        console.log('Processed equipment:', equipment)
+      } else {
+        equipment = {}
+      }
+
       setEditForm({
         name: studio.name || '',
         description: studio.description || '',
@@ -92,7 +115,7 @@ export default function AdminStudiosPage() {
         dailyRate: studio.dailyRate || 0,
         weeklyRate: studio.weeklyRate || 0,
         features: studio.features || [],
-        equipment: studio.equipment || {},
+        equipment: equipment,
         images: studio.images || [],
         isActive: studio.isActive !== undefined ? studio.isActive : true
       })
@@ -589,7 +612,7 @@ export default function AdminStudiosPage() {
                     <h3 className="text-lg font-semibold text-gray-900 mb-4">Equipment & Gear</h3>
                     {modalMode === 'edit' ? (
                       <div className="space-y-4">
-                        {Object.entries(editForm.equipment).map(([category, items], index) => (
+                        {Object.entries(editForm.equipment || {}).map(([category, items], index) => (
                           <div key={index} className="bg-gray-50 p-4 rounded-lg">
                             <div className="flex justify-between items-center mb-3">
                               <h4 className="font-semibold text-gray-900 capitalize">{category}</h4>
@@ -605,13 +628,13 @@ export default function AdminStudiosPage() {
                               </button>
                             </div>
                             <div className="space-y-2">
-                              {(items as string[]).map((item, itemIndex) => (
+                              {Array.isArray(items) ? items.map((item, itemIndex) => (
                                 <div key={itemIndex} className="flex items-center gap-2">
                                   <input
                                     type="text"
-                                    value={item}
+                                    value={item || ''}
                                     onChange={(e) => {
-                                      const newItems = [...(items as string[])]
+                                      const newItems = [...items]
                                       newItems[itemIndex] = e.target.value
                                       handleEquipmentChange(category, newItems)
                                     }}
@@ -619,7 +642,7 @@ export default function AdminStudiosPage() {
                                   />
                                   <button
                                     onClick={() => {
-                                      const newItems = (items as string[]).filter((_, i) => i !== itemIndex)
+                                      const newItems = items.filter((_, i) => i !== itemIndex)
                                       handleEquipmentChange(category, newItems)
                                     }}
                                     className="text-red-600 hover:text-red-800"
@@ -627,10 +650,13 @@ export default function AdminStudiosPage() {
                                     <Trash2 className="h-4 w-4" />
                                   </button>
                                 </div>
-                              ))}
+                              )) : (
+                                <div className="text-gray-500 text-sm">No items in this category</div>
+                              )}
                               <button
                                 onClick={() => {
-                                  const newItems = [...(items as string[]), '']
+                                  const currentItems = Array.isArray(items) ? items : []
+                                  const newItems = [...currentItems, '']
                                   handleEquipmentChange(category, newItems)
                                 }}
                                 className="text-[#4fdce5] hover:text-[#3cc9d3] text-sm flex items-center gap-1"
