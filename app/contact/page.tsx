@@ -1,28 +1,13 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState } from "react"
 import Header from "@/components/header"
 import Footer from "@/components/footer"
 import ShaderBackground from "@/components/shader-background"
-import Link from "next/link"
 import PulsingCircle from "@/components/pulsing-circle"
 import SimpleInlineEditor from "@/components/simple-inline-editor"
 
-interface Page {
-  id: string
-  slug: string
-  title: string
-  content: string
-  metaTitle: string | null
-  metaDescription: string | null
-  createdAt: string
-  updatedAt: string
-  updatedBy: string | null
-}
-
 export default function ContactPage() {
-  const [page, setPage] = useState<Page | null>(null)
-  const [loading, setLoading] = useState(true)
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -33,53 +18,36 @@ export default function ContactPage() {
     timeline: ""
   })
 
-  useEffect(() => {
-    const fetchPage = async () => {
-      try {
-        const response = await fetch('/api/pages/slug/contact')
-        if (response.ok) {
-          const pageData = await response.json()
-          setPage(pageData)
-        }
-      } catch (error) {
-        console.error('Error fetching contact page:', error)
-      } finally {
-        setLoading(false)
-      }
-    }
-
-    fetchPage()
-  }, [])
-
-  const handleSave = async (data: {
-    title: string
-    content: string
-    metaTitle?: string
-    metaDescription?: string
-  }) => {
-    if (!page) return
-
-    const response = await fetch(`/api/pages/slug/contact`, {
-      method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        ...data,
-        updatedBy: 'Inline Editor'
-      }),
-    })
-
-    if (response.ok) {
-      const updatedPage = await response.json()
-      setPage(updatedPage)
-    }
-  }
-
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    // Handle form submission here
-    console.log("Form submitted:", formData)
+    
+    // Basic validation
+    if (!formData.name || !formData.email || !formData.service || !formData.message) {
+      alert('Please fill in all required fields')
+      return
+    }
+
+    try {
+      // Here you would typically send the form data to your backend
+      console.log("Form submitted:", formData)
+      
+      // For now, just show a success message
+      alert('Thank you for your message! We\'ll get back to you within 24 hours.')
+      
+      // Reset form
+      setFormData({
+        name: "",
+        email: "",
+        phone: "",
+        service: "",
+        message: "",
+        budget: "",
+        timeline: ""
+      })
+    } catch (error) {
+      console.error('Error submitting form:', error)
+      alert('There was an error sending your message. Please try again.')
+    }
   }
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
@@ -87,18 +55,6 @@ export default function ContactPage() {
       ...formData,
       [e.target.name]: e.target.value
     })
-  }
-
-  if (loading) {
-    return (
-      <ShaderBackground>
-        <Header />
-        <main className="relative z-20 w-full min-h-screen pt-32 pb-20 px-8 lg:px-16 flex items-center justify-center">
-          <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-white"></div>
-        </main>
-        <Footer />
-      </ShaderBackground>
-    )
   }
 
   return (
@@ -109,20 +65,15 @@ export default function ContactPage() {
       <SimpleInlineEditor pageSlug="contact" pageTitle="Contact Us" />
       
       <main className="relative z-20 w-full min-h-screen pt-32 pb-20 px-8 lg:px-16">
-            <div className="max-w-6xl mx-auto">
-            {/* Dynamic Content from Database */}
-            <div 
-              className="prose prose-lg prose-invert max-w-none"
-              dangerouslySetInnerHTML={{ __html: page?.content || `
-                <div class="text-center mb-20">
-                  <h1 class="text-6xl md:text-7xl font-bold text-white mb-8">Contact Us</h1>
-                  <p class="text-xl md:text-2xl text-white/80 max-w-3xl mx-auto leading-relaxed">
-                    Ready to start your next project? Get in touch with us to discuss your needs, 
-                    get a quote, or book studio time.
-                  </p>
-                </div>
-              ` }}
-            />
+        <div className="max-w-6xl mx-auto">
+          {/* Header Section */}
+          <div className="text-center mb-20">
+            <h1 className="text-6xl md:text-7xl font-bold text-white mb-8">Contact Us</h1>
+            <p className="text-xl md:text-2xl text-white/80 max-w-3xl mx-auto leading-relaxed">
+              Ready to start your next project? Get in touch with us to discuss your needs, 
+              get a quote, or book studio time.
+            </p>
+          </div>
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
             {/* Contact Form */}
@@ -253,59 +204,35 @@ export default function ContactPage() {
               </form>
             </div>
 
-            {/* Contact Information */}
+            {/* Right Column - Studio Information and Studio Hours */}
             <div className="space-y-8">
-              {/* Studio Info */}
+              {/* Studio Information */}
               <div className="bg-white/10 backdrop-blur-sm rounded-lg p-6 border border-white/20">
-                <h3 className="text-2xl font-bold text-white mb-6">Studio Location</h3>
+                <h3 className="text-2xl font-bold text-white mb-6">Information</h3>
                 <div className="space-y-4 text-white/80">
                   <div className="flex items-start space-x-3">
                     <div className="w-5 h-5 bg-[#4fdce5] rounded-full mt-1"></div>
                     <div>
-                      <p className="font-medium">Zurich Musiq Studio</p>
-                      <p>Bahnhofstrasse 123</p>
-                      <p>8001 Zürich, Switzerland</p>
+                      <p className="font-medium">Zurich Musiq</p>
+                      <p>Rotterdam</p>
+                      <p>The Netherlands</p>
                     </div>
                   </div>
-                  <div className="flex items-start space-x-3">
-                    <div className="w-5 h-5 bg-[#4fdce5] rounded-full mt-1"></div>
-                    <div>
-                      <p className="font-medium">Public Transport</p>
-                      <p>5 min walk from Zürich HB</p>
-                      <p>Tram lines 3, 4, 6, 7, 10, 11</p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              {/* Contact Methods */}
-              <div className="bg-white/10 backdrop-blur-sm rounded-lg p-6 border border-white/20">
-                <h3 className="text-2xl font-bold text-white mb-6">Get in Touch</h3>
-                <div className="space-y-4 text-white/80">
                   <div className="flex items-center space-x-3">
                     <div className="w-5 h-5 bg-[#4fdce5] rounded-full"></div>
                     <div>
-                      <p className="font-medium">Email</p>
-                      <a href="mailto:hello@zurichmusiq.com" className="text-[#4fdce5] hover:text-[#6ee7f0]">
-                        hello@zurichmusiq.com
+                      <p className="font-medium">E-mail</p>
+                      <a href="mailto:info@zurichmusiq.com" className="text-[#4fdce5] hover:text-[#6ee7f0]">
+                        info@zurichmusiq.com
                       </a>
                     </div>
                   </div>
                   <div className="flex items-center space-x-3">
                     <div className="w-5 h-5 bg-[#4fdce5] rounded-full"></div>
                     <div>
-                      <p className="font-medium">Phone</p>
+                      <p className="font-medium">Phone & WhatsApp</p>
                       <a href="tel:+41441234567" className="text-[#4fdce5] hover:text-[#6ee7f0]">
-                        +41 44 123 45 67
-                      </a>
-                    </div>
-                  </div>
-                  <div className="flex items-center space-x-3">
-                    <div className="w-5 h-5 bg-[#4fdce5] rounded-full"></div>
-                    <div>
-                      <p className="font-medium">WhatsApp</p>
-                      <a href="https://wa.me/41441234567" className="text-[#4fdce5] hover:text-[#6ee7f0]">
-                        +41 44 123 45 67
+                        +316XXXXXXXX
                       </a>
                     </div>
                   </div>
@@ -334,48 +261,9 @@ export default function ContactPage() {
                   </div>
                 </div>
               </div>
-
-              {/* Quick Actions */}
-              <div className="bg-white/10 backdrop-blur-sm rounded-lg p-6 border border-white/20">
-                <h3 className="text-2xl font-bold text-white mb-6">Quick Actions</h3>
-                <div className="space-y-3">
-                  <Link href="/services">
-                    <button className="w-full px-4 py-3 bg-white/20 text-white rounded-lg hover:bg-white/30 transition-colors duration-300">
-                      View All Services
-                    </button>
-                  </Link>
-                  <Link href="/work">
-                    <button className="w-full px-4 py-3 bg-white/20 text-white rounded-lg hover:bg-white/30 transition-colors duration-300">
-                      See Our Work
-                    </button>
-                  </Link>
-                  <button className="w-full px-4 py-3 bg-white/20 text-white rounded-lg hover:bg-white/30 transition-colors duration-300">
-                    Book Studio Tour
-                  </button>
-                </div>
-              </div>
             </div>
           </div>
-
-            {/* Response Time Info */}
-            <div className="mt-20 text-center" >
-              <div className="bg-white/10 backdrop-blur-sm rounded-lg p-8 border border-white/20 max-w-2xl mx-auto">
-                <h3 className="text-2xl font-bold text-white mb-4">
-                  What Happens Next?
-                </h3>
-                <p className="text-white/80 leading-relaxed mb-6">
-                  We typically respond to all inquiries within 24 hours. For urgent requests, 
-                  please call us directly. We'll schedule a consultation to discuss your project 
-                  in detail and provide a customized quote.
-                </p>
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm text-white/60">
-                  <div>📧 Email Response: 24 hours</div>
-                  <div>📞 Phone Response: 2 hours</div>
-                  <div>💬 WhatsApp: 1 hour</div>
-                </div>
-              </div>
-              </div>
-            </div>
+        </div>
       </main>
 
       <Footer />

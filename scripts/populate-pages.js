@@ -32,7 +32,7 @@ const pages = [
       </section>
     `,
     metaTitle: 'Home - Zurich Musiq | Professional Music Production Studio',
-    metaDescription: 'Zurich Musiq is a professional music production studio in Zurich, Switzerland. We offer music production, mixing, mastering, and studio rental services.',
+    metaDescription: 'Zurich Musiq is a professional music production studio in Zurich, The Netherlands. We offer music production, mixing, mastering, and studio rental services.',
     isPublished: true,
     createdBy: 'System Migration',
     updatedBy: 'System Migration'
@@ -51,7 +51,7 @@ const pages = [
           <div>
             <h2 style="font-size: 2.5rem; color: #2c3e50; margin-bottom: 30px;">Our Story</h2>
             <p style="font-size: 1.1rem; line-height: 1.8; color: #666; margin-bottom: 20px;">
-              Founded in 2008, Zurich Musiq has been at the forefront of music production in Switzerland. 
+              Founded in 2008, Zurich Musiq has been at the forefront of music production in The Netherlands. 
               We combine cutting-edge technology with artistic vision to help artists bring their musical dreams to life.
             </p>
             <p style="font-size: 1.1rem; line-height: 1.8; color: #666; margin-bottom: 20px;">
@@ -219,7 +219,7 @@ const pages = [
                 <div style="width: 20px; height: 20px; background: #4fdce5; border-radius: 50%; margin-right: 15px;"></div>
                 <div>
                   <p style="font-weight: bold; color: #2c3e50;">Address</p>
-                  <p style="color: #666;">Bahnhofstrasse 123<br>8001 Zürich, Switzerland</p>
+                  <p style="color: #666;">Bahnhofstrasse 123<br>8001 Zürich, The Netherlands</p>
                 </div>
               </div>
             </div>

@@ -44,7 +44,7 @@ export default function Footer() {
                 <ul className="space-y-3 text-white/70">
                   <li>Rotterdam, The Netherlands</li>
                   <li><a href="mailto:info@zurichmusiq.com" target="_blank" rel="noopener noreferrer" className="text-white/70 hover:text-white transition-colors duration-200">info@zurichmusiq.com</a></li>
-                  <li>+31 XX XXX XX XX</li>
+                  <li>+316XXXXXXXX</li>
                 </ul>
               </div>
             </div>

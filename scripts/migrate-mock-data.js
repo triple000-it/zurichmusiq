@@ -45,7 +45,7 @@ async function migrateMockData() {
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
               <div>
                 <p class="text-white/80 text-lg leading-relaxed mb-6">
-                  Founded in 2010, Zurich Musiq began as a small recording studio with a big dream: to provide world-class recording facilities to artists of all levels. What started as a passion project has grown into one of Switzerland's most respected recording studios.
+                  Founded in 2010, Zurich Musiq began as a small recording studio with a big dream: to provide world-class recording facilities to artists of all levels. What started as a passion project has grown into one of The Netherlands' most respected recording studios.
                 </p>
                 <p class="text-white/80 text-lg leading-relaxed mb-6">
                   Over the years, we've had the privilege of working with emerging artists, established musicians, and everything in between. Our commitment to quality and innovation has earned us recognition in the music industry and the trust of our clients.
@@ -91,7 +91,7 @@ async function migrateMockData() {
                   <div class="flex-1">
                     <h3 class="text-xl font-bold text-white mb-1">Marcus Weber</h3>
                     <p class="text-[#4fdce5] font-medium mb-3">Founder & Lead Engineer</p>
-                    <p class="text-white/80 text-sm leading-relaxed mb-4">With over 15 years of experience in music production, Marcus has worked with artists across all genres. His passion for sound quality and attention to detail has made him one of Switzerland's most sought-after engineers.</p>
+                    <p class="text-white/80 text-sm leading-relaxed mb-4">With over 15 years of experience in music production, Marcus has worked with artists across all genres. His passion for sound quality and attention to detail has made him one of The Netherlands' most sought-after engineers.</p>
                     <div class="flex flex-wrap gap-2">
                       <span class="px-2 py-1 bg-[#4fdce5]/20 text-[#4fdce5] text-xs rounded">Recording</span>
                       <span class="px-2 py-1 bg-[#4fdce5]/20 text-[#4fdce5] text-xs rounded">Mixing</span>
@@ -246,7 +246,7 @@ async function migrateMockData() {
                     </div>
                     <div>
                       <p class="text-white font-medium">Address</p>
-                      <p class="text-white/80">Bahnhofstrasse 123<br />8001 Zurich, Switzerland</p>
+                      <p class="text-white/80">Bahnhofstrasse 123<br />8001 Zurich, The Netherlands</p>
                     </div>
                   </div>
                   <div class="flex items-start space-x-3">
