@@ -53,9 +53,15 @@ export default function WorkPage() {
         const projectsResponse = await fetch('/api/projects')
         if (projectsResponse.ok) {
           const projectsData = await projectsResponse.json()
-          // Only show published projects
+          // Only show published projects and filter to specific ones
           const publishedProjects = projectsData.filter((project: Project) => project.isPublished)
-          setProjects(publishedProjects)
+          // Filter to show only the 3 specified projects
+          const filteredProjects = publishedProjects.filter((project: Project) => 
+            project.title === 'Digital Dreams' || 
+            project.title === 'Rhythm of the Night' || 
+            project.title === 'Echoes of the City'
+          )
+          setProjects(filteredProjects)
         }
       } catch (error) {
         console.error('Error fetching data:', error)
@@ -112,20 +118,30 @@ export default function WorkPage() {
       <SimpleInlineEditor pageSlug="music" pageTitle="Our Work" />
       
       <main className="relative z-20 w-full min-h-screen pt-32 pb-20 px-8 lg:px-16">
-            <div className="max-w-6xl mx-auto">
-            {/* Dynamic Content from Database */}
-            <div 
-              className="prose prose-lg prose-invert max-w-none"
-              dangerouslySetInnerHTML={{ __html: page?.content || `
-                <div class="text-center mb-20">
-                  <h1 class="text-6xl md:text-7xl font-bold text-white mb-8">Our Work</h1>
-                  <p class="text-xl md:text-2xl text-white/80 max-w-3xl mx-auto leading-relaxed">
-                    Discover our portfolio of successful projects across various genres. 
-                    From intimate acoustic sessions to full orchestral recordings, we've helped artists bring their vision to life.
-                  </p>
-                </div>
-              ` }}
+        <div className="max-w-6xl mx-auto">
+          {/* Header Section */}
+          <div className="text-center mb-20">
+            <h1 className="text-6xl md:text-7xl font-bold text-white mb-8">Our Work</h1>
+            <p className="text-xl md:text-2xl text-white/80 max-w-3xl mx-auto leading-relaxed">
+              Discover our portfolio of successful projects across various genres. 
+              From intimate acoustic sessions to full orchestral recordings, we've helped artists bring their vision to life.
+            </p>
+          </div>
+
+          {/* Spotify Playlist */}
+          <div className="mb-20">
+            <iframe 
+              data-testid="embed-iframe" 
+              style={{borderRadius: '12px'}} 
+              src="https://open.spotify.com/embed/playlist/6BeMJ72OIm7Ra7Wp3ILCmE?utm_source=generator&theme=0" 
+              width="100%" 
+              height="777" 
+              frameBorder="0" 
+              allowFullScreen 
+              allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" 
+              loading="lazy"
             />
+          </div>
 
             {/* Projects Grid */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-20" >
@@ -180,30 +196,6 @@ export default function WorkPage() {
               )}
             </div>
 
-            {/* Statistics Section */}
-            <div className="bg-white/10 backdrop-blur-sm rounded-lg p-8 border border-white/20 mb-20" >
-              <h2 className="text-3xl font-bold text-white text-center mb-8">
-                Studio Statistics
-              </h2>
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
-                <div>
-                  <div className="text-4xl font-bold text-[#4fdce5] mb-2">150+</div>
-                  <div className="text-white/80">Projects Completed</div>
-                </div>
-                <div>
-                  <div className="text-4xl font-bold text-[#4fdce5] mb-2">25+</div>
-                  <div className="text-white/80">Artists Worked With</div>
-                </div>
-                <div>
-                  <div className="text-4xl font-bold text-[#4fdce5] mb-2">98%</div>
-                  <div className="text-white/80">Client Satisfaction</div>
-                </div>
-                <div>
-                  <div className="text-4xl font-bold text-[#4fdce5] mb-2">5+</div>
-                  <div className="text-white/80">Years Experience</div>
-                </div>
-              </div>
-            </div>
 
             {/* CTA Section */}
             <div className="text-center" >
@@ -215,7 +207,7 @@ export default function WorkPage() {
                 Contact us to discuss your project and get started.
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                <Link href="/contact">
+                <Link href="/booking">
                   <button className="px-10 py-4 bg-[#4fdce5] text-black font-semibold text-lg rounded-lg hover:bg-[#3cc9d3] hover:scale-105 transition-all duration-300">
                     Start Your Project
                   </button>
